@@ -1,0 +1,7 @@
+# python_compile
+python_compile/python_linux_x86_64/
+python_compile/python_linux_arm64/
+python_compile/python_windows_x86_64/
+
+# cross_enviroments
+cross_environments/cross_env_linux_arm64

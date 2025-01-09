@@ -27,7 +27,7 @@ cd ..
 BUILD_PYTHON=$(pwd)/python_compile/python_linux_x86_64/bin/python3
 HOST_PYTHON=$(pwd)/python_compile/python_linux_arm64/bin/python3
 CROSSENV_DIR="cross_env_linux_arm64"
-cd cross_enviroments
+cd cross_environments
 
 # Install crossenv using the Build Python's pip
 echo "	- Installing crossenv"

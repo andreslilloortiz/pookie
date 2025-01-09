@@ -25,4 +25,4 @@ fi
 ## Remove unnecessary files
 rm -f $TEMP_PYTHON_FILE
 
-echo ">> Python 3.13.1 testing for Linux ARM64 completed"
+echo ">> Python 3.13.1 testing for Windows x86_64 completed"
