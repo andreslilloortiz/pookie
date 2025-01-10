@@ -1,44 +1,48 @@
-# Ejemplo de compilación de un paquete de Python en C sin compilación cruzada
+# Example of Compiling a Python Package in C Without Cross-Compilation
 
-## 1. **Creación de un entorno virtual**
-Esto es opcional, pero recomendado para evitar conflictos con otros paquetes instalados en el sistema.
+## 1. **Creating a Virtual Environment**
+This step is optional but recommended to avoid conflicts with other packages installed on the system.
 
-Primero, creamos y activamos un entorno virtual llamado `myenv313` con el Python 3.13.1 localizado en la ruta personalizada:
+First, we create and activate a virtual environment named `myenv313` using Python 3.13.1 located at a custom path:
 
 ```bash
-/home/andres/Documentos/TFG/actionless/Linux64bitsPython/bin/python3 -m venv myenv313
+cd ..
+cd ..
+PYTHON_DIR=$(pwd)/python_compile/python_linux_x86_64/bin/python3
+cd examples/NO_Cross_Compile_Example
+$PYTHON_DIR -m venv myenv313
 source myenv313/bin/activate
 ```
 
-## 2. **Instalación de dependencias necesarias**
-Con el entorno virtual activo, instalamos las herramientas requeridas para construir el paquete: `setuptools`, `wheel` y `build`.
+## 2. **Installing Required Dependencies**
+With the virtual environment active, install the tools needed to build the package: `setuptools`, `wheel`, and `build`.
 
 ```bash
 python3 -m pip install setuptools wheel build
 ```
 
-## 3. **Construcción del paquete**
-Ejecutamos el comando para construir el paquete Python, redirigiendo la salida a `/dev/null` para evitar mostrar información innecesaria:
+## 3. **Building the Package**
+Run the command to build the Python package, redirecting the output to `/dev/null` to avoid unnecessary information:
 
 ```bash
-python3 -m build > /dev/null
+python3 -m build
 ```
 
-## 4. **Instalación del paquete generado**
-El paquete generado en el paso anterior se encuentra en el directorio `dist/`. Instalamos el paquete usando pip:
+## 4. **Installing the Generated Package**
+The package generated in the previous step is located in the `dist/` directory. Install the package using pip:
 
 ```bash
 python3 -m pip install dist/sum-1.0-cp313-cp313-linux_x86_64.whl
 ```
 
-## 5. **Prueba del paquete instalado**
-Ejecutamos el Python dentro del entorno virtual para probar el paquete instalado:
+## 5. **Testing the Installed Package**
+Run Python within the virtual environment to test the installed package:
 
 ```bash
 python3
 ```
 
-Dentro del interprete de Python:
+Inside the Python interpreter:
 
 ```python
 >>> import sum
@@ -47,12 +51,11 @@ Dentro del interprete de Python:
 >>> quit()
 ```
 
-Con esto, hemos comprobado que el paquete funciona correctamente dentro del entorno virtual configurado. El entorno se puede desactivar cuando sea necesario escribiendo:
+This confirms that the package works correctly within the configured virtual environment. The environment can be deactivated when no longer needed by running:
 
 ```bash
 deactivate
 ```
 
-## Captura de pantalla del ejemplo
-!["Ejemplo en una terminal"](NO_Cross_Compile_Exampe.png)
-
+## Screenshot of the Example
+![Example in a terminal](NO_Cross_Compile_Example.png)

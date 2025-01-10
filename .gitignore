@@ -5,3 +5,10 @@ python_compile/python_windows_x86_64/
 
 # cross_enviroments
 cross_environments/cross_env_linux_arm64
+
+# examples
+examples/Cross_Compile_Example/dist
+examples/Cross_Compile_Example/sum.egg-info
+examples/NO_Cross_Compile_Example/dist
+examples/NO_Cross_Compile_Example/sum.egg-info
+examples/NO_Cross_Compile_Example/myenv313
