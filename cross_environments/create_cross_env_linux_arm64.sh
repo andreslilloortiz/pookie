@@ -29,6 +29,11 @@ HOST_PYTHON=$(pwd)/python_compile/python_linux_arm64/bin/python3
 CROSSENV_DIR="cross_env_linux_arm64"
 cd cross_environments
 
+# Check if the cross environment directory exists and remove it if necessary
+if [ -d "$CROSSENV_DIR" ]; then
+    rm -rf "$CROSSENV_DIR"
+fi
+
 # Install crossenv using the Build Python's pip
 echo "	- Installing crossenv"
 $BUILD_PYTHON -m pip install crossenv > /dev/null 2> /dev/null
@@ -43,4 +48,3 @@ source ./$CROSSENV_DIR/bin/activate
 echo ">> The cross-compilation virtual environment is created in cross_env_linux_arm64."
 
 # Execute with source ./crear_entorno_cruzado_aarch64.sh so the environment is created in the terminal
-
