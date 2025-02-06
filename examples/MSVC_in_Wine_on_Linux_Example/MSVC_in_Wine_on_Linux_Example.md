@@ -1,14 +1,22 @@
 # Example of Setting Up and Running MSVC in Wine on Linux
 
-## Download the repository
+## Install dependencies
+```bash
+sudo apt-get update
+sudo apt-get install -y wine64 python3 msitools ca-certificates winbind
+```
+
+## Clone the repository
 ```bash
 git clone https://github.com/mstorsjo/msvc-wine.git
 ```
 
-## Install
+## Download and Unpack MSVC
 ```bash
-cd msvc-wine/
-./vsdownload.py --dest .
-./install.sh .
+./msvc-wine/vsdownload.py --dest ./msvc
 ```
 
+## Install MSVC
+```bash
+./msvc-wine/install.sh ./msvc
+```
