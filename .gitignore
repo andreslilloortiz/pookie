@@ -16,3 +16,7 @@ examples/MSVC_in_Wine_on_Linux_Example/my_msvc
 examples/MSVC_in_Wine_on_Linux_Example/msvc-wine
 examples/MSVC_in_Wine_on_Linux_Example/build
 examples/MSVC_in_Wine_on_Linux_Example/cprogram.exe
+examples/Windows_Compile_Example/sum.exp
+examples/Windows_Compile_Example/sum.lib
+examples/Windows_Compile_Example/sum.obj
+examples/Windows_Compile_Example/sum.pyd
