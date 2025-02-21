@@ -5,9 +5,22 @@
 docker pull silkeh/clang
 ```
 
-## Run the Container
+## Create and Run the Container
 ```bash
-docker run -it --name my_clang_container -v $(pwd):/workspace silkeh/clang
+docker create -it --name my_clang_container -v $(pwd):/workspace silkeh/clang
+docker start my_clang_container
+```
+
+## Access the Container
+```bash
+docker exec -it my_clang_container /bin/bash
+```
+
+## Install Packages in the Container
+Una vez dentro del contenedor, puedes usar el siguiente comando para instalar paquetes. Por ejemplo, para instalar `wget`:
+```bash
+apt-get update
+apt-get install -y wget
 ```
 
 ## Compile the Program
