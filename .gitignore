@@ -15,3 +15,4 @@ examples/NO_Cross_Compile_Example/myenv313
 examples/MSVC_in_Wine_on_Linux_Example/my_msvc
 examples/MSVC_in_Wine_on_Linux_Example/msvc-wine
 examples/MSVC_in_Wine_on_Linux_Example/build
+examples/MSVC_in_Wine_on_Linux_Example/cprogram.exe
