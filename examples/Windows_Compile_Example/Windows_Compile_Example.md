@@ -14,7 +14,7 @@ LIB_PATH="/home/andres/Documentos/TFG/actionless/python_compile/python_windows_x
 PYTHON_PATH="/home/andres/Documentos/TFG/actionless/python_compile/python_windows_x86_64/python.exe"
 ```
 
-## Compile sum.c into a shared library (DLL) using MSVC inside Wine
+## Compile sum.c using MSVC inside Wine
 ```bash
 wine "$CL_PATH" /LD /I"$INCLUDE_PATH" sum.c /link /LIBPATH:"$LIB_PATH" /OUT:sum.pyd
 ```
