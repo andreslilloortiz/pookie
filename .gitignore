@@ -20,3 +20,5 @@ examples/Windows_Compile_Example/sum.exp
 examples/Windows_Compile_Example/sum.lib
 examples/Windows_Compile_Example/sum.obj
 examples/Windows_Compile_Example/sum.pyd
+examples/Windows_Compile_Example/dist
+examples/Windows_Compile_Example/sum.egg-info

@@ -19,6 +19,32 @@ PYTHON_PATH="/home/andres/Documentos/TFG/actionless/python_compile/python_window
 wine "$CL_PATH" /LD /I"$INCLUDE_PATH" sum.c /link /LIBPATH:"$LIB_PATH" /OUT:sum.pyd
 ```
 
+## Compile sum.c using setuptools inside Wine
+
+### Get pip
+```bash
+wget https://bootstrap.pypa.io/get-pip.py
+wine $PYTHON_PATH get-pip.py
+```
+
+### Install setuptools and wheel
+```bash
+wine $PYTHON_PATH -m pip install setuptools wheel build
+```
+
+### Build the package
+```bash
+# esto falla porque no detecta que se haya cambiado el compilador y sale el error de que falta el MSVC
+export CC=$CL_PATH
+export CXX=$CL_PATH
+wine $PYTHON_PATH -m build
+```
+
+### Install the generated package
+```bash
+# python3 -m pip install dist/sum-1.0-cp313-cp313-linux_x86_64.whl
+```
+
 ## Run Python inside Wine to test the compiled module
 ```bash
 wine $PYTHON_PATH
