@@ -17,7 +17,6 @@ docker exec -it my_clang_container /bin/bash
 ```
 
 ## Install Packages in the Container
-Una vez dentro del contenedor, puedes usar el siguiente comando para instalar paquetes. Por ejemplo, para instalar `wget`:
 ```bash
 apt-get update
 apt-get install -y wget

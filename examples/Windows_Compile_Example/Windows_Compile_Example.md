@@ -34,9 +34,7 @@ wine $PYTHON_PATH -m pip install setuptools wheel build
 
 ### Build the package
 ```bash
-# esto falla porque no detecta que se haya cambiado el compilador y sale el error de que falta el MSVC
-export CC=$CL_PATH
-export CXX=$CL_PATH
+# this fails because it does not detect that the compiler has been changed and the error that MSVC is missing appears
 wine $PYTHON_PATH -m build
 ```
 
