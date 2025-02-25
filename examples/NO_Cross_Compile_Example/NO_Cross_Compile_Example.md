@@ -1,10 +1,5 @@
 # Example of Compiling a Python Package in C Without Cross-Compilation
 
-# Compile sum.c using gcc
-
-
-# Compile sum.c using setuptools
-
 ## 1. **Creating a Virtual Environment**
 This step is optional but recommended to avoid conflicts with other packages installed on the system.
 
@@ -19,28 +14,35 @@ $PYTHON_DIR -m venv myenv313
 source myenv313/bin/activate
 ```
 
-## 2. **Installing Required Dependencies**
+## 2. Compile sum.c using gcc
+```bash
+gcc -shared -o sum.so -fPIC sum.c $(python3-config --cflags --ldflags)
+```
+
+## 3. Compile sum.c using setuptools
+
+### 3.1. **Installing Required Dependencies**
 With the virtual environment active, install the tools needed to build the package: `setuptools`, `wheel`, and `build`.
 
 ```bash
 python3 -m pip install setuptools wheel build
 ```
 
-## 3. **Building the Package**
+### 3.2. **Building the Package**
 Run the command to build the Python package, redirecting the output to `/dev/null` to avoid unnecessary information:
 
 ```bash
 python3 -m build
 ```
 
-## 4. **Installing the Generated Package**
+### 3.3. **Installing the Generated Package**
 The package generated in the previous step is located in the `dist/` directory. Install the package using pip:
 
 ```bash
 python3 -m pip install dist/sum-1.0-cp313-cp313-linux_x86_64.whl
 ```
 
-## 5. **Testing the Installed Package**
+## 4. **Testing the Installed Package**
 Run Python within the virtual environment to test the installed package:
 
 ```bash
