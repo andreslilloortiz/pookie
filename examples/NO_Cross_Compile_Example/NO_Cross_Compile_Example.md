@@ -1,5 +1,10 @@
 # Example of Compiling a Python Package in C Without Cross-Compilation
 
+# Compile sum.c using gcc
+
+
+# Compile sum.c using setuptools
+
 ## 1. **Creating a Virtual Environment**
 This step is optional but recommended to avoid conflicts with other packages installed on the system.
 
