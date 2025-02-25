@@ -14,9 +14,10 @@ $PYTHON_DIR -m venv myenv313
 source myenv313/bin/activate
 ```
 
-## 2. Compile sum.c using gcc
+## 2. Compile sum.c using gcc or clang
 ```bash
 gcc -shared -o sum.so -fPIC sum.c $(python3-config --cflags --ldflags)
+clang -shared -o sum.so -fPIC sum.c $(python3-config --cflags --ldflags)
 ```
 
 ## 3. Compile sum.c using setuptools
