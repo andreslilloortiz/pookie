@@ -16,10 +16,9 @@ docker start my_clang_container
 docker exec -it my_clang_container /bin/bash
 ```
 
-## Install Packages in the Container
+## Update Packages in the Container
 ```bash
 apt-get update
-apt-get install -y wget
 ```
 
 ## Compile the Program
