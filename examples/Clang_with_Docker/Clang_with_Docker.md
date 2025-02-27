@@ -19,6 +19,7 @@ docker exec -it my_clang_container /bin/bash
 ## Update Packages in the Container
 ```bash
 apt-get update
+apt --fix-broken install
 ```
 
 ## Compile the Program
