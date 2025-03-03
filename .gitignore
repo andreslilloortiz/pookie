@@ -26,3 +26,4 @@ examples/Windows_Compile_Example/dist
 examples/Windows_Compile_Example/sum.egg-info
 examples/NO_Cross_Compile_Example/sum.so
 examples/Clang_with_Docker/cprogram
+examples/macOS_target_using_osxcross/osxcross
