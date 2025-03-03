@@ -39,3 +39,8 @@ o64-clang++ cprogram.c -O3 -o cprogram
 darling shell
 ./cprogram
 ```
+
+# Compile the python package
+```bash
+o64-clang -shared -o sum.so -undefined dynamic_lookup -I/home/andres/Documentos/TFG/actionless/python_compile/python_macos_x86_64/include/python3.13 sum.c
+```
