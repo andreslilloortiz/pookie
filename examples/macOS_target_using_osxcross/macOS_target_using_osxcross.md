@@ -1,6 +1,6 @@
 # Download a packaged SDK
 ```bash
-wget https://github.com/joseluisq/macosx-sdks/releases/download/10.13/MacOSX10.13.sdk.tar.xz
+wget https://github.com/joseluisq/macosx-sdks/releases/download/11.1/MacOSX11.1.sdk.tar.xz
 ```
 
 # Download osxcross
@@ -10,7 +10,7 @@ git clone https://github.com/tpoechtrager/osxcross.git
 
 # Move your packaged SDK to the tarballs/ directory
 ```bash
-mv MacOSX10.13.sdk.tar.xz osxcross/tarballs/
+mv MacOSX11.1.sdk.tar.xz osxcross/tarballs/
 ```
 
 # Dependencies
@@ -40,7 +40,17 @@ darling shell
 ./cprogram
 ```
 
-# Compile the python package
+# Compile the python package for x86_64
 ```bash
 o64-clang -shared -o sum.so -undefined dynamic_lookup -I/home/andres/Documentos/TFG/actionless/python_compile/python_macos_x86_64/include/python3.13 sum.c
+```
+
+# Compile the python package for arm64
+```bash
+oa64-clang -shared -o sum.so -undefined dynamic_lookup -I/home/andres/Documentos/TFG/actionless/python_compile/python_macos_x86_64/include/python3.13 sum.c
+```
+
+# Compile the python package for arm64e
+```bash
+oa64e-clang -shared -o sum.so -undefined dynamic_lookup -I/home/andres/Documentos/TFG/actionless/python_compile/python_macos_x86_64/include/python3.13 sum.c
 ```
