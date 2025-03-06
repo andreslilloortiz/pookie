@@ -10,10 +10,6 @@ wget https://github.com/darlinghq/darling/releases/download/v0.1.20230310_update
 ## Install Darling
 echo "	- Installing Darling"
 sudo dpkg -i darling_0.1.20230310.jammy_amd64.deb >> /dev/null 2>> /dev/null
-sudo darling shell <<EOF
-xcode-select --install >> /dev/null 2>> /dev/null
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" >> /dev/null 2>> /dev/null
-EOF
 
 ## Download Python
 echo "	- Downloading Python"
@@ -21,7 +17,8 @@ wget https://www.python.org/ftp/python/3.13.1/python-3.13.1-macos11.pkg >> /dev/
 
 ## Installing Python
 echo "	- Installing Python"
-darling shell <<EOF
+sudo darling shell <<EOF
+xcode-select --install >> /dev/null 2>> /dev/null
 mkdir -p python_macos_x86_64
 installer -pkg python-3.13.1-macos11.pkg -target / >> /dev/null 2>> /dev/null
 cp -R /Library/Frameworks/Python.framework/Versions/3.13/* ./python_macos_x86_64/ >> /dev/null 2>> /dev/null
