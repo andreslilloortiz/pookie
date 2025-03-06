@@ -10,6 +10,10 @@ wget https://github.com/darlinghq/darling/releases/download/v0.1.20230310_update
 ## Install Darling
 echo "	- Installing Darling"
 sudo dpkg -i darling_0.1.20230310.jammy_amd64.deb >> /dev/null 2>> /dev/null
+sudo darling shell <<EOF
+xcode-select --install >> /dev/null 2>> /dev/null
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" >> /dev/null 2>> /dev/null
+EOF
 
 ## Download Python
 echo "	- Downloading Python"
