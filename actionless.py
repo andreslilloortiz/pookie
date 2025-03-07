@@ -24,6 +24,7 @@ def main():
 
     # iterate targets
     for target in args.target:
+
         if target == 'x86_64-linux':
 
             print(">> Creating docker image for x86_64-linux")
@@ -31,7 +32,7 @@ def main():
                 'docker', 'build', '-f', f'Dockerfile.{target}',
                 '--build-arg', f'PYTHON_VERSION={args.python_version}',
                 '--build-arg', f'C_SOURCE_FILE={args.source}',
-                '-t', f'{target}', '.'
+                '-t', f'{args.python_version}-{target}', '.'
             ])
 
             if (args.build == True or (args.build == False and args.test == False)):
@@ -40,7 +41,7 @@ def main():
                 subprocess.run([
                     'docker', 'run', '-it', '--rm',
                     '-v', f'{os.getcwd()}/workspace:/workspace',
-                    f'{target}', '/bin/bash', '-c',
+                    f'{args.python_version}-{target}', '/bin/bash', '-c',
                     f'gcc -shared -o {compiled} -fPIC {args.source} $(python3-config --cflags --ldflags) && cp {compiled} /workspace'
                 ])
 
