@@ -1,14 +1,11 @@
-# python_compile
 tools/python_compile/python-3.13-x86_64-linux/
 tools/python_compile/python-3.13-arm64-linux/
 tools/python_compile/python-3.13-x86_64-windows/
 tools/python_compile/python-3.13-x86_64-macos/
 tools/python_compile/darling/
 
-# cross_enviroments
 tools/cross_environments/cross_env_linux_arm64
 
-# examples
 tools/examples/Cross_Compile_Example/dist
 tools/examples/Cross_Compile_Example/sum.egg-info
 tools/examples/NO_Cross_Compile_Example/dist
@@ -28,3 +25,5 @@ tools/examples/NO_Cross_Compile_Example/sum.so
 tools/examples/Clang_with_Docker/cprogram
 tools/examples/macOS_target_using_osxcross/osxcross
 tools/examples/macOS_target_using_osxcross/sum.so
+
+workspace
