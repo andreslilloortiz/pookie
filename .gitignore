@@ -1,30 +1,30 @@
 # python_compile
-python_compile/python_linux_x86_64/
-python_compile/python_linux_arm64/
-python_compile/python_windows_x86_64/
-python_compile/python_macos_x86_64/
-python_compile/darling/
+tools/python_compile/python_linux_x86_64/
+tools/python_compile/python_linux_arm64/
+tools/python_compile/python_windows_x86_64/
+tools/python_compile/python_macos_x86_64/
+tools/python_compile/darling/
 
 # cross_enviroments
-cross_environments/cross_env_linux_arm64
+tools/cross_environments/cross_env_linux_arm64
 
 # examples
-examples/Cross_Compile_Example/dist
-examples/Cross_Compile_Example/sum.egg-info
-examples/NO_Cross_Compile_Example/dist
-examples/NO_Cross_Compile_Example/sum.egg-info
-examples/NO_Cross_Compile_Example/myenv313
-examples/MSVC_in_Wine_on_Linux_Example/my_msvc
-examples/MSVC_in_Wine_on_Linux_Example/msvc-wine
-examples/MSVC_in_Wine_on_Linux_Example/build
-examples/MSVC_in_Wine_on_Linux_Example/cprogram.exe
-examples/Windows_Compile_Example/sum.exp
-examples/Windows_Compile_Example/sum.lib
-examples/Windows_Compile_Example/sum.obj
-examples/Windows_Compile_Example/sum.pyd
-examples/Windows_Compile_Example/dist
-examples/Windows_Compile_Example/sum.egg-info
-examples/NO_Cross_Compile_Example/sum.so
-examples/Clang_with_Docker/cprogram
-examples/macOS_target_using_osxcross/osxcross
-examples/macOS_target_using_osxcross/sum.so
+tools/examples/Cross_Compile_Example/dist
+tools/examples/Cross_Compile_Example/sum.egg-info
+tools/examples/NO_Cross_Compile_Example/dist
+tools/examples/NO_Cross_Compile_Example/sum.egg-info
+tools/examples/NO_Cross_Compile_Example/myenv313
+tools/examples/MSVC_in_Wine_on_Linux_Example/my_msvc
+tools/examples/MSVC_in_Wine_on_Linux_Example/msvc-wine
+tools/examples/MSVC_in_Wine_on_Linux_Example/build
+tools/examples/MSVC_in_Wine_on_Linux_Example/cprogram.exe
+tools/examples/Windows_Compile_Example/sum.exp
+tools/examples/Windows_Compile_Example/sum.lib
+tools/examples/Windows_Compile_Example/sum.obj
+tools/examples/Windows_Compile_Example/sum.pyd
+tools/examples/Windows_Compile_Example/dist
+tools/examples/Windows_Compile_Example/sum.egg-info
+tools/examples/NO_Cross_Compile_Example/sum.so
+tools/examples/Clang_with_Docker/cprogram
+tools/examples/macOS_target_using_osxcross/osxcross
+tools/examples/macOS_target_using_osxcross/sum.so
