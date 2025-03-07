@@ -1,0 +1,40 @@
+# Use the Ubuntu base image
+FROM ubuntu:latest
+
+# Set the build arguments for the Python version and C source file
+ARG PYTHON_VERSION
+ARG C_SOURCE_FILE
+
+# Install necessary dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    make \
+    libffi-dev \
+    libssl-dev \
+    libsqlite3-dev \
+    libbz2-dev \
+    xz-utils \
+    libreadline-dev \
+    zlib1g-dev \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install the specific version of Python
+RUN wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz && \
+    tar -xJf Python-${PYTHON_VERSION}.tar.xz && \
+    cd Python-${PYTHON_VERSION} && \
+    ./configure --enable-optimizations && \
+    make -j$(nproc) && \
+    make install && \
+    cd .. && \
+    rm -rf Python-${PYTHON_VERSION}*
+
+# Verify the Python installation
+RUN python3 --version && gcc --version
+
+# Copy the C source file into the container
+COPY ${C_SOURCE_FILE} /${C_SOURCE_FILE}
+
+# Default command
+CMD ["/bin/sh"]
