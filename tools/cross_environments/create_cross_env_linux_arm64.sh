@@ -24,8 +24,8 @@ echo ">> Create Python 3.13.1 cross enviroment for Linux ARM64"
 
 # Define paths to Build Python and Host Python
 cd ..
-BUILD_PYTHON=$(pwd)/python_compile/python_linux_x86_64/bin/python3
-HOST_PYTHON=$(pwd)/python_compile/python_linux_arm64/bin/python3
+BUILD_PYTHON=$(pwd)/python_compile/python-3.13-x86_64-linux/bin/python3
+HOST_PYTHON=$(pwd)/python_compile/python-3.13-arm64-linux/bin/python3
 CROSSENV_DIR="cross_env_linux_arm64"
 cd cross_environments
 

@@ -8,7 +8,7 @@ First, we create and activate a virtual environment named `myenv313` using Pytho
 ```bash
 cd ..
 cd ..
-PYTHON_DIR=$(pwd)/python_compile/python_linux_x86_64/bin/python3
+PYTHON_DIR=$(pwd)/python_compile/python-3.13-x86_64-linux/bin/python3
 cd examples/NO_Cross_Compile_Example
 $PYTHON_DIR -m venv myenv313
 source myenv313/bin/activate

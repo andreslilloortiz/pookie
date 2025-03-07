@@ -19,9 +19,9 @@ wget https://www.python.org/ftp/python/3.13.1/python-3.13.1-macos11.pkg >> /dev/
 echo "	- Installing Python"
 sudo darling shell <<EOF
 xcode-select --install >> /dev/null 2>> /dev/null
-mkdir -p python_macos_x86_64
+mkdir -p python-3.13-x86_64-macos
 installer -pkg python-3.13.1-macos11.pkg -target / >> /dev/null 2>> /dev/null
-cp -R /Library/Frameworks/Python.framework/Versions/3.13/* ./python_macos_x86_64/ >> /dev/null 2>> /dev/null
+cp -R /Library/Frameworks/Python.framework/Versions/3.13/* ./python-3.13-x86_64-macos/ >> /dev/null 2>> /dev/null
 EOF
 
 ## Clean up temporary files

@@ -1,8 +1,8 @@
 # python_compile
-tools/python_compile/python_linux_x86_64/
-tools/python_compile/python_linux_arm64/
-tools/python_compile/python_windows_x86_64/
-tools/python_compile/python_macos_x86_64/
+tools/python_compile/python-3.13-x86_64-linux/
+tools/python_compile/python-3.13-arm64-linux/
+tools/python_compile/python-3.13-x86_64-windows/
+tools/python_compile/python-3.13-x86_64-macos/
 tools/python_compile/darling/
 
 # cross_enviroments

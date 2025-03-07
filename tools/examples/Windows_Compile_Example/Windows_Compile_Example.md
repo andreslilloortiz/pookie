@@ -9,9 +9,9 @@ To compile a Python package for Windows using Wine, you will need:
 ## Define paths for the compiler, includes, libraries, and Python executable
 ```bash
 CL_PATH="/home/andres/Documentos/TFG/actionless/examples/MSVC_in_Wine_on_Linux_Example/my_msvc/opt/msvc/bin/x64/cl.exe"
-INCLUDE_PATH="/home/andres/Documentos/TFG/actionless/python_compile/python_windows_x86_64/include"
-LIB_PATH="/home/andres/Documentos/TFG/actionless/python_compile/python_windows_x86_64/libs"
-PYTHON_PATH="/home/andres/Documentos/TFG/actionless/python_compile/python_windows_x86_64/python.exe"
+INCLUDE_PATH="/home/andres/Documentos/TFG/actionless/python_compile/python-3.13-x86_64-windows/include"
+LIB_PATH="/home/andres/Documentos/TFG/actionless/python_compile/python-3.13-x86_64-windows/libs"
+PYTHON_PATH="/home/andres/Documentos/TFG/actionless/python_compile/python-3.13-x86_64-windows/python.exe"
 ```
 
 ## Compile sum.c using MSVC inside Wine

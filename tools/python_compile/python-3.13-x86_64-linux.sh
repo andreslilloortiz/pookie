@@ -19,7 +19,7 @@ cd Python-3.13.1/
 
 ## Set up the environment
 echo "	- Setting up the environment"
-./configure --prefix=$(pwd)/python_linux_x86_64 --enable-optimizations >> /dev/null 2>> /dev/null
+./configure --prefix=$(pwd)/python-3.13-x86_64-linux --enable-optimizations >> /dev/null 2>> /dev/null
 
 ## Compile Python
 echo "	- Compiling Python"
@@ -31,7 +31,7 @@ make install >> /dev/null 2>> /dev/null
 
 # Move the compiled and installed Python to the current directory
 cd ..
-mv Python-3.13.1/python_linux_x86_64 .
+mv Python-3.13.1/python-3.13-x86_64-linux .
 
 ## Remove unnecessary files
 rm Python-3.13.1.tar.xz

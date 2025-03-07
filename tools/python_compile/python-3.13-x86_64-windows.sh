@@ -27,7 +27,7 @@ wget https://www.python.org/ftp/python/3.13.1/python-3.13.1-amd64.exe
 
 ## Install Python
 echo "	- Installing Python"
-mkdir python_windows_x86_64
+mkdir python-3.13-x86_64-windows
 wine python-3.13.1-amd64.exe
 
 ## Remove unnecessary files

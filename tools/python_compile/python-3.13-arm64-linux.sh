@@ -21,7 +21,7 @@ echo "	- Extracting source code"
 tar -xvf Python-3.13.1.tar.xz >> /dev/null 2>> /dev/null
 
 ## Build Python directory
-BUILD_PYTHON=$(pwd)/python_linux_x86_64/bin/python3
+BUILD_PYTHON=$(pwd)/python-3.13-x86_64-linux/bin/python3
 
 ## Create a virtual environment with Build Python
 echo "	- Creating a virtual enviroment with Build Python"
@@ -48,7 +48,7 @@ echo "ac_cv_file__dev_ptc=no" >> config.site
 CONFIG_SITE=$(pwd)/config.site ../configure \
     --host=aarch64-linux-gnu \
     --build=$(../config.guess) \
-    --prefix=$(pwd)/python_linux_arm64 \
+    --prefix=$(pwd)/python-3.13-arm64-linux \
     --enable-shared \
     CROSS_COMPILE=aarch64-linux-gnu- \
     CFLAGS="-march=armv8-a" \
@@ -69,7 +69,7 @@ deactivate
 ## Move the compiled and installed Python to the current directory
 cd ..
 cd ..
-mv Python-3.13.1/build_cross/python_linux_arm64/ .
+mv Python-3.13.1/build_cross/python-3.13-arm64-linux/ .
 
 ## Remove unnecessary files
 rm Python-3.13.1.tar.xz
