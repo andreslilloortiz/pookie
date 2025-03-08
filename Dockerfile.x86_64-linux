@@ -3,7 +3,6 @@ FROM ubuntu:latest
 
 # Set the build arguments for the Python version and C source file
 ARG PYTHON_VERSION
-ARG C_SOURCE_FILE
 
 # Install necessary dependencies
 RUN apt-get update && apt-get install -y \
@@ -32,9 +31,6 @@ RUN wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VER
 
 # Verify the Python installation
 RUN python3 --version && gcc --version
-
-# Copy the C source file into the container
-COPY ${C_SOURCE_FILE} /${C_SOURCE_FILE}
 
 # Default command
 CMD ["/bin/sh"]

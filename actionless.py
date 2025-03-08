@@ -5,9 +5,8 @@ import subprocess
 def main():
     parser = argparse.ArgumentParser(description='Tool for Automating the Build and Testing Process of Native Python Libraries Using Cross-Compilation and Emulation Technologies')
 
-    parser.add_argument('source', type=str, help='Python library to build and test')
-    parser.add_argument('--build', action='store_true', help='Build the library')
-    parser.add_argument('--test', action='store_true', help='Test the library')
+    parser.add_argument('--build', type=str, help='Python library to build')
+    parser.add_argument('--test', type=str, help='Test file to run after building the library')
     parser.add_argument('--python-version', type=str, default='3.13.1', help='Python version to use (default: 3.13.1)')
     parser.add_argument('--target', type=str, required=True, nargs='+', choices=['x86_64-linux', 'x86_64-windows', 'x86_64-macos', 'arm64-macos'], help='Target platform(s) to build and test the library')
 
@@ -17,32 +16,48 @@ def main():
     for arg in vars(args):
         print(f"{arg}: {getattr(args, arg)}")
 
-    # check if source file exists
-    if not os.path.isfile(args.source):
-        print(f"Error: {args.source} is not a valid file.")
-        return
+    # move files to workspace
+    subprocess.run(['mkdir', '-p', 'workspace'])
+    if args.build != None and os.path.isfile(args.build):    
+        subprocess.run(['cp', args.build, 'workspace'])
+    if args.test != None and os.path.isfile(args.test):
+        subprocess.run(['cp', args.test, 'workspace'])
 
     # iterate targets
     for target in args.target:
 
+        # x86_64-linux
         if target == 'x86_64-linux':
 
+            # create docker image
             print(">> Creating docker image for x86_64-linux")
             subprocess.run([
                 'docker', 'build', '-f', f'Dockerfile.{target}',
                 '--build-arg', f'PYTHON_VERSION={args.python_version}',
-                '--build-arg', f'C_SOURCE_FILE={args.source}',
                 '-t', f'{args.python_version}-{target}', '.'
             ])
 
-            if (args.build == True or (args.build == False and args.test == False)):
+            # build the library
+            if args.build != None and os.path.isfile(args.build):
+
                 print(">> Building the library for x86_64-linux")
-                compiled = os.path.splitext(args.source)[0] + ".so"
+                compiled = os.path.splitext(args.build)[0] + ".so"
                 subprocess.run([
                     'docker', 'run', '-it', '--rm',
                     '-v', f'{os.getcwd()}/workspace:/workspace',
                     f'{args.python_version}-{target}', '/bin/bash', '-c',
-                    f'gcc -shared -o {compiled} -fPIC {args.source} $(python3-config --cflags --ldflags) && cp {compiled} /workspace'
+                    f'cd /workspace && gcc -shared -o {compiled} -fPIC {args.build} $(python3-config --cflags --ldflags)'
+                ])
+
+            # test the library
+            if args.test != None and os.path.isfile(args.test):
+
+                print(">> Testing the library for x86_64-linux")
+                subprocess.run([
+                    'docker', 'run', '-it', '--rm',
+                    '-v', f'{os.getcwd()}/workspace:/workspace',
+                    f'{args.python_version}-{target}', '/bin/bash', '-c',
+                    f'cd /workspace && python3 {args.test}'
                 ])
 
     print(">> Check the workspace directory for the compiled library")
