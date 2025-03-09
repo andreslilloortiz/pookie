@@ -43,6 +43,8 @@ RUN echo "deb http://archive.ubuntu.com/ubuntu jammy main universe multiverse re
     dpkg -i darling_0.1.20230310.jammy_amd64.deb && \
     rm darling_0.1.20230310.jammy_amd64.deb
 
+RUN darling --version 
+
 # Download and install the specific version of Python
 
 
