@@ -32,7 +32,7 @@ def main():
             # create docker image
             print(">> Creating docker image for x86_64-linux")
             subprocess.run([
-                'docker', 'build', '-f', f'Dockerfile.{target}',
+                'docker', 'build', '-f', f'images/Dockerfile.{target}',
                 '--build-arg', f'PYTHON_VERSION={args.python_version}',
                 '-t', f'{args.python_version}-{target}', '.'
             ])

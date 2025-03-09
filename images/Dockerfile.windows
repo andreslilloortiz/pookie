@@ -20,12 +20,14 @@ RUN apt-get update && apt-get install -y \
     python3 \
     && rm -rf /var/lib/apt/lists/*
 
-# Download and install the specific version of Python
-RUN wget https://www.python.org/ftp/python/${PYTHON_VERSION}/python-${PYTHON_VERSION}-amd64.exe
-
 # Download MSVC
 RUN git clone https://github.com/mstorsjo/msvc-wine.git && \
     cd msvc-wine && \
     echo "yes" | ./vsdownload.py --dest ../my_msvc/opt/msvc && \
     ./install.sh ../my_msvc/opt/msvc && \
     cd .. && rm -r msvc-wine
+
+# Download and install the specific version of Python
+RUN wget https://www.python.org/ftp/python/${PYTHON_VERSION}/python-${PYTHON_VERSION}-amd64.exe
+
+# Verify the Python installation
