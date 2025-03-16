@@ -17,7 +17,7 @@ def main():
         print(f"{arg}: {getattr(args, arg)}")
 
     # move files to workspace
-    subprocess.run(['mkdir', 'workspace'])
+    subprocess.run(['mkdir', '-p', 'workspace'])
     if args.build != None and os.path.isfile(args.build):    
         subprocess.run(['cp', args.build, 'workspace'])
     if args.test != None and os.path.isfile(args.test):
