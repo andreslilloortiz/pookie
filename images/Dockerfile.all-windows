@@ -25,7 +25,7 @@ RUN git clone https://github.com/mstorsjo/msvc-wine.git && \
     cd .. && rm -r msvc-wine
 
 # Add the python installation
-COPY python-3.10.11-x86_64-windows /python-3.10.11-x86_64-windows
-COPY python-3.11.9-x86_64-windows /python-3.11.9-x86_64-windows
-COPY python-3.12.9-x86_64-windows /python-3.12.9-x86_64-windows
-COPY python-3.13.2-x86_64-windows /python-3.13.2-x86_64-windows
+COPY compiled-python/python-3.10.11-x86_64-windows /python-3.10.11-x86_64-windows
+COPY compiled-python/python-3.11.9-x86_64-windows /python-3.11.9-x86_64-windows
+COPY compiled-python/python-3.12.9-x86_64-windows /python-3.12.9-x86_64-windows
+COPY compiled-python/python-3.13.2-x86_64-windows /python-3.13.2-x86_64-windows

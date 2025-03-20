@@ -44,24 +44,22 @@ def main():
                         args.test,
                         'workspace'])
 
+    # build only one docker for windows and macos
+    if any("windows" in item.lower() for item in args.target):
+        # create docker image
+        print(f">> Creating docker image for all-all-windows")
+        subprocess.run([
+            'docker',
+                'build',
+                '-f',
+                    f'images/Dockerfile.all-windows',
+                '-t',
+                    f'all-all-windows',
+                '.'
+        ])
+
     # iterate versions and targets
     for target in args.target:
-
-        # x86_64-windows
-        if target == 'x86_64-windows':
-
-            # create docker image
-            print(f">> Creating docker image for all-{target}")
-            subprocess.run([
-                'docker',
-                    'build',
-                    '-f',
-                        f'images/Dockerfile.{target}',
-                    '-t',
-                        f'all-{target}',
-                    '.'
-            ])
-
         for python_version in args.python_version:
 
             # x86_64-linux
