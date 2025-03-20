@@ -29,7 +29,7 @@ def main():
     # check args
     print(">> Configuration")
     for arg in vars(args):
-        print(f"{arg}: {getattr(args, arg)}")
+        print(f"\t- {arg}: {getattr(args, arg)}")
 
     # move files to workspace
     subprocess.run(['mkdir', '-p', 'workspace'])
@@ -47,7 +47,7 @@ def main():
             if target == 'x86_64-linux':
 
                 # create docker image
-                print(f"    - Creating docker image for {target}")
+                print(f"\t- Creating docker image for {target}")
                 subprocess.run([
                     'docker', 'build', '-f', f'images/Dockerfile.{target}',
                     '--build-arg', f'PYTHON_VERSION={python_version}',
@@ -57,7 +57,7 @@ def main():
                 # build the library
                 if args.build != None and os.path.isfile(args.build):
 
-                    print(f"    - Building the library for {target}")
+                    print(f"\t- Building the library for {target}")
                     compiled = os.path.splitext(args.build)[0] + ".so"
                     subprocess.run([
                         'docker', 'run', '-it', '--rm',
@@ -69,7 +69,7 @@ def main():
                 # test the library
                 if args.test != None and os.path.isfile(args.test):
 
-                    print(f"    - Testing the library for {target}")
+                    print(f"\t- Testing the library for {target}")
                     subprocess.run([
                         'docker', 'run', '-it', '--rm',
                         '-v', f'{os.getcwd()}/workspace:/workspace',
