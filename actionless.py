@@ -32,11 +32,17 @@ def main():
         print(f"- {arg}: {getattr(args, arg)}")
 
     # move files to workspace
-    subprocess.run(['mkdir', '-p', 'workspace'])
+    subprocess.run(['mkdir',
+                        '-p',
+                        'workspace'])
     if args.build != None and os.path.isfile(args.build):
-        subprocess.run(['cp', args.build, 'workspace'])
+        subprocess.run(['cp',
+                            args.build,
+                            'workspace'])
     if args.test != None and os.path.isfile(args.test):
-        subprocess.run(['cp', args.test, 'workspace'])
+        subprocess.run(['cp',
+                        args.test,
+                        'workspace'])
 
     # iterate versions and targets
     for python_version in args.python_version:
@@ -45,14 +51,22 @@ def main():
             # x86_64-linux
             if target == 'x86_64-linux':
 
-                subprocess.run(['mkdir', '-p', f'workspace/{python_version}-{target}'])
+                subprocess.run(['mkdir',
+                                '-p',
+                                f'workspace/{python_version}-{target}'])
 
                 # create docker image
                 print(f">> Creating docker image for {python_version}-{target}")
                 subprocess.run([
-                    'docker', 'build', '-f', f'images/Dockerfile.{target}',
-                    '--build-arg', f'PYTHON_VERSION={python_version}',
-                    '-t', f'{python_version}-{target}', '.'
+                    'docker',
+                        'build',
+                        '-f',
+                            f'images/Dockerfile.{target}',
+                        '--build-arg',
+                            f'PYTHON_VERSION={python_version}',
+                        '-t',
+                            f'{python_version}-{target}',
+                        '.'
                 ])
 
                 # build the library
@@ -61,10 +75,16 @@ def main():
                     print(f">> Building the library for {python_version}-{target}")
                     compiled = os.path.splitext(args.build)[0] + ".so"
                     subprocess.run([
-                        'docker', 'run', '-it', '--rm',
-                        '-v', f'{os.getcwd()}/workspace:/workspace',
-                        f'{python_version}-{target}', '/bin/bash', '-c',
-                        f'cd /workspace && gcc -shared -o {compiled} -fPIC {args.build} $(python3-config --cflags --ldflags) && mv {compiled} {python_version}-{target}'
+                        'docker',
+                            'run',
+                            '-it',
+                            '--rm',
+                            '-v',
+                                f'{os.getcwd()}/workspace:/workspace',
+                            f'{python_version}-{target}',
+                            '/bin/bash',
+                                '-c',
+                                f'cd /workspace && gcc -shared -o {compiled} -fPIC {args.build} $(python3-config --cflags --ldflags) && mv {compiled} {python_version}-{target}'
                     ])
 
                 # test the library
@@ -72,18 +92,40 @@ def main():
 
                     print(f">> Testing the library for {python_version}-{target}")
                     subprocess.run([
-                        'docker', 'run', '-it', '--rm',
-                        '-v', f'{os.getcwd()}/workspace:/workspace',
-                        f'{python_version}-{target}', '/bin/bash', '-c',
-                        f'cd workspace && cp {args.test} {python_version}-{target} && cd {python_version}-{target} && python3 {args.test} && rm {args.test}'
+                        'docker',
+                            'run',
+                            '-it',
+                            '--rm',
+                            '-v',
+                                f'{os.getcwd()}/workspace:/workspace',
+                            f'{python_version}-{target}',
+                            '/bin/bash',
+                                '-c',
+                                f'cd workspace && cp {args.test} {python_version}-{target} && cd {python_version}-{target} && python3 {args.test} && rm {args.test}'
                     ])
 
             # x86_64-windows
             if target == 'x86_64-windows':
 
+                subprocess.run(['mkdir',
+                                '-p',
+                                f'workspace/{python_version}-{target}'])
+
                 # create docker image
                 print(f">> Creating docker image for {python_version}-{target}")
-
+                subprocess.run([
+                    'docker',
+                        'build',
+                        '-f',
+                            f'images/Dockerfile.{target}',
+                        '--build-arg',
+                            f'PYTHON_VERSION={python_version}',
+                        '--build-arg',
+                            f'PYTHON_PATH=compiled-python/python-{python_version}-{target}',
+                        '-t',
+                            f'{python_version}-{target}',
+                        '.'
+                ])
 
     print("\n>> Check the workspace directory for the compiled library")
 
