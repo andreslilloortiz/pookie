@@ -45,8 +45,24 @@ def main():
                         'workspace'])
 
     # iterate versions and targets
-    for python_version in args.python_version:
-        for target in args.target:
+    for target in args.target:
+
+        # x86_64-windows
+        if target == 'x86_64-windows':
+
+            # create docker image
+            print(f">> Creating docker image for all-{target}")
+            subprocess.run([
+                'docker',
+                    'build',
+                    '-f',
+                        f'images/Dockerfile.{target}',
+                    '-t',
+                        f'all-{target}',
+                    '.'
+            ])
+
+        for python_version in args.python_version:
 
             # x86_64-linux
             if target == 'x86_64-linux':
@@ -103,29 +119,6 @@ def main():
                                 '-c',
                                 f'cd workspace && cp {args.test} {python_version}-{target} && cd {python_version}-{target} && python3 {args.test} && rm {args.test}'
                     ])
-
-            # x86_64-windows
-            if target == 'x86_64-windows':
-
-                subprocess.run(['mkdir',
-                                '-p',
-                                f'workspace/{python_version}-{target}'])
-
-                # create docker image
-                print(f">> Creating docker image for {python_version}-{target}")
-                subprocess.run([
-                    'docker',
-                        'build',
-                        '-f',
-                            f'images/Dockerfile.{target}',
-                        '--build-arg',
-                            f'PYTHON_VERSION={python_version}',
-                        '--build-arg',
-                            f'PYTHON_PATH=compiled-python/python-{python_version}-{target}',
-                        '-t',
-                            f'{python_version}-{target}',
-                        '.'
-                ])
 
     print("\n>> Check the workspace directory for the compiled library")
 
