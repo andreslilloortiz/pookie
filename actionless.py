@@ -32,17 +32,25 @@ def main():
         print(f"- {arg}: {getattr(args, arg)}")
 
     # copy files to workspace
-    subprocess.run(['mkdir',
-                        '-p',
-                        'workspace'])
+    subprocess.run([
+        'mkdir',
+            '-p',
+            'workspace'
+        ])
+
     if args.build != None and os.path.isfile(args.build):
-        subprocess.run(['cp',
-                            args.build,
-                            'workspace'])
+        subprocess.run([
+            'cp',
+                args.build,
+                'workspace'
+        ])
+
     if args.test != None and os.path.isfile(args.test):
-        subprocess.run(['cp',
-                        args.test,
-                        'workspace'])
+        subprocess.run([
+            'cp',
+                args.test,
+                'workspace'
+        ])
 
     # build only one docker for windows and macos
     if any("windows" in item.lower() for item in args.target):
@@ -65,9 +73,11 @@ def main():
             # x86_64-linux
             if target == 'x86_64-linux':
 
-                subprocess.run(['mkdir',
-                                '-p',
-                                f'workspace/{python_version}-{target}'])
+                subprocess.run([
+                    'mkdir',
+                        '-p',
+                        f'workspace/{python_version}-{target}'
+                ])
 
                 # create docker image
                 print(f">> Creating docker image for {python_version}-{target}")
@@ -121,9 +131,13 @@ def main():
             # x86_64-windows
             if target == 'x86_64-windows':
 
-                subprocess.run(['mkdir',
-                                '-p',
-                                f'workspace/{python_version}-{target}'])
+                # PYTHONHASHSEED=1
+
+                subprocess.run([
+                    'mkdir',
+                        '-p',
+                        f'workspace/{python_version}-{target}'
+                ])
 
                 # build the library
                 if args.build != None and os.path.isfile(args.build):
