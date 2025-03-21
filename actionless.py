@@ -14,8 +14,8 @@ def main():
     parser.add_argument('--python-version',
                             type = str,
                             nargs = '+',
-                            choices = ['3.13.1', '3.12.9', '3.11.9', '3.10.10'],
-                            default = ['3.13.1', '3.12.9', '3.11.9', '3.10.10'],
+                            choices = ['3.13.2', '3.12.9', '3.11.9', '3.10.11'],
+                            default = ['3.13.2', '3.12.9', '3.11.9', '3.10.11'],
                             help = 'Python version(s) to use (default: all)')
     parser.add_argument('--target',
                             type = str,
