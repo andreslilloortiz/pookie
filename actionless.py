@@ -14,8 +14,8 @@ def main():
     parser.add_argument('--python-version',
                             type = str,
                             nargs = '+',
-                            choices = ['3.13.2', '3.12.9', '3.11.9', '3.10.11'],
-                            default = ['3.13.2', '3.12.9', '3.11.9', '3.10.11'],
+                            choices = ['3.13.1', '3.12.9', '3.11.9', '3.10.10'],
+                            default = ['3.13.1', '3.12.9', '3.11.9', '3.10.10'],
                             help = 'Python version(s) to use (default: all)')
     parser.add_argument('--target',
                             type = str,
@@ -31,7 +31,7 @@ def main():
     for arg in vars(args):
         print(f"- {arg}: {getattr(args, arg)}")
 
-    # move files to workspace
+    # copy files to workspace
     subprocess.run(['mkdir',
                         '-p',
                         'workspace'])
@@ -117,6 +117,21 @@ def main():
                                 '-c',
                                 f'cd workspace && cp {args.test} {python_version}-{target} && cd {python_version}-{target} && python3 {args.test} && rm {args.test}'
                     ])
+
+            # x86_64-windows
+            if target == 'x86_64-windows':
+
+                subprocess.run(['mkdir',
+                                '-p',
+                                f'workspace/{python_version}-{target}'])
+
+                # build the library
+                if args.build != None and os.path.isfile(args.build):
+                    pass
+
+                # test the library
+                if args.test != None and os.path.isfile(args.test):
+                    pass
 
     print("\n>> Check the workspace directory for the compiled library")
 
