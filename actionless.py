@@ -66,6 +66,19 @@ def main():
                 '.'
         ])
 
+    if any("macos" in item.lower() for item in args.target):
+        # create docker image
+        print(f">> Creating docker image for all-all-macos")
+        subprocess.run([
+            'docker',
+                'build',
+                '-f',
+                    f'images/Dockerfile.all-macos',
+                '-t',
+                    f'all-all-macos',
+                '.'
+        ])
+
     # iterate versions and targets
     for target in args.target:
         for python_version in args.python_version:

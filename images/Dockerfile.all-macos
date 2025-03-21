@@ -36,11 +36,11 @@ RUN wget https://github.com/joseluisq/macosx-sdks/releases/download/11.1/MacOSX1
 
 ENV PATH="/osxcross/target/bin:${PATH}"
 
-# Download darling
-RUN echo "deb http://archive.ubuntu.com/ubuntu jammy main universe multiverse restricted" | tee /etc/apt/sources.list.d/jammy.list && \
-    apt-get update && apt-get install -y shared-mime-info libavcodec58 libavformat58 libavutil56 libcairo2 libdbus-1-3 libegl1 libfuse2t64 libgif7 libgl1 libglu1-mesa libpulse0 libswresample3 libtiff5 libxcursor1 libxkbfile1 libxrandr2 fuse && rm -rf /var/lib/apt/lists/* && \
-    wget https://github.com/darlinghq/darling/releases/download/v0.1.20230310_update_sources_11_5/darling_0.1.20230310.jammy_amd64.deb && \
-    dpkg -i darling_0.1.20230310.jammy_amd64.deb && \
-    rm darling_0.1.20230310.jammy_amd64.deb
+# # Download darling
+# RUN echo "deb http://archive.ubuntu.com/ubuntu jammy main universe multiverse restricted" | tee /etc/apt/sources.list.d/jammy.list && \
+#     apt-get update && apt-get install -y shared-mime-info libavcodec58 libavformat58 libavutil56 libcairo2 libdbus-1-3 libegl1 libfuse2t64 libgif7 libgl1 libglu1-mesa libpulse0 libswresample3 libtiff5 libxcursor1 libxkbfile1 libxrandr2 fuse && rm -rf /var/lib/apt/lists/* && \
+#     wget https://github.com/darlinghq/darling/releases/download/v0.1.20230310_update_sources_11_5/darling_0.1.20230310.jammy_amd64.deb && \
+#     dpkg -i darling_0.1.20230310.jammy_amd64.deb && \
+#     rm darling_0.1.20230310.jammy_amd64.deb
 
-RUN darling --version
+# RUN darling --version
