@@ -1,9 +1,6 @@
 # Use the Ubuntu base image
 FROM ubuntu:latest
 
-# Set the build arguments for the Python version and C source file
-ARG PYTHON_VERSION
-
 # Install necessary dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
@@ -19,15 +16,39 @@ RUN apt-get update && apt-get install -y \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Download and install the specific version of Python
-RUN wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz && \
-    tar -xJf Python-${PYTHON_VERSION}.tar.xz && \
-    cd Python-${PYTHON_VERSION} && \
-    ./configure --enable-optimizations && \
+# Download and install the Python
+RUN wget https://www.python.org/ftp/python/3.13.2/Python-3.13.2.tar.xz && \
+    tar -xJf Python-3.13.2.tar.xz && \
+    cd Python-3.13.2 && \
+    ./configure --prefix=/python-3.13.2-x86_64-linux --enable-optimizations && \
     make -j$(nproc) && \
     make install && \
     cd .. && \
-    rm -rf Python-${PYTHON_VERSION}*
+    rm -rf Python-3.13.2*
 
-# Verify the Python installation
-RUN python3 --version && gcc --version
+RUN wget https://www.python.org/ftp/python/3.12.9/Python-3.12.9.tar.xz && \
+    tar -xJf Python-3.12.9.tar.xz && \
+    cd Python-3.12.9 && \
+    ./configure --prefix=/python-3.12.9-x86_64-linux --enable-optimizations && \
+    make -j$(nproc) && \
+    make install && \
+    cd .. && \
+    rm -rf Python-3.12.9*
+
+RUN wget https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tar.xz && \
+    tar -xJf Python-3.11.9.tar.xz && \
+    cd Python-3.11.9 && \
+    ./configure --prefix=/python-3.11.9-x86_64-linux --enable-optimizations && \
+    make -j$(nproc) && \
+    make install && \
+    cd .. && \
+    rm -rf Python-3.11.9*
+
+RUN wget https://www.python.org/ftp/python/3.10.11/Python-3.10.11.tar.xz && \
+    tar -xJf Python-3.10.11.tar.xz && \
+    cd Python-3.10.11 && \
+    ./configure --prefix=/python-3.10.11-x86_64-linux --enable-optimizations && \
+    make -j$(nproc) && \
+    make install && \
+    cd .. && \
+    rm -rf Python-3.10.11*

@@ -52,9 +52,9 @@ def main():
                 'workspace'
         ])
 
-    # build only one docker for windows and macos
+    # build only one docker image for all architectures and python versions of windows and macos
     if any("windows" in item.lower() for item in args.target):
-        # create docker image
+        # create windows docker image
         print(f">> Creating docker image for all-all-windows")
         subprocess.run([
             'docker',
@@ -67,7 +67,7 @@ def main():
         ])
 
     if any("macos" in item.lower() for item in args.target):
-        # create docker image
+        # create macos docker image
         print(f">> Creating docker image for all-all-macos")
         subprocess.run([
             'docker',
@@ -79,7 +79,21 @@ def main():
                 '.'
         ])
 
-    # iterate versions and targets
+    # build only one docker image for all python versions of x86_64-linux
+    if any("x86_64-linux" in item.lower() for item in args.target):
+        # create x86_64-linux docker image
+        print(f">> Creating docker image for all-x86_64-linux")
+        subprocess.run([
+            'docker',
+                'build',
+                '-f',
+                    f'images/Dockerfile.x86_64-linux',
+                '-t',
+                    f'all-x86_64-linux',
+                '.'
+        ])
+
+    # iterate versions and targets for build and test the library
     for target in args.target:
         for python_version in args.python_version:
 
@@ -90,20 +104,6 @@ def main():
                     'mkdir',
                         '-p',
                         f'workspace/{python_version}-{target}'
-                ])
-
-                # create docker image
-                print(f">> Creating docker image for {python_version}-{target}")
-                subprocess.run([
-                    'docker',
-                        'build',
-                        '-f',
-                            f'images/Dockerfile.{target}',
-                        '--build-arg',
-                            f'PYTHON_VERSION={python_version}',
-                        '-t',
-                            f'{python_version}-{target}',
-                        '.'
                 ])
 
                 # build the library
@@ -118,7 +118,7 @@ def main():
                             '--rm',
                             '-v',
                                 f'{os.getcwd()}/workspace:/workspace',
-                            f'{python_version}-{target}',
+                            f'all-{target}',
                             '/bin/bash',
                                 '-c',
                                 f'cd /workspace && gcc -shared -o {compiled} -fPIC {args.build} $(python3-config --cflags --ldflags) && mv {compiled} {python_version}-{target}'
@@ -135,7 +135,7 @@ def main():
                             '--rm',
                             '-v',
                                 f'{os.getcwd()}/workspace:/workspace',
-                            f'{python_version}-{target}',
+                            f'all-{target}',
                             '/bin/bash',
                                 '-c',
                                 f'cd workspace && cp {args.test} {python_version}-{target} && cd {python_version}-{target} && python3 {args.test} && rm {args.test}'
