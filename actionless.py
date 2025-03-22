@@ -2,6 +2,19 @@ import argparse
 import os
 import subprocess
 
+def image_exists(image_name):
+    """Verifica si una imagen de Docker ya existe."""
+    result = subprocess.run([
+        'docker',
+            'images',
+            '-q',
+                image_name],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True
+    )
+    return bool(result.stdout.strip())
+
 def main():
     parser = argparse.ArgumentParser(description='Tool for Automating the Build and Testing Process of Native Python Libraries Using Cross-Compilation and Emulation Technologies')
 
@@ -54,44 +67,50 @@ def main():
 
     # build only one docker image for all architectures and python versions of windows and macos
     if any("windows" in item.lower() for item in args.target):
-        # create windows docker image
-        print(f">> Creating docker image for all-all-windows")
-        subprocess.run([
-            'docker',
-                'build',
-                '-f',
-                    f'images/Dockerfile.all-windows',
-                '-t',
-                    f'all-all-windows',
-                '.'
-        ])
+        if not image_exists("all-all-windows"):
+            print(f">> Creating docker image for all-all-windows")
+            subprocess.run([
+                'docker',
+                    'build',
+                    '-f',
+                        'images/Dockerfile.all-windows',
+                    '-t',
+                        'all-all-windows',
+                    '.'
+            ])
+        else:
+            print(">> Docker image for all-all-windows is already built")
 
     if any("macos" in item.lower() for item in args.target):
-        # create macos docker image
-        print(f">> Creating docker image for all-all-macos")
-        subprocess.run([
-            'docker',
-                'build',
-                '-f',
-                    f'images/Dockerfile.all-macos',
-                '-t',
-                    f'all-all-macos',
-                '.'
-        ])
+        if not image_exists("all-all-macos"):
+            print(f">> Creating docker image for all-all-macos")
+            subprocess.run([
+                'docker',
+                    'build',
+                    '-f',
+                        'images/Dockerfile.all-macos',
+                    '-t',
+                        'all-all-macos',
+                    '.'
+            ])
+        else:
+            print(">> Docker image for all-all-macos is already built")
 
     # build only one docker image for all python versions of x86_64-linux
     if any("x86_64-linux" in item.lower() for item in args.target):
-        # create x86_64-linux docker image
-        print(f">> Creating docker image for all-x86_64-linux")
-        subprocess.run([
-            'docker',
-                'build',
-                '-f',
-                    f'images/Dockerfile.x86_64-linux',
-                '-t',
-                    f'all-x86_64-linux',
-                '.'
-        ])
+        if not image_exists("all-x86_64-linux"):
+            print(f">> Creating docker image for all-x86_64-linux")
+            subprocess.run([
+                'docker',
+                    'build',
+                    '-f',
+                        'images/Dockerfile.x86_64-linux',
+                    '-t',
+                        'all-x86_64-linux',
+                    '.'
+            ])
+        else:
+            print(">> Docker image for all-x86_64-linux is already built")
 
     # iterate versions and targets for build and test the library
     for target in args.target:
