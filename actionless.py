@@ -3,7 +3,7 @@ import os
 import subprocess
 
 def image_exists(image_name):
-    """Verifica si una imagen de Docker ya existe."""
+    """Checks if a Docker image already exists."""
     result = subprocess.run([
         'docker',
             'images',
@@ -140,7 +140,7 @@ def main():
                             f'all-{target}',
                             '/bin/bash',
                                 '-c',
-                                f'cd /workspace && gcc -shared -o {compiled} -fPIC {args.build} $(python3-config --cflags --ldflags) && mv {compiled} {python_version}-{target}'
+                                f'PYTHON_DIR=/python-{python_version}-{target}/bin/python3 && $PYTHON_DIR -m venv myenv{python_version} && source myenv{python_version}/bin/activate && cd /workspace && gcc -shared -o {compiled} -fPIC {args.build} $(python3-config --cflags --ldflags) && mv {compiled} {python_version}-{target}'
                     ])
 
                 # test the library
@@ -157,7 +157,7 @@ def main():
                             f'all-{target}',
                             '/bin/bash',
                                 '-c',
-                                f'cd workspace && cp {args.test} {python_version}-{target} && cd {python_version}-{target} && python3 {args.test} && rm {args.test}'
+                                f'PYTHON_DIR=/python-{python_version}-{target}/bin/python3 && $PYTHON_DIR -m venv myenv{python_version} && source myenv{python_version}/bin/activate && cd workspace && cp {args.test} {python_version}-{target} && cd {python_version}-{target} && python3 {args.test} && rm {args.test}'
                     ])
 
             # x86_64-windows
