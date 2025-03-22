@@ -145,6 +145,12 @@ def main():
             if target == 'x86_64-windows':
 
                 # PYTHONHASHSEED=1
+                '''
+                CL_PATH='/my_msvc/opt/msvc/bin/x64/cl.exe'
+                INCLUDE_PATH='/python-3.13.2-x86_64-windows/include'
+                LIB_PATH='/python-3.13.2-x86_64-windows/libs'
+                PYTHON_PATH='/python-3.13.2-x86_64-windows/python.exe'
+                '''
 
                 subprocess.run([
                     'mkdir',
