@@ -17,6 +17,13 @@ RUN apt-get update && apt-get install -y \
     python3 \
     && rm -rf /var/lib/apt/lists/*
 
+# Configure wine
+RUN export WINEPREFIX=/home/ubuntu/.wine && \
+    mkdir -p /home/ubuntu/.wine && \
+    chmod -R 777 /home/ubuntu/.wine && \
+    mkdir -p /home/ubuntu/.wine/drive_c/windows/temp && \
+    chmod -R 777 /home/ubuntu/.wine/drive_c/windows/temp
+
 # Download MSVC
 RUN git clone https://github.com/mstorsjo/msvc-wine.git && \
     cd msvc-wine && \

@@ -33,8 +33,8 @@ def main():
     parser.add_argument('--target',
                             type = str,
                             nargs = '+',
-                            choices = ['x86_64-linux', 'x86_64-windows', 'x86_64-macos', 'arm64-macos'],
-                            default = ['x86_64-linux', 'x86_64-windows', 'x86_64-macos', 'arm64-macos'],
+                            choices = ['x86_64-linux', 'x86_64-windows', 'x86_64-macos'],
+                            default = ['x86_64-linux', 'x86_64-windows', 'x86_64-macos'],
                             help = 'Target platform(s) to build and test the library (default: all)')
 
     args = parser.parse_args()
@@ -64,6 +64,22 @@ def main():
                 args.test,
                 'workspace'
         ])
+
+    # build only one docker image for all python versions of x86_64-linux
+    if any("x86_64-linux" in item.lower() for item in args.target):
+        if not image_exists("all-x86_64-linux"):
+            print(f">> Creating docker image for all-x86_64-linux")
+            subprocess.run([
+                'docker',
+                    'build',
+                    '-f',
+                        'images/Dockerfile.x86_64-linux',
+                    '-t',
+                        'all-x86_64-linux',
+                    '.'
+            ])
+        else:
+            print(">> Docker image for all-x86_64-linux is already built")
 
     # build only one docker image for all architectures and python versions of windows and macos
     if any("windows" in item.lower() for item in args.target):
@@ -95,22 +111,6 @@ def main():
             ])
         else:
             print(">> Docker image for all-all-macos is already built")
-
-    # build only one docker image for all python versions of x86_64-linux
-    if any("x86_64-linux" in item.lower() for item in args.target):
-        if not image_exists("all-x86_64-linux"):
-            print(f">> Creating docker image for all-x86_64-linux")
-            subprocess.run([
-                'docker',
-                    'build',
-                    '-f',
-                        'images/Dockerfile.x86_64-linux',
-                    '-t',
-                        'all-x86_64-linux',
-                    '.'
-            ])
-        else:
-            print(">> Docker image for all-x86_64-linux is already built")
 
     # iterate versions and targets for build and test the library
     for target in args.target:
@@ -179,7 +179,21 @@ def main():
 
                 # build the library
                 if args.build != None and os.path.isfile(args.build):
-                    pass
+
+                    print(f">> Building the library for {python_version}-{target}")
+                    compiled = os.path.splitext(args.build)[0] + ".pyd"
+                    subprocess.run([
+                        'docker',
+                            'run',
+                            '-it',
+                            '--rm',
+                            '-v',
+                                f'{os.getcwd()}/workspace:/workspace',
+                            f'all-all-windows',
+                            '/bin/bash',
+                                '-c',
+                                f''
+                    ])
 
                 # test the library
                 if args.test != None and os.path.isfile(args.test):
