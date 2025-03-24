@@ -1,3 +1,4 @@
+# One line
 andres@andres-OMEN-Laptop-15-ek0xxx:~/Documentos/TFG/actionless$ docker run -it --rm -v ./workspace:/workspace all-all-windows /bin/bash -c "export WINEPREFIX=/home/ubuntu/.wine && cd workspace && WINEDEBUG=-all wine "/my_msvc/opt/msvc/bin/x64/cl.exe" /LD /I"/python-3.13.2-x86_64-windows/include" sum.c /link /LIBPATH:"/python-3.13.2-x86_64-windows/libs" /OUT:sum.pyd"
 
 wine: could not open working directory L"C:\\windows\\system32\\", starting in the Windows directory.
@@ -6,10 +7,10 @@ wine: could not open working directory L"C:\\windows\\system32\\", starting in t
 wine: configuration in L"/home/ubuntu/.wine" has been updated.
 exit status 3
 
+# Separated lines
 andres@andres-OMEN-Laptop-15-ek0xxx:~/Documentos/TFG/actionless$ docker run -it --rm -v ./workspace:/workspace all-all-windows /bin/bash
 
-root@5e79e46d9080:/# export WINEPREFIX=/home/ubuntu/.wine && cd workspace && WINEDEBUG=-all wine "/my_msvc/opt/msvc/bin/x64/cl.exe" /LD /I"/python-3.13.2-x86_64-windows/include" sum.c /link /LI
-BPATH:"/python-3.13.2-x86_64-windows/libs" /OUT:sum.pyd
+root@5e79e46d9080:/# export WINEPREFIX=/home/ubuntu/.wine && cd workspace && WINEDEBUG=-all wine "/my_msvc/opt/msvc/bin/x64/cl.exe" /LD /I"/python-3.13.2-x86_64-windows/include" sum.c /link /LIBPATH:"/python-3.13.2-x86_64-windows/libs" /OUT:sum.pyd
 
 wine: could not open working directory L"C:\\windows\\system32\\", starting in the Windows directory.
 wine: could not open working directory L"C:\\windows\\system32\\", starting in the Windows directory.
