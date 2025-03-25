@@ -20,10 +20,9 @@ echo "	- Installing Python"
 sudo darling shell <<EOF
 xcode-select --install
 mkdir -p ../compiled-python/python-3.13.2-x86_64-macos
-installer -pkg python-3.13.2-macos11.pkg -target ../compiled-python/python-3.13.2-x86_64-macos
+installer -pkg python-3.13.2-macos11.pkg -target /
+cp -R /Library/Frameworks/Python.framework/Versions/3.13/* ../compiled-python/python-3.13.2-x86_64-macos
 EOF
-
-# cp -R /Library/Frameworks/Python.framework/Versions/3.13/* ../../compiled-python/python-3.13.2-x86_64-macos
 
 ## Clean up temporary files
 rm darling_0.1.20230310.jammy_amd64.deb
