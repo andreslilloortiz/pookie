@@ -163,14 +163,6 @@ def main():
             # x86_64-windows
             if target == 'x86_64-windows':
 
-                # PYTHONHASHSEED=1
-                '''
-                CL_PATH='/my_msvc/opt/msvc/bin/x64/cl.exe'
-                INCLUDE_PATH='/python-3.13.2-x86_64-windows/include'
-                LIB_PATH='/python-3.13.2-x86_64-windows/libs'
-                PYTHON_PATH='/python-3.13.2-x86_64-windows/python.exe'
-                '''
-
                 subprocess.run([
                     'mkdir',
                         '-p',
@@ -179,6 +171,13 @@ def main():
 
                 # build the library
                 if args.build != None and os.path.isfile(args.build):
+
+                    '''
+                    CL_PATH='/my_msvc/opt/msvc/bin/x64/cl.exe'
+                    INCLUDE_PATH='/python-3.13.2-x86_64-windows/include'
+                    LIB_PATH='/python-3.13.2-x86_64-windows/libs'
+                    PYTHON_PATH='/python-3.13.2-x86_64-windows/python.exe'
+                    '''
 
                     print(f">> Building the library for {python_version}-{target}")
                     compiled = os.path.splitext(args.build)[0] + ".pyd"
@@ -193,6 +192,38 @@ def main():
                             '/bin/bash',
                                 '-c',
                                 f''
+                    ])
+
+                # test the library
+                if args.test != None and os.path.isfile(args.test):
+                    pass # PYTHONHASHSEED=1
+
+            # x86_64-macos
+            if target == 'x86_64-macos':
+
+                subprocess.run([
+                    'mkdir',
+                        '-p',
+                        f'workspace/{python_version}-{target}'
+                ])
+
+                # build the library
+                if args.build != None and os.path.isfile(args.build):
+
+                    print(f">> Building the library for {python_version}-{target}")
+                    compiled = os.path.splitext(args.build)[0] + ".so"
+                    subfolder = ".".join(python_version.split(".")[:2])
+                    subprocess.run([
+                        'docker',
+                            'run',
+                            '-it',
+                            '--rm',
+                            '-v',
+                                f'{os.getcwd()}/workspace:/workspace',
+                            f'all-all-macos',
+                            '/bin/bash',
+                                '-c',
+                                f'cd /workspace && o64-clang -shared -o sum.so -undefined dynamic_lookup -I/python-{python_version}-x86_64-macos/include/python{subfolder} {args.build} && mv {compiled} {python_version}-{target}'
                     ])
 
                 # test the library
