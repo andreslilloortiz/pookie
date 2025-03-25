@@ -44,3 +44,9 @@ ENV PATH="/osxcross/target/bin:${PATH}"
 #     rm darling_0.1.20230310.jammy_amd64.deb
 
 # RUN darling --version
+
+# Add the python installation
+COPY compiled-python/python-3.10.11-x86_64-macos /python-3.10.11-x86_64-macos
+COPY compiled-python/python-3.11.9-x86_64-macos /python-3.11.9-x86_64-macos
+COPY compiled-python/python-3.12.9-x86_64-macos /python-3.12.9-x86_64-macos
+COPY compiled-python/python-3.13.2-x86_64-macos /python-3.13.2-x86_64-macos
