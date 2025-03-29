@@ -199,7 +199,20 @@ def main():
 
                 # test the library
                 if args.test != None and os.path.isfile(args.test):
-                    pass # PYTHONHASHSEED=1
+                    # PYTHONHASHSEED=1
+                    print(f">> Testing the library for {python_version}-{target}")
+                    subprocess.run([
+                        'docker',
+                            'run',
+                            '-it',
+                            '--rm',
+                            '-v',
+                                f'{os.getcwd()}/workspace:/workspace',
+                            'all-all-windows',
+                            '/bin/bash',
+                                '-c',
+                                f'PYTHON_DIR=/python-{python_version}-{target}/python.exe && cd workspace && cp {args.test} {python_version}-{target} && cd {python_version}-{target} && WINEDEBUG=-all wine $PYTHON_DIR {args.test} 2>&1 | grep -v -E "wine" && rm {args.test}'
+                    ])
 
             # x86_64-macos
             if target == 'x86_64-macos':
