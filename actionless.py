@@ -176,7 +176,7 @@ def main():
                     compiled = os.path.splitext(args.build)[0] + ".pyd"
                     lpython = int(python_version.split('.')[0] + python_version.split('.')[1])
 
-                    build_file_content = f"""@echo off\n/python-{python_version}-{target}/python.exe -m venv myenv{python_version}\ncall myenv{python_version}/Scripts/activate.bat\n/mingw64/bin/gcc.exe -shared -o sum.pyd sum.c -I "/python-{python_version}-{target}/include" -L "/python-{python_version}-{target}/libs" -lpython{lpython}"""
+                    build_file_content = f"""@echo off\n/python-{python_version}-{target}/python.exe -m venv myenv{python_version}\ncall myenv{python_version}/Scripts/activate.bat\n/mingw64/bin/gcc.exe -shared -o {compiled} {args.build} -I "/python-{python_version}-{target}/include" -L "/python-{python_version}-{target}/libs" -lpython{lpython}"""
 
                     with open(f"{os.getcwd()}/workspace/tmp.bat", 'w') as build_file:
                         build_file.write(build_file_content)
@@ -194,7 +194,7 @@ def main():
                             'wine',
                                 'cmd',
                                     '/c',
-                                        f'tmp.bat && move sum.pyd {python_version}-{target} && rmdir /S /Q myenv{python_version} && del /Q tmp.bat && exit'
+                                        f'tmp.bat && move {compiled} {python_version}-{target} && rmdir /S /Q myenv{python_version} && del /Q tmp.bat && exit'
                     ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
                 # test the library
@@ -226,7 +226,7 @@ def main():
                             'all-all-macos',
                             '/bin/bash',
                                 '-c',
-                                f'cd /workspace && o64-clang -shared -o sum.so -undefined dynamic_lookup -I/python-{python_version}-x86_64-macos/include/python{subfolder} {args.build} && mv {compiled} {python_version}-{target}'
+                                f'cd /workspace && o64-clang -shared -o {compiled} -undefined dynamic_lookup -I/python-{python_version}-x86_64-macos/include/python{subfolder} {args.build} && mv {compiled} {python_version}-{target}'
                     ])
 
                 # test the library
