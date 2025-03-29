@@ -172,15 +172,15 @@ def main():
                 # build the library
                 if args.build != None and os.path.isfile(args.build):
 
-                    '''
-                    CL_PATH='/my_msvc/opt/msvc/bin/x64/cl.exe'
-                    INCLUDE_PATH='/python-3.13.2-x86_64-windows/include'
-                    LIB_PATH='/python-3.13.2-x86_64-windows/libs'
-                    PYTHON_PATH='/python-3.13.2-x86_64-windows/python.exe'
-                    '''
-
                     print(f">> Building the library for {python_version}-{target}")
                     compiled = os.path.splitext(args.build)[0] + ".pyd"
+                    lpython = int(python_version.split('.')[0] + python_version.split('.')[1])
+
+                    build_file_content = f"""@echo off\n/python-{python_version}-{target}/python.exe -m venv myenv{python_version}\ncall myenv{python_version}/Scripts/activate.bat\n/mingw64/bin/gcc.exe -shared -o sum.pyd sum.c -I "/python-{python_version}-{target}/include" -L "/python-{python_version}-{target}/libs" -lpython{lpython}"""
+
+                    with open(f"{os.getcwd()}/workspace/tmp.bat", 'w') as build_file:
+                        build_file.write(build_file_content)
+
                     subprocess.run([
                         'docker',
                             'run',
@@ -188,11 +188,14 @@ def main():
                             '--rm',
                             '-v',
                                 f'{os.getcwd()}/workspace:/workspace',
-                            f'all-all-windows',
-                            '/bin/bash',
-                                '-c',
-                                f''
-                    ])
+                            '-w',
+                                '/workspace',
+                            'all-all-windows',
+                            'wine',
+                                'cmd',
+                                    '/c',
+                                        f'tmp.bat && move sum.pyd {python_version}-{target} && rmdir /S /Q myenv{python_version} && del /Q tmp.bat && exit'
+                    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
                 # test the library
                 if args.test != None and os.path.isfile(args.test):
@@ -220,7 +223,7 @@ def main():
                             '--rm',
                             '-v',
                                 f'{os.getcwd()}/workspace:/workspace',
-                            f'all-all-macos',
+                            'all-all-macos',
                             '/bin/bash',
                                 '-c',
                                 f'cd /workspace && o64-clang -shared -o sum.so -undefined dynamic_lookup -I/python-{python_version}-x86_64-macos/include/python{subfolder} {args.build} && mv {compiled} {python_version}-{target}'
@@ -230,7 +233,7 @@ def main():
                 if args.test != None and os.path.isfile(args.test):
                     pass
 
-    print("\n>> Check the workspace directory for the compiled library")
+    print(">> Check the workspace directory for the compiled library")
 
 if __name__ == '__main__':
     main()
