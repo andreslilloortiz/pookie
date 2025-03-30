@@ -26,7 +26,7 @@ sudo tools/get_dependencies.sh
 
 # Add the compiler to the path
 ```bash
-export PATH=$PATH:/home/andres/Documentos/TFG/actionless/examples/macOS_target_using_osxcross/osxcross/target/bin
+export PATH=$PATH:/home/andres/Documentos/TFG/pookie/examples/macOS_target_using_osxcross/osxcross/target/bin
 ```
 
 # Compile the c program
@@ -42,15 +42,15 @@ darling shell
 
 # Compile the python package for x86_64
 ```bash
-o64-clang -shared -o sum.so -undefined dynamic_lookup -I/home/andres/Documentos/TFG/actionless/python_compile/python-3.13-x86_64-macos/include/python3.13 sum.c
+o64-clang -shared -o sum.so -undefined dynamic_lookup -I/home/andres/Documentos/TFG/pookie/python_compile/python-3.13-x86_64-macos/include/python3.13 sum.c
 ```
 
 # Compile the python package for arm64
 ```bash
-oa64-clang -shared -o sum.so -undefined dynamic_lookup -I/home/andres/Documentos/TFG/actionless/python_compile/python-3.13-x86_64-macos/include/python3.13 sum.c
+oa64-clang -shared -o sum.so -undefined dynamic_lookup -I/home/andres/Documentos/TFG/pookie/python_compile/python-3.13-x86_64-macos/include/python3.13 sum.c
 ```
 
 # Compile the python package for arm64e
 ```bash
-oa64e-clang -shared -o sum.so -undefined dynamic_lookup -I/home/andres/Documentos/TFG/actionless/python_compile/python-3.13-x86_64-macos/include/python3.13 sum.c
+oa64e-clang -shared -o sum.so -undefined dynamic_lookup -I/home/andres/Documentos/TFG/pookie/python_compile/python-3.13-x86_64-macos/include/python3.13 sum.c
 ```
