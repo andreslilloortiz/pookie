@@ -81,7 +81,7 @@ def main():
         else:
             print(">> Docker image for all-x86_64-linux is already built")
 
-    # build only one docker image for all architectures and python versions of windows and macos
+    # build only one docker image for all architectures and python versions of windows
     if any("windows" in item.lower() for item in args.target):
         if not image_exists("all-all-windows"):
             print(f">> Creating docker image for all-all-windows")
@@ -97,6 +97,7 @@ def main():
         else:
             print(">> Docker image for all-all-windows is already built")
 
+    # build only one docker image for all architectures and python versions of macos
     if any("macos" in item.lower() for item in args.target):
         if not image_exists("all-all-macos"):
             print(f">> Creating docker image for all-all-macos")
@@ -199,7 +200,7 @@ def main():
 
                 # test the library
                 if args.test != None and os.path.isfile(args.test):
-                    # PYTHONHASHSEED=1
+
                     print(f">> Testing the library for {python_version}-{target}")
                     subprocess.run([
                         'docker',
