@@ -26,7 +26,7 @@ For Linux x86_64, you need to modify the `Dockerfile.x86_64-linux` file located 
 
 For Windows x86_64, the process is slightly different:
 
-- Follow the guide in [`docs/cross-install-python-x86_64-windows.md`](docs/cross-install-python-x86_64-windows.md) to manually install the desired Python version on your local machine.
+- Follow the guide in [`cross-install-python-x86_64-windows.md`](cross-install-python-x86_64-windows.md) to manually install the desired Python version on your local machine.
 
 - Once installed, modify the `Dockerfile.all-windows` file in the `images` folder.
 
@@ -38,7 +38,7 @@ For Windows x86_64, the process is slightly different:
 
 The process for macOS x86_64 follows the same approach as Windows x86_64:
 
-- Follow the guide in [`docs/cross-install-python-x86_64-macos.md`](docs/cross-install-python-x86_64-macos.md) to manually install the desired Python version on your local machine.
+- Follow the guide in [`cross-install-python-x86_64-macos.md`](cross-install-python-x86_64-macos.md) to manually install the desired Python version on your local machine.
 
 - Modify the `Dockerfile.all-macos` file in the `images` folder.
 
