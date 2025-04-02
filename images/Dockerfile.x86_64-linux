@@ -17,7 +17,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     python3-dev\
     && rm -rf /var/lib/apt/lists/*
 
-# Download and install the Python
+# Download and install the Python versions
 RUN wget https://www.python.org/ftp/python/3.13.2/Python-3.13.2.tar.xz && \
     tar -xJf Python-3.13.2.tar.xz && \
     cd Python-3.13.2 && \
