@@ -45,3 +45,7 @@ The process for macOS x86_64 follows the same approach as Windows x86_64:
 - Locate the `# Add the python installation` section.
 
 - Add the new Python version using the same command structure as the existing ones, replacing the Python version accordingly.
+
+---
+
+I hope this guide has been helpful!
