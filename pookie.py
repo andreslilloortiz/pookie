@@ -65,6 +65,9 @@ def main():
                 'workspace'
         ])
 
+    # clone repository with prebuilt python binaries
+    subprocess.run(["git", "clone", "https://github.com/andreslilloortiz/python-prebuilt-binaries.git"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
     # build only one docker image for all python versions of x86_64-linux
     if any("x86_64-linux" in item.lower() for item in args.target):
         if not image_exists("all-x86_64-linux"):

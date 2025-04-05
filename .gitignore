@@ -1,3 +1,6 @@
+workspace
+python-prebuilt-binaries
+
 tmp/python_compile/python-3.13-x86_64-linux/
 tmp/python_compile/python-3.13-arm64-linux/
 tmp/python_compile/python-3.13-x86_64-windows/
@@ -25,5 +28,3 @@ tmp/examples/NO_Cross_Compile_Example/sum.so
 tmp/examples/Clang_with_Docker/cprogram
 tmp/examples/macOS_target_using_osxcross/osxcross
 tmp/examples/macOS_target_using_osxcross/sum.so
-
-workspace
