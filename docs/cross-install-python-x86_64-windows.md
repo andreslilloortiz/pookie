@@ -63,9 +63,9 @@ wget https://www.python.org/ftp/python/3.13.2/python-3.13.2-amd64.exe
 ### 3. Install Python using Wine
 
 ```bash
-mkdir -p ../compiled-python/python-3.13.2-x86_64-windows
+mkdir -p ../python-prebuilt-binaries/python-3.13.2-x86_64-windows
 
-wine python-3.13.2-amd64.exe /quiet InstallAllUsers=1 TargetDir="%CD%\..\..\compiled-python\python-3.13.2-x86_64-windows" PrependPath=1
+wine python-3.13.2-amd64.exe /quiet InstallAllUsers=1 TargetDir="%CD%\..\..\python-prebuilt-binaries\python-3.13.2-x86_64-windows" PrependPath=1
 ```
 
 ### 4. Clean up unnecessary files
@@ -79,7 +79,7 @@ rm python-3.13.2-amd64.exe
 To verify that Python has been installed correctly, run the following command:
 
 ```bash
-wine ../compiled-python/python-3.13.2-x86_64-windows/python.exe --version
+wine ../python-prebuilt-binaries/python-3.13.2-x86_64-windows/python.exe --version
 ```
 
 This should output the installed Python version.

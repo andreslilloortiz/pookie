@@ -47,9 +47,9 @@ wget https://www.python.org/ftp/python/3.13.2/python-3.13.2-macos11.pkg
 ```bash
 sudo darling shell <<EOF
 xcode-select --install
-mkdir -p ../compiled-python/python-3.13.2-x86_64-macos
+mkdir -p ../python-prebuilt-binaries/python-3.13.2-x86_64-macos
 installer -pkg python-3.13.2-macos11.pkg -target /
-cp -R /Library/Frameworks/Python.framework/Versions/3.13/* ../compiled-python/python-3.13.2-x86_64-macos
+cp -R /Library/Frameworks/Python.framework/Versions/3.13/* ../python-prebuilt-binaries/python-3.13.2-x86_64-macos
 EOF
 ```
 
@@ -66,7 +66,7 @@ rm python-3.13.2-macos11.pkg
 To verify that Python has been installed correctly, run the following command:
 
 ```bash
-darling shell ../compiled-python/python-3.13.2-x86_64-macos/bin/python3 --version
+darling shell ../python-prebuilt-binaries/python-3.13.2-x86_64-macos/bin/python3 --version
 ```
 
 This should output the installed Python version.
