@@ -249,7 +249,7 @@ def main():
                 # test the library
                 if args.test != None and os.path.isfile(args.test):
                     print(f">> Testing the library for {python_version}-{target}")
-                    print("Not supported :(")
+                    print("Not yet supported :(")
 
     print(">> Check the workspace directory for the compiled library")
 
