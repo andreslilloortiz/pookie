@@ -144,7 +144,7 @@ def main():
                             f'all-{target}',
                             '/bin/bash',
                                 '-c',
-                                f'PYTHON_DIR=/python-{python_version}-{target}/bin/python3 && $PYTHON_DIR -m venv myenv{python_version} && source myenv{python_version}/bin/activate && cd /workspace && gcc -shared -o {compiled} -fPIC {args.build} $(python3-config --cflags --ldflags) && mv {compiled} {python_version}-{target}'
+                                f'source /myenv{python_version}/bin/activate && cd /workspace && gcc -shared -o {compiled} -fPIC {args.build} $(python3-config --cflags --ldflags) && mv {compiled} {python_version}-{target} && deactivate'
                     ])
 
                 # test the library
@@ -161,7 +161,7 @@ def main():
                             f'all-{target}',
                             '/bin/bash',
                                 '-c',
-                                f'PYTHON_DIR=/python-{python_version}-{target}/bin/python3 && $PYTHON_DIR -m venv myenv{python_version} && source myenv{python_version}/bin/activate && cd workspace && cp {args.test} {python_version}-{target} && cd {python_version}-{target} && python3 {args.test} && rm {args.test}'
+                                f'source myenv{python_version}/bin/activate && cd workspace && cp {args.test} {python_version}-{target} && cd {python_version}-{target} && python3 {args.test} && rm {args.test} && deactivate'
                     ])
 
             # x86_64-windows

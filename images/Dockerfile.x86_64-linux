@@ -17,7 +17,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     python3-dev\
     && rm -rf /var/lib/apt/lists/*
 
-# Download and install the Python versions
+# Download and install the Python versions and create virtual environments
 RUN wget https://www.python.org/ftp/python/3.13.2/Python-3.13.2.tar.xz && \
     tar -xJf Python-3.13.2.tar.xz && \
     cd Python-3.13.2 && \
@@ -25,7 +25,8 @@ RUN wget https://www.python.org/ftp/python/3.13.2/Python-3.13.2.tar.xz && \
     make -j$(nproc) && \
     make install && \
     cd .. && \
-    rm -rf Python-3.13.2*
+    rm -rf Python-3.13.2* && \
+    python-3.13.2-x86_64-linux/bin/python3 -m venv myenv3.13.2
 
 RUN wget https://www.python.org/ftp/python/3.12.9/Python-3.12.9.tar.xz && \
     tar -xJf Python-3.12.9.tar.xz && \
@@ -34,7 +35,8 @@ RUN wget https://www.python.org/ftp/python/3.12.9/Python-3.12.9.tar.xz && \
     make -j$(nproc) && \
     make install && \
     cd .. && \
-    rm -rf Python-3.12.9*
+    rm -rf Python-3.12.9* && \
+    python-3.12.9-x86_64-linux/bin/python3 -m venv myenv3.12.9
 
 RUN wget https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tar.xz && \
     tar -xJf Python-3.11.9.tar.xz && \
@@ -43,7 +45,8 @@ RUN wget https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tar.xz && \
     make -j$(nproc) && \
     make install && \
     cd .. && \
-    rm -rf Python-3.11.9*
+    rm -rf Python-3.11.9* && \
+    python-3.11.9-x86_64-linux/bin/python3 -m venv myenv3.11.9
 
 RUN wget https://www.python.org/ftp/python/3.10.11/Python-3.10.11.tar.xz && \
     tar -xJf Python-3.10.11.tar.xz && \
@@ -52,4 +55,5 @@ RUN wget https://www.python.org/ftp/python/3.10.11/Python-3.10.11.tar.xz && \
     make -j$(nproc) && \
     make install && \
     cd .. && \
-    rm -rf Python-3.10.11*
+    rm -rf Python-3.10.11* && \
+    python-3.10.11-x86_64-linux/bin/python3 -m venv myenv3.10.11
