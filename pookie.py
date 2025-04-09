@@ -58,6 +58,13 @@ def main():
                 'workspace'
         ])
 
+    if "setup.py" != None and os.path.isfile("setup.py"):
+            subprocess.run([
+                'cp',
+                    "setup.py",
+                    'workspace'
+            ])
+
     if args.test != None and os.path.isfile(args.test):
         subprocess.run([
             'cp',
@@ -66,7 +73,11 @@ def main():
         ])
 
     # clone repository with prebuilt python binaries
-    subprocess.run(["git", "clone", "https://github.com/andreslilloortiz/python-prebuilt-binaries.git"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run([
+        "git",
+            "clone",
+                "https://github.com/andreslilloortiz/python-prebuilt-binaries.git"
+    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     # build only one docker image for all python versions of x86_64-linux
     if any("x86_64-linux" in item.lower() for item in args.target):
@@ -133,7 +144,6 @@ def main():
                 if args.build != None and os.path.isfile(args.build):
 
                     print(f">> Building the library for {python_version}-{target}")
-                    compiled = os.path.splitext(args.build)[0] + ".so"
                     subprocess.run([
                         'docker',
                             'run',
@@ -144,8 +154,8 @@ def main():
                             f'all-{target}',
                             '/bin/bash',
                                 '-c',
-                                f'source /myenv{python_version}/bin/activate && cd /workspace && gcc -shared -o {compiled} -fPIC {args.build} $(python3-config --cflags --ldflags) && mv {compiled} {python_version}-{target} && deactivate'
-                    ])
+                                f'source /myenv{python_version}/bin/activate && python3 -m pip install -U setuptools wheel build && cd /workspace && python3 -m build && rm -rf {python_version}-{target}/dist {python_version}-{target}/*.egg-info && mv dist *.egg-info {python_version}-{target} && deactivate'
+                    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
                 # test the library
                 if args.test != None and os.path.isfile(args.test):
@@ -161,7 +171,7 @@ def main():
                             f'all-{target}',
                             '/bin/bash',
                                 '-c',
-                                f'source myenv{python_version}/bin/activate && cd workspace && cp {args.test} {python_version}-{target} && cd {python_version}-{target} && python3 {args.test} && rm {args.test} && deactivate'
+                                f'source myenv{python_version}/bin/activate && cd workspace && python3 -m pip install {python_version}-{target}/dist/*.whl >> /dev/null 2>> /dev/null && python3 {args.test} && deactivate'
                     ])
 
             # x86_64-windows
