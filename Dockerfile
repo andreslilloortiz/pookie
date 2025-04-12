@@ -11,8 +11,8 @@ RUN apt-get update && apt-get install -y \
 # Add pookie.py
 COPY pookie.py .
 
-# Clone repository with prebuilt python binaries
-RUN git clone https://github.com/andreslilloortiz/python-prebuilt-binaries.git
+# Copy repository with prebuilt python binaries
+COPY python-prebuilt-binaries /python-prebuilt-binaries
 
 # Copy images
 COPY images/Dockerfile.all-macos /Dockerfile.all-macos
