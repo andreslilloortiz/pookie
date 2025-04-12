@@ -44,40 +44,8 @@ def main():
     for arg in vars(args):
         print(f"- {arg}: {getattr(args, arg)}")
 
-    # copy files to workspace
-    subprocess.run([
-        'mkdir',
-            '-p',
-            'workspace'
-        ])
-
-    if args.build != None and os.path.isfile(args.build):
-        subprocess.run([
-            'cp',
-                args.build,
-                'workspace'
-        ])
-
-    if "setup.py" != None and os.path.isfile("setup.py"):
-            subprocess.run([
-                'cp',
-                    "setup.py",
-                    'workspace'
-            ])
-
-    if args.test != None and os.path.isfile(args.test):
-        subprocess.run([
-            'cp',
-                args.test,
-                'workspace'
-        ])
-
-    # clone repository with prebuilt python binaries
-    subprocess.run([
-        "git",
-            "clone",
-                "https://github.com/andreslilloortiz/python-prebuilt-binaries.git"
-    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    # workspace for docker in docker
+    host_workspace_path = os.environ.get('WORSPACE_PWD', '/workspace')
 
     # build only one docker image for all python versions of x86_64-linux
     if any("x86_64-linux" in item.lower() for item in args.target):
@@ -137,7 +105,7 @@ def main():
                 subprocess.run([
                     'mkdir',
                         '-p',
-                        f'workspace/{python_version}-{target}'
+                        f'/workspace/{python_version}-{target}'
                 ])
 
                 # build the library
@@ -150,7 +118,7 @@ def main():
                             '-it',
                             '--rm',
                             '-v',
-                                f'{os.getcwd()}/workspace:/workspace',
+                                f'{host_workspace_path}:/workspace',
                             f'all-{target}',
                             '/bin/bash',
                                 '-c',
@@ -167,7 +135,7 @@ def main():
                             '-it',
                             '--rm',
                             '-v',
-                                f'{os.getcwd()}/workspace:/workspace',
+                                f'{host_workspace_path}:/workspace',
                             f'all-{target}',
                             '/bin/bash',
                                 '-c',
@@ -180,7 +148,7 @@ def main():
                 subprocess.run([
                     'mkdir',
                         '-p',
-                        f'workspace/{python_version}-{target}'
+                        f'/workspace/{python_version}-{target}'
                 ])
 
                 # build the library
@@ -192,7 +160,7 @@ def main():
 
                     build_file_content = f"""@echo off\n/python-{python_version}-{target}/python.exe -m venv myenv{python_version}\ncall myenv{python_version}/Scripts/activate.bat\n/mingw64/bin/gcc.exe -shared -o {compiled} {args.build} -I "/python-{python_version}-{target}/include" -L "/python-{python_version}-{target}/libs" -lpython{lpython}"""
 
-                    with open(f"{os.getcwd()}/workspace/tmp.bat", 'w') as build_file:
+                    with open(f"tmp.bat", 'w') as build_file:
                         build_file.write(build_file_content)
 
                     subprocess.run([
@@ -201,7 +169,7 @@ def main():
                             '-it',
                             '--rm',
                             '-v',
-                                f'{os.getcwd()}/workspace:/workspace',
+                                f'{host_workspace_path}:/workspace',
                             '-w',
                                 '/workspace',
                             'all-all-windows',
@@ -221,7 +189,7 @@ def main():
                             '-it',
                             '--rm',
                             '-v',
-                                f'{os.getcwd()}/workspace:/workspace',
+                                f'{host_workspace_path}:/workspace',
                             'all-all-windows',
                             '/bin/bash',
                                 '-c',
@@ -234,7 +202,7 @@ def main():
                 subprocess.run([
                     'mkdir',
                         '-p',
-                        f'workspace/{python_version}-{target}'
+                        f'/workspace/{python_version}-{target}'
                 ])
 
                 # build the library
@@ -249,7 +217,7 @@ def main():
                             '-it',
                             '--rm',
                             '-v',
-                                f'{os.getcwd()}/workspace:/workspace',
+                                f'{host_workspace_path}:/workspace',
                             'all-all-macos',
                             '/bin/bash',
                                 '-c',
