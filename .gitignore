@@ -1,3 +1,4 @@
+python-prebuilt-binaries
 workspace/*
 !workspace/.keepme
 !workspace/sum.c
