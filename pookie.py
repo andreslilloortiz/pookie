@@ -45,7 +45,7 @@ def main():
         print(f"- {arg}: {getattr(args, arg)}")
 
     # workspace for docker in docker
-    host_workspace_path = os.environ.get('WORSPACE_PWD', '/workspace')
+    host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')
 
     # build only one docker image for all python versions of x86_64-linux
     if any("x86_64-linux" in item.lower() for item in args.target):
@@ -55,11 +55,11 @@ def main():
                 'docker',
                     'build',
                     '-f',
-                        'images/Dockerfile.x86_64-linux',
+                        '/Dockerfile.x86_64-linux',
                     '-t',
                         'all-x86_64-linux',
                     '.'
-            ])
+            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         else:
             print(">> Docker image for all-x86_64-linux is already built")
 
@@ -71,11 +71,11 @@ def main():
                 'docker',
                     'build',
                     '-f',
-                        'images/Dockerfile.all-windows',
+                        '/Dockerfile.all-windows',
                     '-t',
                         'all-all-windows',
-                    '.'
-            ])
+                    '/python-prebuilt-binaries' # context
+            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         else:
             print(">> Docker image for all-all-windows is already built")
 
@@ -87,11 +87,11 @@ def main():
                 'docker',
                     'build',
                     '-f',
-                        'images/Dockerfile.all-macos',
+                        '/Dockerfile.all-macos',
                     '-t',
                         'all-all-macos',
-                    '.'
-            ])
+                    '/python-prebuilt-binaries' # context
+            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         else:
             print(">> Docker image for all-all-macos is already built")
 
@@ -222,7 +222,7 @@ def main():
                             '/bin/bash',
                                 '-c',
                                 f'cd /workspace && o64-clang -shared -o {compiled} -undefined dynamic_lookup -I/python-{python_version}-x86_64-macos/include/python{subfolder} {args.build} && mv {compiled} {python_version}-{target}'
-                    ])
+                    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
                 # test the library
                 if args.test != None and os.path.isfile(args.test):
