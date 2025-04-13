@@ -29,13 +29,13 @@ def main():
                             nargs = '+',
                             choices = ['3.13.2', '3.12.9', '3.11.9', '3.10.11'],
                             default = ['3.13.2', '3.12.9', '3.11.9', '3.10.11'],
-                            help = 'Python version(s) to compile for (default: all)')
+                            help = 'Python version(s) to compile for (if not specified: all)')
     parser.add_argument('--target',
                             type = str,
                             nargs = '+',
                             choices = ['x86_64-linux', 'x86_64-windows', 'x86_64-macos'],
                             default = ['x86_64-linux', 'x86_64-windows', 'x86_64-macos'],
-                            help = 'Target platform(s) to build and test the library for (default: all)')
+                            help = 'Target platform(s) to build and test the library for (if not specified: all)')
 
     args = parser.parse_args()
 
