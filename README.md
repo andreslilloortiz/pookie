@@ -46,7 +46,7 @@ The proposed solution leverages technologies like QEMU and Wine to implement cro
 | Argument           | Description and Options                                                                                                   |
 |--------------------|---------------------------------------------------------------------------------------------------------------------------|
 | `--build <file>`   | Python library source file to build                                                                                       |
-| `--test <file>`    | Test python file to run after building the library                                                                        |
+| `--test <file>`    | Test Python file to run after building the library                                                                        |
 | `--python-version` | Python version(s) to compile for (default: all): `3.13.2`, `3.12.9`, `3.11.9`, `3.10.11`                                  |
 | `--target`         | Target platform(s) to build and test the library for (default: all): `x86_64-linux`, `x86_64-windows`, `x86_64-macos`     |
 
@@ -54,7 +54,7 @@ The proposed solution leverages technologies like QEMU and Wine to implement cro
 
 ## Example
 
-Compile the source file `mymodule.c` and test it with `test_mymodule.py` for python version `3.12.9` targeting both `x86_64-linux` and `x86_64-windows`.
+Compile the source file `mymodule.c` and test it with `test_mymodule.py` for Python version `3.12.9` targeting both `x86_64-linux` and `x86_64-windows`.
 
 ```bash
 docker run -it --rm \

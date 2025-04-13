@@ -44,6 +44,12 @@ def main():
     for arg in vars(args):
         print(f"- {arg}: {getattr(args, arg)}")
 
+    if args.build != None and not os.path.isfile(args.build):
+        print(f">> WARNING: The specified build file '{args.build}' does not exist.")
+
+    if args.test != None and not os.path.isfile(args.test):
+            print(f">> WARNING: The specified test file '{args.test}' does not exist.")
+
     # workspace for docker in docker
     host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')
 
