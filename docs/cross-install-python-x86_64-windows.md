@@ -6,7 +6,7 @@ If you want to install a different version of Python, the steps are generally th
 
 In the `scripts` folder, there is a script named `cross-install-python-x86_64-windows.sh` that executes the commands outlined in this guide.
 
-**IMPORTANT:** These commands are designed to be run from the `scripts` folder.
+> **IMPORTANT:** These commands are designed to be run from the `scripts` folder.
 
 More information:
 
