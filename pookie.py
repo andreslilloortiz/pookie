@@ -20,7 +20,8 @@ def main():
 
     parser.add_argument('--build',
                             type = str,
-                            help = 'Python library source file to build')
+                            nargs = '+',
+                            help = 'Python library source file(s) to build')
     parser.add_argument('--test',
                             type = str,
                             nargs = '+',
@@ -45,12 +46,21 @@ def main():
     for arg in vars(args):
         print(f"- {arg}: {getattr(args, arg)}")
 
-    if args.build != None and not os.path.isfile(args.build):
-        print(f">> WARNING: The specified build file '{args.build}' does not exist.")
+    # check --build
+    builds = ""
+    if args.build != None:
+        for build in args.build:
+            if not os.path.isfile(build):
+                print(f">> WARNING: The specified build file '{build}' does not exist.")
+            else:
+                builds += " " + build
+        builds.strip()
 
-    for test in args.test:
-        if test != None and not os.path.isfile(test):
-            print(f">> WARNING: The specified test file '{test}' does not exist.")
+    # check --test
+    if args.test != None:
+        for test in args.test:
+            if not os.path.isfile(test):
+                print(f">> WARNING: The specified test file '{test}' does not exist.")
 
     # workspace for docker in docker
     host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')
@@ -117,7 +127,7 @@ def main():
                 ])
 
                 # build the library
-                if args.build != None and os.path.isfile(args.build):
+                if args.build != None:
 
                     print(f">> Building the library for {python_version}-{target}")
                     subprocess.run([
@@ -134,21 +144,23 @@ def main():
                     ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
                 # test the library
-                for test in args.test:
-                    if test != None and os.path.isfile(test):
-                        print(f">> Testing the library for {python_version}-{target} with {test}")
-                        subprocess.run([
-                            'docker',
-                                'run',
-                                '-it',
-                                '--rm',
-                                '-v',
-                                    f'{host_workspace_path}:/workspace',
-                                f'all-{target}',
-                                '/bin/bash',
-                                    '-c',
-                                    f'source myenv{python_version}/bin/activate && cd workspace && python3 -m pip install {python_version}-{target}/dist/*.whl >> /dev/null 2>> /dev/null && python3 {test} && deactivate'
-                        ])
+                if args.test != None:
+
+                    for test in args.test:
+                        if os.path.isfile(test):
+                            print(f">> Testing the library for {python_version}-{target} with {test}")
+                            subprocess.run([
+                                'docker',
+                                    'run',
+                                    '-it',
+                                    '--rm',
+                                    '-v',
+                                        f'{host_workspace_path}:/workspace',
+                                    f'all-{target}',
+                                    '/bin/bash',
+                                        '-c',
+                                        f'source myenv{python_version}/bin/activate && cd workspace && python3 -m pip install {python_version}-{target}/dist/*.whl >> /dev/null 2>> /dev/null && python3 {test} && deactivate'
+                            ])
 
             # x86_64-windows
             if target == 'x86_64-windows':
@@ -160,13 +172,13 @@ def main():
                 ])
 
                 # build the library
-                if args.build != None and os.path.isfile(args.build):
+                if args.build != None:
 
                     print(f">> Building the library for {python_version}-{target}")
-                    compiled = os.path.splitext(args.build)[0] + ".pyd"
+                    compiled = os.path.splitext(args.build[0])[0] + ".pyd"
                     lpython = int(python_version.split('.')[0] + python_version.split('.')[1])
 
-                    build_file_content = f"""@echo off\n/python-{python_version}-{target}/python.exe -m venv myenv{python_version}\ncall myenv{python_version}/Scripts/activate.bat\n/mingw64/bin/gcc.exe -shared -o {compiled} {args.build} -I "/python-{python_version}-{target}/include" -L "/python-{python_version}-{target}/libs" -lpython{lpython}"""
+                    build_file_content = f"""@echo off\n/python-{python_version}-{target}/python.exe -m venv myenv{python_version}\ncall myenv{python_version}/Scripts/activate.bat\n/mingw64/bin/gcc.exe -shared -o {compiled} {builds} -I "/python-{python_version}-{target}/include" -L "/python-{python_version}-{target}/libs" -lpython{lpython}"""
 
                     with open(f"tmp.bat", 'w') as build_file:
                         build_file.write(build_file_content)
@@ -188,21 +200,23 @@ def main():
                     ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
                 # test the library
-                for test in args.test:
-                    if test != None and os.path.isfile(test):
-                        print(f">> Testing the library for {python_version}-{target} with {test}")
-                        subprocess.run([
-                            'docker',
-                                'run',
-                                '-it',
-                                '--rm',
-                                '-v',
-                                    f'{host_workspace_path}:/workspace',
-                                'all-all-windows',
-                                '/bin/bash',
-                                    '-c',
-                                    f'PYTHON_DIR=/python-{python_version}-{target}/python.exe && cd workspace && cp {test} {python_version}-{target} && cd {python_version}-{target} && WINEDEBUG=-all wine $PYTHON_DIR {test} 2>&1 | grep -v -E "wine" && rm {test}'
-                        ])
+                if args.test != None:
+
+                    for test in args.test:
+                        if os.path.isfile(test):
+                            print(f">> Testing the library for {python_version}-{target} with {test}")
+                            subprocess.run([
+                                'docker',
+                                    'run',
+                                    '-it',
+                                    '--rm',
+                                    '-v',
+                                        f'{host_workspace_path}:/workspace',
+                                    'all-all-windows',
+                                    '/bin/bash',
+                                        '-c',
+                                        f'PYTHON_DIR=/python-{python_version}-{target}/python.exe && cd workspace && cp {test} {python_version}-{target} && cd {python_version}-{target} && WINEDEBUG=-all wine $PYTHON_DIR {test} 2>&1 | grep -v -E "wine" && rm {test}'
+                            ])
 
             # x86_64-macos
             if target == 'x86_64-macos':
@@ -214,10 +228,10 @@ def main():
                 ])
 
                 # build the library
-                if args.build != None and os.path.isfile(args.build):
+                if args.build != None:
 
                     print(f">> Building the library for {python_version}-{target}")
-                    compiled = os.path.splitext(args.build)[0] + ".so"
+                    compiled = os.path.splitext(args.build[0])[0] + ".so"
                     subfolder = ".".join(python_version.split(".")[:2])
                     subprocess.run([
                         'docker',
@@ -229,14 +243,16 @@ def main():
                             'all-all-macos',
                             '/bin/bash',
                                 '-c',
-                                f'cd /workspace && o64-clang -shared -o {compiled} -undefined dynamic_lookup -I/python-{python_version}-x86_64-macos/include/python{subfolder} {args.build} && mv {compiled} {python_version}-{target}'
+                                f'cd /workspace && o64-clang -shared -o {compiled} -undefined dynamic_lookup -I/python-{python_version}-x86_64-macos/include/python{subfolder} {builds} && mv {compiled} {python_version}-{target}'
                     ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
                 # test the library
-                for test in args.test:
-                    if test != None and os.path.isfile(test):
-                        print(f">> Testing the library for {python_version}-{target} with {test}")
-                        print("Not yet supported :(")
+                if args.test != None:
+
+                    for test in args.test:
+                        if os.path.isfile(test):
+                            print(f">> Testing the library for {python_version}-{target} with {test}")
+                            print("Not yet supported :(")
 
     print(">> See you soon")
 
