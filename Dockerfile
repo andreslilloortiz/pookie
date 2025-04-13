@@ -1,4 +1,4 @@
-# Use the Python 3.13 base image
+# Use the Ubuntu base image
 FROM ubuntu:latest
 
 # Install necessary dependencies
