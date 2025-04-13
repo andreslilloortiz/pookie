@@ -235,7 +235,7 @@ def main():
                     print(f">> Testing the library for {python_version}-{target}")
                     print("Not yet supported :(")
 
-    print(">> Check the workspace directory for the compiled library")
+    print(">> See you soon")
 
 if __name__ == '__main__':
     main()
