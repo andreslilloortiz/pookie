@@ -23,7 +23,8 @@ def main():
                             help = 'Python library source file to build')
     parser.add_argument('--test',
                             type = str,
-                            help = 'Test file to run after building the library')
+                            nargs = '+',
+                            help = 'Test file(s) to run after building the library')
     parser.add_argument('--python-version',
                             type = str,
                             nargs = '+',
@@ -47,8 +48,9 @@ def main():
     if args.build != None and not os.path.isfile(args.build):
         print(f">> WARNING: The specified build file '{args.build}' does not exist.")
 
-    if args.test != None and not os.path.isfile(args.test):
-            print(f">> WARNING: The specified test file '{args.test}' does not exist.")
+    for test in args.test:
+        if test != None and not os.path.isfile(test):
+            print(f">> WARNING: The specified test file '{test}' does not exist.")
 
     # workspace for docker in docker
     host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')
@@ -132,21 +134,21 @@ def main():
                     ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
                 # test the library
-                if args.test != None and os.path.isfile(args.test):
-
-                    print(f">> Testing the library for {python_version}-{target}")
-                    subprocess.run([
-                        'docker',
-                            'run',
-                            '-it',
-                            '--rm',
-                            '-v',
-                                f'{host_workspace_path}:/workspace',
-                            f'all-{target}',
-                            '/bin/bash',
-                                '-c',
-                                f'source myenv{python_version}/bin/activate && cd workspace && python3 -m pip install {python_version}-{target}/dist/*.whl >> /dev/null 2>> /dev/null && python3 {args.test} && deactivate'
-                    ])
+                for test in args.test:
+                    if test != None and os.path.isfile(test):
+                        print(f">> Testing the library for {python_version}-{target} with {test}")
+                        subprocess.run([
+                            'docker',
+                                'run',
+                                '-it',
+                                '--rm',
+                                '-v',
+                                    f'{host_workspace_path}:/workspace',
+                                f'all-{target}',
+                                '/bin/bash',
+                                    '-c',
+                                    f'source myenv{python_version}/bin/activate && cd workspace && python3 -m pip install {python_version}-{target}/dist/*.whl >> /dev/null 2>> /dev/null && python3 {test} && deactivate'
+                        ])
 
             # x86_64-windows
             if target == 'x86_64-windows':
@@ -186,21 +188,21 @@ def main():
                     ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
                 # test the library
-                if args.test != None and os.path.isfile(args.test):
-
-                    print(f">> Testing the library for {python_version}-{target}")
-                    subprocess.run([
-                        'docker',
-                            'run',
-                            '-it',
-                            '--rm',
-                            '-v',
-                                f'{host_workspace_path}:/workspace',
-                            'all-all-windows',
-                            '/bin/bash',
-                                '-c',
-                                f'PYTHON_DIR=/python-{python_version}-{target}/python.exe && cd workspace && cp {args.test} {python_version}-{target} && cd {python_version}-{target} && WINEDEBUG=-all wine $PYTHON_DIR {args.test} 2>&1 | grep -v -E "wine" && rm {args.test}'
-                    ])
+                for test in args.test:
+                    if test != None and os.path.isfile(test):
+                        print(f">> Testing the library for {python_version}-{target} with {test}")
+                        subprocess.run([
+                            'docker',
+                                'run',
+                                '-it',
+                                '--rm',
+                                '-v',
+                                    f'{host_workspace_path}:/workspace',
+                                'all-all-windows',
+                                '/bin/bash',
+                                    '-c',
+                                    f'PYTHON_DIR=/python-{python_version}-{target}/python.exe && cd workspace && cp {test} {python_version}-{target} && cd {python_version}-{target} && WINEDEBUG=-all wine $PYTHON_DIR {test} 2>&1 | grep -v -E "wine" && rm {test}'
+                        ])
 
             # x86_64-macos
             if target == 'x86_64-macos':
@@ -231,9 +233,10 @@ def main():
                     ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
                 # test the library
-                if args.test != None and os.path.isfile(args.test):
-                    print(f">> Testing the library for {python_version}-{target}")
-                    print("Not yet supported :(")
+                for test in args.test:
+                    if test != None and os.path.isfile(test):
+                        print(f">> Testing the library for {python_version}-{target} with {test}")
+                        print("Not yet supported :(")
 
     print(">> See you soon")
 
