@@ -55,9 +55,9 @@ The proposed solution leverages technologies like QEMU and Wine to implement cro
 
 > **Note:** For `x86_64-linux` target, compilation uses setuptools. That means you can provide via `--build` a `setup.py` file, which defines the necessary source files.
 
-## Example
+## Examples
 
-Compile the source file `mylib.c` and test it with `test_mylib.py` for Python version `3.12.9` targeting both `x86_64-linux` and `x86_64-windows`.
+Compile the source file `mylib.c` and test it with `test.py` script for Python versions `3.12.9` and `3.11.9` targeting both `x86_64-macos` and `x86_64-windows`.
 
 ```bash
 docker run -it --rm \
@@ -67,9 +67,42 @@ docker run -it --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
     pookie \
     --build mylib.c \
-    --test test_mylib.py \
-    --python-version 3.12.9 \
-    --target x86_64-linux x86_64-windows
+    --test test.py \
+    --test-mode script
+    --python-version 3.12.9 3.11.9 \
+    --target x86_64-macos x86_64-windows
+```
+
+Compile the source files with `setup.py` file and test it with test files in the module (directory with `__init__.py`) `tests` for Python version `3.10.11` targeting `x86_64-linux`.
+
+```bash
+docker run -it --rm \
+    -v $(pwd)/workspace:/workspace \
+    -e WORKSPACE_PWD=$(pwd)/workspace \
+    -w /workspace \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    pookie \
+    --build setup.py \
+    --test tests \
+    --test-mode module
+    --python-version 3.10.11 \
+    --target x86_64-linux
+```
+
+Compile the source files with `setup.py` file and test it with test files located in the `tests` folder using `pytest` for Python versions `3.13.2` and `3.12.9` targeting `x86_64-linux`.
+
+```bash
+docker run -it --rm \
+    -v $(pwd)/workspace:/workspace \
+    -e WORKSPACE_PWD=$(pwd)/workspace \
+    -w /workspace \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    pookie \
+    --build setup.py \
+    --test tests/test1.py tests/test2.py \
+    --test-mode pytest
+    --python-version 3.13.2 3.12.9 \
+    --target x86_64-linux
 ```
 
 ## Output

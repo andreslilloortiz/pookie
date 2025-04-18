@@ -30,7 +30,7 @@ def main():
                             type=str,
                             choices=['script', 'module', 'pytest'],
                             default='script',
-                            help='How to run test files: "script" (default), "module" (python -m), or "pytest"')
+                            help='How to run test files: "script" (default), "module", or "pytest"')
     parser.add_argument('--python-version',
                             type = str,
                             nargs = '+',
