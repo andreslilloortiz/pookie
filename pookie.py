@@ -38,6 +38,9 @@ def main():
                             choices = ['x86_64-linux', 'x86_64-windows', 'x86_64-macos'],
                             default = ['x86_64-linux', 'x86_64-windows', 'x86_64-macos'],
                             help = 'Target platform(s) to build and test the library for (if not specified: all)')
+    parser.add_argument('--clean',
+                            action='store_true',
+                            help='Clean the workspace by removing all files and directories')
 
     args = parser.parse_args()
 
@@ -45,6 +48,16 @@ def main():
     print(">> Configuration")
     for arg in vars(args):
         print(f"- {arg}: {getattr(args, arg)}")
+
+    # check --clean
+    if args.clean:
+        print(f">> Cleaning workspace")
+        subprocess.run("rm -r *", shell=True)
+        subprocess.run([
+            'touch',
+                '.keepme'
+        ])
+        return
 
     # check --build
     builds = ""
