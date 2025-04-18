@@ -172,7 +172,7 @@ def main():
                                     f'all-{target}',
                                     '/bin/bash',
                                         '-c',
-                                        f'source myenv{python_version}/bin/activate && cd workspace && python3 -m pip install {python_version}-{target}/dist/*.whl >> /dev/null 2>> /dev/null && python3 {test} && deactivate'
+                                        f'source myenv{python_version}/bin/activate && cd workspace && python3 -m pip install {python_version}-{target}/dist/*.whl >> /dev/null 2>> /dev/null && python3 -m tests && deactivate'
                             ])
 
             # x86_64-windows
