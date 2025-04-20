@@ -81,6 +81,9 @@ def main():
     # workspace for docker in docker
     host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')
 
+    # log file
+    logfile = open("pookie.log", "a")
+
     # build only one docker image for all python versions of x86_64-linux
     if any("x86_64-linux" in item.lower() for item in args.target):
         if not image_exists("all-x86_64-linux"):
@@ -93,7 +96,7 @@ def main():
                     '-t',
                         'all-x86_64-linux',
                     '.'
-            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            ], stdout=logfile, stderr=logfile)
         else:
             print(">> Docker image for all-x86_64-linux is already built")
 
@@ -109,7 +112,7 @@ def main():
                     '-t',
                         'all-all-windows',
                     '/python-prebuilt-binaries' # context
-            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            ], stdout=logfile, stderr=logfile)
         else:
             print(">> Docker image for all-all-windows is already built")
 
@@ -125,7 +128,7 @@ def main():
                     '-t',
                         'all-all-macos',
                     '/python-prebuilt-binaries' # context
-            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            ], stdout=logfile, stderr=logfile)
         else:
             print(">> Docker image for all-all-macos is already built")
 
@@ -140,7 +143,7 @@ def main():
                     'mkdir',
                         '-p',
                         f'/workspace/{python_version}-{target}'
-                ])
+                ], stdout=logfile, stderr=logfile)
 
                 # build the library
                 if args.build != None:
@@ -157,7 +160,7 @@ def main():
                             '/bin/bash',
                                 '-c',
                                 f'source /myenv{python_version}/bin/activate && python3 -m pip install -U setuptools wheel build && cd /workspace && python3 -m build && rm -rf {python_version}-{target}/dist {python_version}-{target}/*.egg-info && mv dist *.egg-info {python_version}-{target} && deactivate'
-                    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    ], stdout=logfile, stderr=logfile)
 
                 # test the library
                 if args.test != None:
@@ -193,7 +196,7 @@ def main():
                     'mkdir',
                         '-p',
                         f'/workspace/{python_version}-{target}'
-                ])
+                ], stdout=logfile, stderr=logfile)
 
                 # build the library
                 if args.build != None:
@@ -221,7 +224,7 @@ def main():
                                 'cmd',
                                     '/c',
                                         f'tmp.bat && move {compiled} {python_version}-{target} && rmdir /S /Q myenv{python_version} && del /Q tmp.bat && exit'
-                    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    ], stdout=logfile, stderr=logfile)
 
                 # test the library
                 if args.test != None:
@@ -257,7 +260,7 @@ def main():
                     'mkdir',
                         '-p',
                         f'/workspace/{python_version}-{target}'
-                ])
+                ], stdout=logfile, stderr=logfile)
 
                 # build the library
                 if args.build != None:
@@ -276,7 +279,7 @@ def main():
                             '/bin/bash',
                                 '-c',
                                 f'cd /workspace && o64-clang -shared -o {compiled} -undefined dynamic_lookup -I/python-{python_version}-x86_64-macos/include/python{subfolder} {builds} && mv {compiled} {python_version}-{target}'
-                    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    ], stdout=logfile, stderr=logfile)
 
                 # test the library
                 if args.test != None:
