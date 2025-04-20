@@ -23,6 +23,7 @@ The proposed solution leverages technologies like QEMU and Wine to implement cro
     ```bash
     git clone https://github.com/andreslilloortiz/python-prebuilt-binaries.git
     ```
+
 3. **Build pookie Docker image**
 
     ```bash
@@ -30,6 +31,10 @@ The proposed solution leverages technologies like QEMU and Wine to implement cro
     ```
 
 4. **Run pookie**
+
+    You can run pookie either by using the Docker command directly or by executing a simple shell script.
+
+    **Option 1**: Using Docker command directly.
 
     ```bash
     docker run -it --rm \
@@ -39,6 +44,22 @@ The proposed solution leverages technologies like QEMU and Wine to implement cro
         -v /var/run/docker.sock:/var/run/docker.sock \
         pookie --help
     ```
+
+    **Option 2**: Using the provided shell script.
+
+    Make the script executable.
+
+    ```bash
+    chmod +x pookie.sh
+    ```
+
+    Run the script.
+
+    ```bash
+    ./pookie.sh --help
+    ```
+
+
 ## Running Pookie: Command Line Options
 
 > **Recomendation:** First run Pookie without arguments to allow it to generate the required Docker images for building and testing. This may take a few minutes the first time.
@@ -60,12 +81,7 @@ The proposed solution leverages technologies like QEMU and Wine to implement cro
 Compile the source file `mylib.c` and test it with `test.py` script for Python versions `3.12.9` and `3.11.9` targeting both `x86_64-macos` and `x86_64-windows`.
 
 ```bash
-docker run -it --rm \
-    -v $(pwd)/workspace:/workspace \
-    -e WORKSPACE_PWD=$(pwd)/workspace \
-    -w /workspace \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    pookie \
+./pookie.sh \
     --build mylib.c \
     --test test.py \
     --test-mode script
@@ -76,12 +92,7 @@ docker run -it --rm \
 Compile the source files with `setup.py` file and test it with test files in the module (directory with `__init__.py`) `tests` for Python version `3.10.11` targeting `x86_64-linux`.
 
 ```bash
-docker run -it --rm \
-    -v $(pwd)/workspace:/workspace \
-    -e WORKSPACE_PWD=$(pwd)/workspace \
-    -w /workspace \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    pookie \
+./pookie.sh \
     --build setup.py \
     --test tests \
     --test-mode module
@@ -92,12 +103,7 @@ docker run -it --rm \
 Compile the source files with `setup.py` file and test it with test files located in the `tests` folder using `pytest` for Python versions `3.13.2` and `3.12.9` targeting `x86_64-linux`.
 
 ```bash
-docker run -it --rm \
-    -v $(pwd)/workspace:/workspace \
-    -e WORKSPACE_PWD=$(pwd)/workspace \
-    -w /workspace \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    pookie \
+./pookie.sh \
     --build setup.py \
     --test tests/test1.py tests/test2.py \
     --test-mode pytest
@@ -128,6 +134,24 @@ workspace
 ## Extending the Tool with Other Python Versions
 
 By following the steps in [`extending-the-tool-whit-other-python-versions.md`](docs/extending-the-tool-whit-other-python-versions.md) found in the `docs` folder, you can extend the tool to support additional Python versions across multiple targets.
+
+## Developer Notes
+
+During development, if you're rebuilding images frequently — for example, when testing changes — Docker may retain old layers from previous builds. Even when images are overwritten, the old layers can remain in the cache and gradually consume a large amount of disk space.
+
+To check current Docker disk usage:
+
+```bash
+docker system df
+```
+
+To safely clean up unused build cache:
+
+```bash
+docker builder prune
+```
+
+This will only remove build cache not currently used by any active images or containers.
 
 ---
 

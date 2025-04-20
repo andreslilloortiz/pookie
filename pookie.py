@@ -18,6 +18,10 @@ def image_exists(image_name):
 def main():
     parser = argparse.ArgumentParser(description='Tool for Automating the Build and Testing Process of Native Python Libraries Using Cross-Compilation and Emulation Technologies')
 
+
+    parser.add_argument('--clean',
+                            action='store_true',
+                            help='Clean the workspace by removing all files and directories')
     parser.add_argument('--build',
                             type = str,
                             nargs = '+',
@@ -43,9 +47,6 @@ def main():
                             choices = ['x86_64-linux', 'x86_64-windows', 'x86_64-macos'],
                             default = ['x86_64-linux', 'x86_64-windows', 'x86_64-macos'],
                             help = 'Target platform(s) to build and test the library for (if not specified: all)')
-    parser.add_argument('--clean',
-                            action='store_true',
-                            help='Clean the workspace by removing all files and directories')
 
     args = parser.parse_args()
 
