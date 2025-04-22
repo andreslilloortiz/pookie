@@ -1,6 +1,7 @@
 import argparse
 import os
 import subprocess
+import re
 
 def image_exists(image_name):
     """Checks if a Docker image already exists."""
@@ -28,13 +29,7 @@ def main():
                             help = 'Python library source file(s) to build')
     parser.add_argument('--test',
                             type = str,
-                            nargs = '+',
-                            help = 'Test file(s) or module(s) to run after building the library')
-    parser.add_argument('--test-mode',
-                            type=str,
-                            choices=['script', 'module', 'pytest'],
-                            default='script',
-                            help='How to run test files: "script" (default), "module", or "pytest"')
+                            help = 'Test Python command to run after building the library')
     parser.add_argument('--python-version',
                             type = str,
                             nargs = '+',
@@ -71,12 +66,6 @@ def main():
             else:
                 builds += " " + build
         builds.strip()
-
-    # check --test
-    if args.test != None:
-        for test in args.test:
-            if not os.path.isfile(test) and not os.path.isdir(test):
-                print(f">> WARNING: The specified test file or module '{test}' does not exist.")
 
     # workspace for docker in docker
     host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')
@@ -165,29 +154,20 @@ def main():
                 # test the library
                 if args.test != None:
 
-                    for test in args.test:
-                        if os.path.isfile(test) or os.path.isdir(test):
-                            print(f">> Testing the library for {python_version}-{target} with {test}")
+                    print(f">> Testing the library for {python_version}-{target} with '{args.test}'")
 
-                            if args.test_mode == 'script':
-                                test_command = f'python3 {test}'
-                            elif args.test_mode == 'module':
-                                test_command = f'python3 -m {test}'
-                            elif args.test_mode == 'pytest':
-                                test_command = f'python3 -m pip install -q pytest >> /dev/null 2>> /dev/null && pytest {test}'
-
-                            subprocess.run([
-                                'docker',
-                                    'run',
-                                    '-it',
-                                    '--rm',
-                                    '-v',
-                                        f'{host_workspace_path}:/workspace',
-                                    f'all-{target}',
-                                    '/bin/bash',
-                                        '-c',
-                                        f'source myenv{python_version}/bin/activate && cd workspace && python3 -m pip install {python_version}-{target}/dist/*.whl >> /dev/null 2>> /dev/null && {test_command} && deactivate'
-                            ])
+                    subprocess.run([
+                        'docker',
+                            'run',
+                            '-it',
+                            '--rm',
+                            '-v',
+                                f'{host_workspace_path}:/workspace',
+                            f'all-{target}',
+                            '/bin/bash',
+                                '-c',
+                                f'source myenv{python_version}/bin/activate && cd workspace && python3 -m pip install {python_version}-{target}/dist/*.whl >> /dev/null 2>> /dev/null && {args.test} && deactivate'
+                    ])
 
             # x86_64-windows
             if target == 'x86_64-windows':
@@ -229,29 +209,22 @@ def main():
                 # test the library
                 if args.test != None:
 
-                    for test in args.test:
-                        if os.path.isfile(test) or os.path.isdir(test):
-                            print(f">> Testing the library for {python_version}-{target} with {test}")
+                    print(f">> Testing the library for {python_version}-{target} with '{args.test}'")
 
-                            if args.test_mode == 'script':
-                                test_command = f'$PYTHON_DIR {test}'
-                            elif args.test_mode == 'module':
-                                test_command = f'$PYTHON_DIR -m {test}'
-                            elif args.test_mode == 'pytest':
-                                test_command = f'$PYTHON_DIR -m pip install -q pytest >> /dev/null 2>> /dev/null && pytest {test}'
+                    test_command = re.sub(r'\bpython3?\b', '$PYTHON_DIR', args.test)
 
-                            subprocess.run([
-                                'docker',
-                                    'run',
-                                    '-it',
-                                    '--rm',
-                                    '-v',
-                                        f'{host_workspace_path}:/workspace',
-                                    'all-all-windows',
-                                    '/bin/bash',
-                                        '-c',
-                                        f'PYTHON_DIR=/python-{python_version}-{target}/python.exe && cd workspace && cp {test} {python_version}-{target} && cd {python_version}-{target} && WINEDEBUG=-all wine {test_command} 2>&1 | grep -v -E "wine" && rm {test}'
-                            ])
+                    subprocess.run([
+                        'docker',
+                            'run',
+                            '-it',
+                            '--rm',
+                            '-v',
+                                f'{host_workspace_path}:/workspace',
+                            'all-all-windows',
+                            '/bin/bash',
+                                '-c',
+                                f'PYTHON_DIR=/python-{python_version}-{target}/python.exe && cd workspace && cp {python_version}-{target}/*.pyd . && export PYTHONHASHSEED=0 && WINEDEBUG=-all wine {test_command} 2>&1 | grep -v -E "wine" && rm *.pyd'
+                    ])
 
             # x86_64-macos
             if target == 'x86_64-macos':
@@ -284,10 +257,8 @@ def main():
                 # test the library
                 if args.test != None:
 
-                    for test in args.test:
-                        if os.path.isfile(test) or os.path.isdir(test):
-                            print(f">> Testing the library for {python_version}-{target} with {test}")
-                            print("Not yet supported :(")
+                    print(f">> Testing the library for {python_version}-{target} with '{args.test }'")
+                    print("Not yet supported :(")
 
     print(">> See you soon")
 

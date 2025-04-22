@@ -69,8 +69,7 @@ The proposed solution leverages technologies like QEMU and Wine to implement cro
 | `-h, --help`                                                                                           | Show this help message and exit                                              |
 | `--clean`                                                                                              | Clean the workspace by removing all files and directories                    |
 | `--build BUILD [BUILD ...]`                                                                            | Python library source file(s) to build                                       |
-| `--test TEST [TEST ...]`                                                                               | Test Python file(s) or module(s) to run after building the library           |
-| `--test-mode {script,module,pytest}`                                                                   | How to run test files: "script" (default), "module", or "pytest"             |
+| `--test TEST`                                                                                          | Test Python command to run after building the library                        |
 | `--python-version {3.13.2,3.12.9,3.11.9,3.10.11} [{3.13.2,3.12.9,3.11.9,3.10.11} ...]`                 | Python version(s) to compile for (if not specified: all)                     |
 | `--target {x86_64-linux,x86_64-windows,x86_64-macos} [{x86_64-linux,x86_64-windows,x86_64-macos} ...]` | Target platform(s) to build and test the library for (if not specified: all) |
 
@@ -83,19 +82,17 @@ Compile the source file `mylib.c` and test it with `test.py` script for Python v
 ```bash
 ./pookie.sh \
     --build mylib.c \
-    --test test.py \
-    --test-mode script
+    --test "python3 test.py" \
     --python-version 3.12.9 3.11.9 \
     --target x86_64-macos x86_64-windows
 ```
 
-Compile the source files with `setup.py` file and test it with test files in the module (directory with `__init__.py`) `tests` for Python version `3.10.11` targeting `x86_64-linux`.
+Compile the source files with `setup.py` file and test it with test files in the module `tests` (directory with `__init__.py`) for Python version `3.10.11` targeting `x86_64-linux`.
 
 ```bash
 ./pookie.sh \
     --build setup.py \
-    --test tests \
-    --test-mode module
+    --test "python3 -m tests" \
     --python-version 3.10.11 \
     --target x86_64-linux
 ```
@@ -105,8 +102,7 @@ Compile the source files with `setup.py` file and test it with test files locate
 ```bash
 ./pookie.sh \
     --build setup.py \
-    --test tests/test1.py tests/test2.py \
-    --test-mode pytest
+    --test "python3 -m pip install pytest && pytest tests/test1.py && pytest tests/test2.py" \
     --python-version 3.13.2 3.12.9 \
     --target x86_64-linux
 ```
