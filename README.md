@@ -141,9 +141,11 @@ To check current Docker disk usage:
 docker system df
 ```
 
-To safely clean up unused build cache:
+To safely clean up dangling images and unused build cache:
 
 ```bash
+docker image prune
+
 docker builder prune
 ```
 
