@@ -128,14 +128,14 @@ def main():
             # x86_64-linux
             if target == 'x86_64-linux':
 
-                subprocess.run([
-                    'mkdir',
-                        '-p',
-                        f'/workspace/{python_version}-{target}'
-                ], stdout=logfile, stderr=logfile)
-
                 # build the library
                 if args.build != None:
+
+                    subprocess.run([
+                        'mkdir',
+                            '-p',
+                            f'/workspace/{python_version}-{target}'
+                    ], stdout=logfile, stderr=logfile)
 
                     print(f">> Building the library for {python_version}-{target}")
                     subprocess.run([
@@ -172,14 +172,14 @@ def main():
             # x86_64-windows
             if target == 'x86_64-windows':
 
-                subprocess.run([
-                    'mkdir',
-                        '-p',
-                        f'/workspace/{python_version}-{target}'
-                ], stdout=logfile, stderr=logfile)
-
                 # build the library
                 if args.build != None:
+
+                    subprocess.run([
+                        'mkdir',
+                            '-p',
+                            f'/workspace/{python_version}-{target}'
+                    ], stdout=logfile, stderr=logfile)
 
                     print(f">> Building the library for {python_version}-{target}")
                     compiled = os.path.splitext(args.build[0])[0] + ".pyd"
@@ -229,14 +229,14 @@ def main():
             # x86_64-macos
             if target == 'x86_64-macos':
 
-                subprocess.run([
-                    'mkdir',
-                        '-p',
-                        f'/workspace/{python_version}-{target}'
-                ], stdout=logfile, stderr=logfile)
-
                 # build the library
                 if args.build != None:
+
+                    subprocess.run([
+                        'mkdir',
+                            '-p',
+                            f'/workspace/{python_version}-{target}'
+                    ], stdout=logfile, stderr=logfile)
 
                     print(f">> Building the library for {python_version}-{target}")
                     compiled = os.path.splitext(args.build[0])[0] + ".so"
