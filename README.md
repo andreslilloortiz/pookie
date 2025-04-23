@@ -133,7 +133,7 @@ By following the steps in [`extending-the-tool-whit-other-python-versions.md`](d
 
 ## Developer Notes
 
-During development, if you're rebuilding images frequently — for example, when testing changes — Docker may retain old layers from previous builds. Even when images are overwritten, the old layers can remain in the cache and gradually consume a large amount of disk space.
+During development, if you're rebuilding images frequently (for example, when testing changes) Docker may retain old layers from previous builds. Even when images are overwritten, the old layers can remain in the cache and gradually consume a large amount of disk space.
 
 To check current Docker disk usage:
 
@@ -149,7 +149,7 @@ docker image prune
 docker builder prune
 ```
 
-This will only remove build cache not currently used by any active images or containers.
+This will only remove dangling images (those that are untagged and not referenced by any container) and build cache not currently used by any active images or containers, helping to free up disk space without affecting running or tagged images.
 
 ---
 
