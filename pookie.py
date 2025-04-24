@@ -21,16 +21,12 @@ def image_exists(image_name):
 def main():
     parser = argparse.ArgumentParser(description='Tool for Automating the Build and Testing Process of Native Python Libraries Using Cross-Compilation and Emulation Technologies')
 
-    parser.add_argument('--clean',
-                            action='store_true',
-                            help='Clean the workspace by removing all files and directories')
     parser.add_argument('--build',
                             type = str,
-                            nargs = '+',
-                            help = 'Python command to build')
+                            help = 'Python build command')
     parser.add_argument('--test',
                             type = str,
-                            help = 'Test Python command to run after building the library')
+                            help = 'Python test command')
     parser.add_argument('--python-version',
                             type = str,
                             nargs = '+',
@@ -38,8 +34,8 @@ def main():
     parser.add_argument('--target',
                             type = str,
                             nargs = '+',
-                            choices = ['x86_64-linux', 'x86_64-windows', 'x86_64-macos'],
-                            default = ['x86_64-linux', 'x86_64-windows', 'x86_64-macos'],
+                            choices = ['manylinux_2_17_x86_64', 'musllinux_1_2_x86_64', 'win_amd64', 'macosx_x86_64'],
+                            default = ['manylinux_2_17_x86_64', 'musllinux_1_2_x86_64', 'win_amd64', 'macosx_x86_64'],
                             help = 'Target platform(s) to build and test the library for (if not specified: all)')
 
     args = parser.parse_args()
@@ -49,26 +45,9 @@ def main():
     for arg in vars(args):
         print(f"- {arg}: {getattr(args, arg)}")
 
-    # check --clean
-    if args.clean:
-        print(f">> Cleaning workspace")
-        subprocess.run("find . -mindepth 1 ! -name '.keepme' -exec rm -rf {} +", shell=True)
-        print(f">> See you soon")
-        return
-
     # Fetch python-versions
     result = find_latest_patch_versions(3, args.python_version)
     print(result)
-
-    # # check --build
-    # builds = ""
-    # if args.build != None:
-    #     for build in args.build:
-    #         if not os.path.isfile(build):
-    #             print(f">> WARNING: The specified build file '{build}' does not exist.")
-    #         else:
-    #             builds += " " + build
-    #     builds.strip()
 
     # # workspace for docker in docker
     # host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')
