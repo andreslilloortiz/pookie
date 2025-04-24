@@ -1,0 +1,21 @@
+FROM ubuntu:latest
+
+RUN dpkg --add-architecture i386
+RUN apt-get update && apt-get install -y \
+    wine64 \
+    wine32:i386 \
+    python3 \
+    msitools \
+    ca-certificates \
+    winbind \
+    wget \
+    git \
+    unzip \
+    cabextract \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN git clone https://github.com/mstorsjo/msvc-wine.git && \
+    cd msvc-wine && \
+    echo "yes" | ./vsdownload.py --dest ../my_msvc/opt/msvc && \
+    ./install.sh ../my_msvc/opt/msvc && \
+    cd .. && rm -r msvc-wine

@@ -1,0 +1,18 @@
+FROM ubuntu:18.04
+
+RUN apt-get update && apt-get install -y \
+    gcc \
+    wget \
+    git \
+    tar \
+    make \
+    xz-utils \
+    unzip \
+    libssl-dev \
+    libbz2-dev \
+    zlib1g-dev \
+    liblzma-dev \
+    libffi-dev \
+    libsqlite3-dev \
+    libreadline-dev \
+    && rm -rf /var/lib/apt/lists/*

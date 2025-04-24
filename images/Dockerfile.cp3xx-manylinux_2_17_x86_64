@@ -1,0 +1,13 @@
+FROM base-manylinux:latest
+
+ARG PYTHON_VERSION
+
+# Instalar Python
+RUN wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz && \
+    tar -xJf Python-${PYTHON_VERSION}.tar.xz && \
+    cd Python-${PYTHON_VERSION} && \
+    ./configure --enable-optimizations && \
+    make -j$(nproc) && \
+    make install && \
+    cd .. && \
+    rm -rf Python-${PYTHON_VERSION}*

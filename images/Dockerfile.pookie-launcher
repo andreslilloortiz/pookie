@@ -1,0 +1,10 @@
+FROM base-ubuntu2404:latest
+
+RUN apt-get update && apt-get install -y \
+    docker.io \
+    python3 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY pookie.py .
+
+ENTRYPOINT ["python3", "/pookie.py"]

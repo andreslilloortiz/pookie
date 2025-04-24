@@ -1,0 +1,30 @@
+FROM pookie-base:latest
+
+RUN apt-get update && apt-get install -y \
+    cpio \
+    clang \
+    llvm-dev \
+    libxml2-dev \
+    uuid-dev \
+    bzip2 \
+    libssl-dev \
+    build-essential \
+    patch \
+    python3 \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.22.0/cmake-3.22.0.tar.gz && \
+    tar -zxvf cmake-3.22.0.tar.gz && \
+    cd cmake-3.22.0 && \
+    ./bootstrap && \
+    make -j$(nproc) && \
+    make install && \
+    cd .. && rm -rf cmake-3.22.0 cmake-3.22.0.tar.gz
+
+RUN wget https://github.com/joseluisq/macosx-sdks/releases/download/11.1/MacOSX11.1.sdk.tar.xz && \
+    git clone https://github.com/tpoechtrager/osxcross.git && \
+    mv MacOSX11.1.sdk.tar.xz osxcross/tarballs/ && \
+    cd osxcross && tools/get_dependencies.sh && \
+    echo | ./build.sh
+
+ENV PATH="/osxcross/target/bin:${PATH}"

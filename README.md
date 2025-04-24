@@ -24,13 +24,19 @@ The proposed solution leverages technologies like QEMU and Wine to implement cro
     git clone https://github.com/andreslilloortiz/python-prebuilt-binaries.git
     ```
 
-3. **Build pookie Docker image**
+3. **Build pookie-base Docker image**
 
     ```bash
-    docker build -t pookie .
+    docker build -t pookie-base -f images/Dockerfile.pookie-base .
     ```
 
-4. **Run pookie**
+4. 3. **Build pookie-launcher Docker image**
+
+    ```bash
+    docker build -t pookie-launcher -f images/Dockerfile.pookie-launcher .
+    ```
+
+5. **Run pookie**
 
     You can run pookie either by using the Docker command directly or by executing a simple shell script.
 
@@ -42,7 +48,7 @@ The proposed solution leverages technologies like QEMU and Wine to implement cro
         -e WORKSPACE_PWD=$(pwd)/workspace \
         -w /workspace \
         -v /var/run/docker.sock:/var/run/docker.sock \
-        pookie --help
+        pookie-launcher --help
     ```
 
     **Option 2**: Using the provided shell script.
@@ -68,7 +74,7 @@ The proposed solution leverages technologies like QEMU and Wine to implement cro
 |--------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|
 | `-h, --help`                                                                                           | Show this help message and exit                                              |
 | `--clean`                                                                                              | Clean the workspace by removing all files and directories                    |
-| `--build BUILD [BUILD ...]`                                                                            | Python library source file(s) to build                                       |
+| `--build BUILD [BUILD ...]`                                                                            | Python command to build                                                      |
 | `--test TEST`                                                                                          | Test Python command to run after building the library                        |
 | `--python-version {3.13.2,3.12.9,3.11.9,3.10.11} [{3.13.2,3.12.9,3.11.9,3.10.11} ...]`                 | Python version(s) to compile for (if not specified: all)                     |
 | `--target {x86_64-linux,x86_64-windows,x86_64-macos} [{x86_64-linux,x86_64-windows,x86_64-macos} ...]` | Target platform(s) to build and test the library for (if not specified: all) |
