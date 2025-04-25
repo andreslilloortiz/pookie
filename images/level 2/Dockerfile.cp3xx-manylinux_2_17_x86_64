@@ -1,9 +1,10 @@
-FROM base-manylinux:latest
+FROM gnu-gcc:latest
 
+ARG PYTHON_URL
 ARG PYTHON_VERSION
 
 # Instalar Python
-RUN wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz && \
+RUN wget ${PYTHON_URL} && \
     tar -xJf Python-${PYTHON_VERSION}.tar.xz && \
     cd Python-${PYTHON_VERSION} && \
     ./configure --enable-optimizations && \

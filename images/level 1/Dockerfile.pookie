@@ -1,10 +1,15 @@
-FROM base-ubuntu2404:latest
+FROM ubuntu-2404:latest
 
 RUN apt-get update && apt-get install -y \
     docker.io \
     python3 \
+    python3-requests \
+    python3-bs4 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY pookie.py .
+COPY python_version_fetcher.py .
+
+COPY images /images
 
 ENTRYPOINT ["python3", "/pookie.py"]

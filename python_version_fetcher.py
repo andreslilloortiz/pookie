@@ -70,8 +70,8 @@ def find_latest_patch_versions(major_version, minor_versions=None, required_file
       Defaults to all three file types.
 
     Returns:
-    - A dictionary where the keys are the minor versions and the values are lists
-      of URLs for the available files for the latest patch version.
+    - A dictionary where the keys are the full versions (major.minor.patch) and the values are dictionaries
+      with the required file types as keys and their corresponding URLs as values.
     """
     if required_files is None:
         required_files = ["tar_xz", "embed_zip", "macos_pkg"]
@@ -108,8 +108,8 @@ def find_latest_patch_versions(major_version, minor_versions=None, required_file
         for version in versions:
             files = check_files(version, required_files)
             if files:
-                # Store only the list of URLs for available files
-                result[minor_version] = [value for key, value in files.items() if value]
+                # Use the full version as the key and the files dictionary as the value
+                result[version] = files
                 break  # Found the latest valid version for this minor version
 
     return result

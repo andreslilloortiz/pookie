@@ -6,7 +6,9 @@ from ftplib import FTP
 from python_version_fetcher import find_latest_patch_versions
 
 def image_exists(image_name):
-    """Checks if a Docker image already exists."""
+    """
+    Checks if a Docker image already exists.
+    """
     result = subprocess.run([
         'docker',
             'images',
@@ -48,7 +50,7 @@ def main():
     # Fetch python-versions
     required_files = []
     for target in args.target:
-        # mapear targets con tipos de archivos
+        # map target to required files
         if target == 'manylinux_2_17_x86_64' or target == 'musllinux_1_2_x86_64':
             required_files.append('tar_xz')
         if target == 'win_amd64':
@@ -56,14 +58,68 @@ def main():
         if target == 'macosx_x86_64':
             required_files.append('macos_pkg')
 
-    result = find_latest_patch_versions(3, args.python_version, required_files)
-    print(result)
+    python_versions_dic = find_latest_patch_versions(3, args.python_version, required_files)
+    print(python_versions_dic)
 
-    # # workspace for docker in docker
+    # log file
+    logfile = open("pookie.log", "a")
+
+    # create docker images
+    for target in args.target:
+
+        if target == 'manylinux_2_17_x86_64':
+            print(">> Creating docker images for manylinux_2_17_x86_64")
+
+            # level 0
+            if not image_exists("ubuntu-1804"):
+                subprocess.run([
+                    'docker',
+                        'build',
+                        '-f',
+                            '/images/level 0/Dockerfile.ubuntu-1804',
+                        '-t',
+                            'ubuntu-1804',
+                        '.'
+                ], stdout=logfile, stderr=logfile)
+
+            # level 1
+            if not image_exists("gnu-gcc"):
+                subprocess.run([
+                    'docker',
+                        'build',
+                        '-f',
+                            '/images/level 1/Dockerfile.gnu-gcc',
+                        '-t',
+                            'gnu-gcc',
+                        '.'
+                ], stdout=logfile, stderr=logfile)
+
+            # level 2
+            for python_version, urls_dic in python_versions_dic.items():
+
+                cp_version_parts = python_version.split(".")
+                cp_version = f"{cp_version_parts[0]}{cp_version_parts[1]}"
+
+                if not image_exists(f"cp{cp_version}-manylinux_2_17_x86_64"):
+                    subprocess.run([
+                        'docker',
+                            'build',
+                            '-f',
+                                '/images/level 2/Dockerfile.cp3xx-manylinux_2_17_x86_64',
+                            '-t',
+                                f'cp{cp_version}-manylinux_2_17_x86_64',
+                            '--build-arg',
+                                f'PYTHON_VERSION={python_version}',
+                            '--build-arg',
+                                f'PYTHON_URL={urls_dic["tar_xz"]}',
+                            '.'
+                    ], stdout=logfile, stderr=logfile)
+
+
+    # workspace for docker in docker
     # host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')
 
-    # # log file
-    # logfile = open("pookie.log", "a")
+
 
     # # build only one docker image for all python versions of x86_64-linux
     # if any("x86_64-linux" in item.lower() for item in args.target):

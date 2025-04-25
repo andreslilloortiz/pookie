@@ -1,4 +1,4 @@
-FROM pookie-base:latest
+FROM ubuntu-1804:latest
 
 RUN apt-get update && apt-get install -y \
     gcc \
