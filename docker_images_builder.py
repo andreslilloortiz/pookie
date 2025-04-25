@@ -83,3 +83,22 @@ def build_docker_images(targets, logfile, python_versions_dic):
                                 f'PYTHON_URL={urls_dic["tar_xz"]}',
                             '.'
                     ], stdout=logfile, stderr=logfile)
+
+        if target == 'macosx_x86_64':
+            print(">> Creating docker images for macosx_x86_64")
+            tree = "win-macosx-pookie"
+
+            # level 1 (same base level as pookie so its created)
+
+            # level 2
+            image_name = "win-macosx-pookie-lvl2-osxcross"
+            if not image_exists(image_name):
+                subprocess.run([
+                    'docker',
+                        'build',
+                        '-f',
+                            f'/images/{tree}/Dockerfile.{image_name}',
+                        '-t',
+                            f'{image_name}',
+                        '.'
+                ], stdout=logfile, stderr=logfile)
