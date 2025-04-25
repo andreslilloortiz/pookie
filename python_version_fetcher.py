@@ -28,51 +28,54 @@ def get_versions(major_version, minor_version):
             versions.append(match.group(0).strip('/'))
     return sorted(versions, key=lambda s: list(map(int, s.split('.'))), reverse=True)
 
-def check_files(version):
+def check_files(version, required_files):
     """
-    Checks if the necessary files (`Python-<version>.tar.xz`,
-    `python-<version>-embed-amd64.zip`, and `python-<version>-macos11.pkg`) are
-    available for a specific version on the Python FTP server.
+    Checks if the specified files are available for a specific version on the Python FTP server.
 
     Parameters:
     - version (str): The specific Python version to check for the files.
+    - required_files (list): A list of required file types (e.g., ['tar_xz', 'embed_zip', 'macos_pkg']).
 
     Returns:
-    - A tuple containing the full URLs for the `.tar.xz`, `.zip`, and `.pkg` files
-      if all files are available, or `None` if any file is missing.
+    - A dictionary indicating the availability of each required file and their URLs if available.
+      If any required file is missing, returns None.
     """
     url = f"{BASE_URL}{version}/"
     response = requests.get(url)
     soup = BeautifulSoup(response.text, "html.parser")
     files = [a['href'] for a in soup.find_all("a", href=True)]
 
-    tar_xz = f"Python-{version}.tar.xz"
-    embed_zip = f"python-{version}-embed-amd64.zip"
-    macos_pkg = f"python-{version}-macos11.pkg"
+    file_map = {
+        "tar_xz": f"Python-{version}.tar.xz",
+        "embed_zip": f"python-{version}-embed-amd64.zip",
+        "macos_pkg": f"python-{version}-macos11.pkg",
+    }
 
-    if tar_xz in files and embed_zip in files and macos_pkg in files:
-        return (url + tar_xz, url + embed_zip, url + macos_pkg)
+    result = {key: (url + file_map[key] if file_map[key] in files else None) for key in required_files}
 
-    return None
+    return result if all(result.values()) else None
 
-def find_latest_patch_versions(major_version, minor_versions=None):
+def find_latest_patch_versions(major_version, minor_versions=None, required_files=None):
     """
     Finds the latest available patch versions for specific minor versions
-    within the major version, ensuring that all necessary files
-    (`.tar.xz`, `.zip`, and `.pkg`) are present for those versions.
+    within the major version, ensuring that the specified files are present.
 
-    If no minor_versions are provided, it will use the latest 4 minor versions.
+    If no minor_versions are provided, it will use the latest 4 minor versions
+    that have all the required files.
 
     Parameters:
     - major_version (int): The major version to search for.
     - minor_versions (list, optional): A list of minor versions to search for.
+    - required_files (list, optional): A list of required file types (e.g., ['tar_xz', 'embed_zip', 'macos_pkg']).
+      Defaults to all three file types.
 
     Returns:
     - A dictionary where the keys are the minor versions and the values are lists
-      of URLs for the files of the latest patch version in each minor version.
-      If no valid version is found for a minor version, the value is an empty list.
+      of URLs for the available files for the latest patch version.
     """
-    # If minor_versions is not provided, fetch the latest 4 available minor versions
+    if required_files is None:
+        required_files = ["tar_xz", "embed_zip", "macos_pkg"]
+
     if not minor_versions:
         # Get all available versions for the major_version
         response = requests.get(BASE_URL)
@@ -82,23 +85,31 @@ def find_latest_patch_versions(major_version, minor_versions=None):
         for a in soup.find_all("a", href=True):
             match = re.match(rf"{major_version}\.(\d+)\.\d+/?", a['href'])
             if match:
-                all_versions.add(match.group(1))
+                all_versions.add(int(match.group(1)))
 
-        # Select the latest 4 minor versions
-        minor_versions = sorted(map(int, all_versions), reverse=True)[:4]
+        # Check for the latest 4 minor versions that have valid files
+        valid_minor_versions = []
+        for minor_version in sorted(all_versions, reverse=True):
+            versions = get_versions(major_version, minor_version)
+            for version in versions:
+                if check_files(version, required_files):
+                    valid_minor_versions.append(minor_version)
+                    break  # Stop checking once a valid version is found for this minor version
+            if len(valid_minor_versions) == 4:
+                break  # Stop once we have 4 valid minor versions
+
+        minor_versions = valid_minor_versions
 
     result = {}
 
     for minor_version in minor_versions:
         versions = get_versions(major_version, minor_version)
-        files_found = []
 
         for version in versions:
-            files = check_files(version)
+            files = check_files(version, required_files)
             if files:
-                files_found = files
+                # Store only the list of URLs for available files
+                result[minor_version] = [value for key, value in files.items() if value]
                 break  # Found the latest valid version for this minor version
-
-        result[minor_version] = files_found
 
     return result

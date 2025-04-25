@@ -46,7 +46,17 @@ def main():
         print(f"- {arg}: {getattr(args, arg)}")
 
     # Fetch python-versions
-    result = find_latest_patch_versions(3, args.python_version)
+    required_files = []
+    for target in args.target:
+        # mapear targets con tipos de archivos
+        if target == 'manylinux_2_17_x86_64' or target == 'musllinux_1_2_x86_64':
+            required_files.append('tar_xz')
+        if target == 'win_amd64':
+            required_files.append('embed_zip')
+        if target == 'macosx_x86_64':
+            required_files.append('macos_pkg')
+
+    result = find_latest_patch_versions(3, args.python_version, required_files)
     print(result)
 
     # # workspace for docker in docker
