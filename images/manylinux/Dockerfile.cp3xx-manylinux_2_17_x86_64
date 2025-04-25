@@ -1,4 +1,4 @@
-FROM gnu-gcc:latest
+FROM manylinux-lvl2-gnu-gcc:latest
 
 ARG PYTHON_URL
 ARG PYTHON_VERSION

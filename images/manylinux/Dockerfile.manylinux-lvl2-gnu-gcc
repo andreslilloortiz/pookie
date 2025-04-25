@@ -1,4 +1,4 @@
-FROM ubuntu-1804:latest
+FROM manylinux-lvl1-base:latest
 
 RUN apt-get update && apt-get install -y \
     gcc \

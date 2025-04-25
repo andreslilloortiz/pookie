@@ -34,43 +34,47 @@ def build_docker_images(targets, logfile, python_versions_dic):
 
         if target == 'manylinux_2_17_x86_64':
             print(">> Creating docker images for manylinux_2_17_x86_64")
-
-            # level 0
-            if not image_exists("ubuntu-1804"):
-                subprocess.run([
-                    'docker',
-                        'build',
-                        '-f',
-                            '/images/level 0/Dockerfile.ubuntu-1804',
-                        '-t',
-                            'ubuntu-1804',
-                        '.'
-                ], stdout=logfile, stderr=logfile)
+            tree = "manylinux"
 
             # level 1
-            if not image_exists("gnu-gcc"):
+            image_name = "manylinux-lvl1-base"
+            if not image_exists(image_name):
                 subprocess.run([
                     'docker',
                         'build',
                         '-f',
-                            '/images/level 1/Dockerfile.gnu-gcc',
+                            f'/images/{tree}/Dockerfile.{image_name}',
                         '-t',
-                            'gnu-gcc',
+                            f'{image_name}',
                         '.'
                 ], stdout=logfile, stderr=logfile)
 
             # level 2
+            image_name = "manylinux-lvl2-gnu-gcc"
+            if not image_exists(image_name):
+                subprocess.run([
+                    'docker',
+                        'build',
+                        '-f',
+                            f'/images/{tree}/Dockerfile.{image_name}',
+                        '-t',
+                            f'{image_name}',
+                        '.'
+                ], stdout=logfile, stderr=logfile)
+
+            # level 3
             for python_version, urls_dic in python_versions_dic.items():
 
                 cp_version_parts = python_version.split(".")
                 cp_version = f"{cp_version_parts[0]}{cp_version_parts[1]}"
+                image_name = f"cp{cp_version}-manylinux_2_17_x86_64"
 
-                if not image_exists(f"cp{cp_version}-manylinux_2_17_x86_64"):
+                if not image_exists(image_name):
                     subprocess.run([
                         'docker',
                             'build',
                             '-f',
-                                '/images/level 2/Dockerfile.cp3xx-manylinux_2_17_x86_64',
+                                f'/images/{tree}/Dockerfile.cp3xx-manylinux_2_17_x86_64',
                             '-t',
                                 f'cp{cp_version}-manylinux_2_17_x86_64',
                             '--build-arg',

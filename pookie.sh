@@ -9,20 +9,20 @@ fi
 
 WORKSPACE_DIR="$1"
 
-# Check if the Docker image 'ubuntu-2404' exists, if not, build it
-if ! docker image inspect ubuntu-2404 > /dev/null 2>&1; then
-    docker build -t ubuntu-2404 -f images/level\ 0/Dockerfile.ubuntu-2404 . > /dev/null 2>&1
+# Check if the Docker image 'win-macosx-pookie-lvl1-base' exists, if not, build it
+if ! docker image inspect win-macosx-pookie-lvl1-base > /dev/null 2>&1; then
+    docker build -t win-macosx-pookie-lvl1-base -f images/win-macosx-pookie/Dockerfile.win-macosx-pookie-lvl1-base . > /dev/null 2>&1
     if [ $? -ne 0 ]; then
-        echo "Error: Failed to build Docker image 'ubuntu-2404'."
+        echo "Error: Failed to build Docker image 'win-macosx-pookie-lvl1-base'."
         exit 1
     fi
 fi
 
-# Check if the Docker image 'pookie' exists, if not, build it
-if ! docker image inspect pookie > /dev/null 2>&1; then
-    docker build -t pookie -f images/level\ 1/Dockerfile.pookie . > /dev/null 2>&1
+# Check if the Docker image 'win-macosx-pookie-lvl2-pookie' exists, if not, build it
+if ! docker image inspect win-macosx-pookie-lvl2-pookie > /dev/null 2>&1; then
+    docker build -t win-macosx-pookie-lvl2-pookie -f images/win-macosx-pookie/Dockerfile.win-macosx-pookie-lvl2-pookie . > /dev/null 2>&1
     if [ $? -ne 0 ]; then
-        echo "Error: Failed to build Docker image 'pookie'."
+        echo "Error: Failed to build Docker image 'win-macosx-pookie-lvl2-pookie'."
         exit 1
     fi
 fi
@@ -34,4 +34,4 @@ docker run -it --rm \
     -w /workspace \
     -v /var/run/docker.sock:/var/run/docker.sock \
     --network host \
-    pookie "${@:2}"
+    win-macosx-pookie-lvl2-pookie "${@:2}"
