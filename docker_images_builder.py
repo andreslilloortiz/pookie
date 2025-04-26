@@ -65,18 +65,19 @@ def build_docker_images(targets, logfile, python_versions_dic):
             # level 3
             for python_version, urls_dic in python_versions_dic.items():
 
+                general_image_name = "manylinux-lvl3-cp3xx"
                 cp_version_parts = python_version.split(".")
                 cp_version = f"{cp_version_parts[0]}{cp_version_parts[1]}"
-                image_name = f"cp{cp_version}-manylinux_2_17_x86_64"
+                image_name = f"manylinux-lvl3-cp{cp_version}"
 
                 if not image_exists(image_name):
                     subprocess.run([
                         'docker',
                             'build',
                             '-f',
-                                f'/images/{tree}/Dockerfile.cp3xx-manylinux_2_17_x86_64',
+                                f'/images/{tree}/Dockerfile.{general_image_name}',
                             '-t',
-                                f'cp{cp_version}-manylinux_2_17_x86_64',
+                                f'{image_name}',
                             '--build-arg',
                                 f'PYTHON_VERSION={python_version}',
                             '--build-arg',
