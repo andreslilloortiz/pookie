@@ -1,0 +1,23 @@
+FROM win-macosx-pookie-lvl2-msvc-mingw64:latest
+
+ARG PYTHON_URL
+ARG PYTHON_VERSION
+
+RUN PYTHON_VERSION_COMPACT=$(echo "${PYTHON_VERSION}" | awk -F. '{print $1 $2}') && \
+    wget ${PYTHON_URL} &&\
+    unzip python-${PYTHON_VERSION}-embed-amd64.zip -dpython-${PYTHON_VERSION}-embed-amd64 &&\
+    unzip python-${PYTHON_VERSION}-embed-amd64/python${PYTHON_VERSION_COMPACT}.zip -dpython-${PYTHON_VERSION}-embed-amd64/python${PYTHON_VERSION_COMPACT} &&\
+    rm python-${PYTHON_VERSION}-embed-amd64/python${PYTHON_VERSION_COMPACT}.zip && \
+    { \
+    echo ".\\python${PYTHON_VERSION_COMPACT}"; \
+    echo ".\\Scripts"; \
+    echo "."; \
+    echo "# importing site will run sitecustomize.py"; \
+    echo "import site"; \
+    } > ./python-${PYTHON_VERSION}-embed-amd64/python${PYTHON_VERSION_COMPACT}._pth && \
+    echo "import sys" > python-${PYTHON_VERSION}-embed-amd64/sitecustomize.py && \
+    mkdir -p python-${PYTHON_VERSION}-embed-amd64/DLLs && \
+    wget -P python-${PYTHON_VERSION}-embed-amd64 https://bootstrap.pypa.io/get-pip.py
+
+# && \
+# wine python-${PYTHON_VERSION}-embed-amd64/python.exe python-${PYTHON_VERSION}-embed-amd64/get-pip.py
