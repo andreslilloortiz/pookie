@@ -21,6 +21,51 @@ def image_exists(image_name):
     )
     return bool(result.stdout.strip())
 
+def build_lvl1_or_lvl2_image(tree, image_name, logfile):
+    """
+    Build a level 1 or level 2 Docker image.
+    Parameters:
+    - tree (str): The tree from the Docker layer graph.
+    - image_name (str): The specific image name to build.
+    - logfile (file object): File object to log the output of the build process.
+    """
+    if not image_exists(image_name):
+        subprocess.run([
+            'docker',
+                'build',
+                '-f',
+                    f'/images/{tree}/Dockerfile.{image_name}',
+                '-t',
+                    f'{image_name}',
+                '.'
+        ], stdout=logfile, stderr=logfile)
+
+def build_lvl3_image(tree, general_image_name, image_name, python_version, python_url, logfile):
+    """
+    Build a level 3 CP3xx Docker image.
+    Parameters:
+    - tree (str): The tree from the Docker layer graph.
+    - general_image_name (str): The image name.
+    - image_name (str): The specific image name to build.
+    - python_version (str): The Python version to use.
+    - python_url (str): The URL for the Python source.
+    - logfile (file object): File object to log the output of the build process.
+    """
+    if not image_exists(image_name):
+        subprocess.run([
+            'docker',
+                'build',
+                '-f',
+                    f'/images/{tree}/Dockerfile.{general_image_name}',
+                '-t',
+                    f'{image_name}',
+                '--build-arg',
+                    f'PYTHON_VERSION={python_version}',
+                '--build-arg',
+                    f'PYTHON_URL={python_url}',
+                '.'
+        ], stdout=logfile, stderr=logfile)
+
 def build_docker_images(targets, logfile, python_versions_dic):
     """
     Build Docker images for the specified targets.
@@ -38,19 +83,34 @@ def build_docker_images(targets, logfile, python_versions_dic):
 
             # level 1
             image_name = "manylinux-lvl1-base"
-            if not image_exists(image_name):
-                subprocess.run([
-                    'docker',
-                        'build',
-                        '-f',
-                            f'/images/{tree}/Dockerfile.{image_name}',
-                        '-t',
-                            f'{image_name}',
-                        '.'
-                ], stdout=logfile, stderr=logfile)
+            build_lvl1_or_lvl2_image(tree, image_name, logfile)
 
             # level 2
             image_name = "manylinux-lvl2-gnu-gcc"
+            build_lvl1_or_lvl2_image(tree, image_name, logfile)
+
+            # level 3
+            for python_version, urls_dic in python_versions_dic.items():
+
+                general_image_name = "manylinux-lvl3-cp3xx-manylinux_2_17"
+
+                cp_version_parts = python_version.split(".")
+                cp_version = f"{cp_version_parts[0]}{cp_version_parts[1]}"
+                image_name = f"manylinux-lvl3-cp{cp_version}-manylinux_2_17"
+
+                python_url = urls_dic["tar_xz"]
+
+                build_lvl3_image(tree, general_image_name, image_name, python_version, python_url, logfile)
+
+        if target == 'macosx_x86_64':
+            print(">> Creating docker images for macosx_x86_64")
+            tree = "win-macosx-pookie"
+
+            # level 1
+            # (same base level as pookie so its created)
+
+            # level 2
+            image_name = "win-macosx-pookie-lvl2-osxcross"
             if not image_exists(image_name):
                 subprocess.run([
                     'docker',
@@ -65,41 +125,12 @@ def build_docker_images(targets, logfile, python_versions_dic):
             # level 3
             for python_version, urls_dic in python_versions_dic.items():
 
-                general_image_name = "manylinux-lvl3-cp3xx"
+                general_image_name = "win-macosx-pookie-lvl3-cp3xx-macosx"
+
                 cp_version_parts = python_version.split(".")
                 cp_version = f"{cp_version_parts[0]}{cp_version_parts[1]}"
-                image_name = f"manylinux-lvl3-cp{cp_version}"
+                image_name = f"win-macosx-pookie-lvl3-cp{cp_version}-macosx"
 
-                if not image_exists(image_name):
-                    subprocess.run([
-                        'docker',
-                            'build',
-                            '-f',
-                                f'/images/{tree}/Dockerfile.{general_image_name}',
-                            '-t',
-                                f'{image_name}',
-                            '--build-arg',
-                                f'PYTHON_VERSION={python_version}',
-                            '--build-arg',
-                                f'PYTHON_URL={urls_dic["tar_xz"]}',
-                            '.'
-                    ], stdout=logfile, stderr=logfile)
+                python_url = urls_dic["macos_pkg"]
 
-        if target == 'macosx_x86_64':
-            print(">> Creating docker images for macosx_x86_64")
-            tree = "win-macosx-pookie"
-
-            # level 1 (same base level as pookie so its created)
-
-            # level 2
-            image_name = "win-macosx-pookie-lvl2-osxcross"
-            if not image_exists(image_name):
-                subprocess.run([
-                    'docker',
-                        'build',
-                        '-f',
-                            f'/images/{tree}/Dockerfile.{image_name}',
-                        '-t',
-                            f'{image_name}',
-                        '.'
-                ], stdout=logfile, stderr=logfile)
+                build_lvl3_image(tree, general_image_name, image_name, python_version, python_url, logfile)

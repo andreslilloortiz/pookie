@@ -1,0 +1,11 @@
+FROM win-macosx-pookie-lvl2-osxcross:latest
+
+ARG PYTHON_URL
+ARG PYTHON_VERSION
+
+RUN wget ${PYTHON_URL} &&\
+    7z x python-${PYTHON_VERSION}-macos11.pkg -opython-${PYTHON_VERSION}-macos11 &&\
+    cd python-${PYTHON_VERSION}-macos11/Python_Framework.pkg/ &&\
+    mv Payload Payload.gz &&\
+    gunzip Payload.gz &&\
+    cpio -i < Payload

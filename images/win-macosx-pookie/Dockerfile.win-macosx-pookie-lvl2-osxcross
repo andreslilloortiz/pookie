@@ -16,6 +16,8 @@ RUN apt-get update && apt-get install -y \
     liblzma-dev \
     build-essential \
     patch \
+    p7zip-full \
+    gzip \
     && rm -rf /var/lib/apt/lists/*
 
 RUN wget https://github.com/joseluisq/macosx-sdks/releases/download/11.1/MacOSX11.1.sdk.tar.xz && \
