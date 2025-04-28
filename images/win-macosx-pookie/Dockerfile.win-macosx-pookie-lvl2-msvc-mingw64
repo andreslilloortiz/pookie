@@ -3,17 +3,14 @@ FROM win-macosx-pookie-lvl1-base:latest
 RUN dpkg --add-architecture i386
 RUN apt-get update && apt-get install -y \
     msitools \
+    wine64 \
+    wine32:i386 \
+    winetricks \
     ca-certificates \
     winbind \
     unzip \
     cabextract \
     && rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -pm755 /etc/apt/keyrings && \
-    wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key - && \
-    wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/jammy/winehq-jammy.sources && \
-    apt-get update && \
-    apt install -y --install-recommends winehq-stable
 
 RUN wget https://github.com/brechtsanders/winlibs_mingw/releases/download/14.2.0posix-12.0.0-ucrt-r3/winlibs-x86_64-posix-seh-gcc-14.2.0-llvm-19.1.7-mingw-w64ucrt-12.0.0-r3.zip && \
     unzip winlibs-x86_64-posix-seh-gcc-14.2.0-llvm-19.1.7-mingw-w64ucrt-12.0.0-r3.zip && \

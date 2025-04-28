@@ -3,6 +3,12 @@ FROM win-macosx-pookie-lvl2-msvc-mingw64:latest
 ARG PYTHON_URL
 ARG PYTHON_VERSION
 
+# RUN mkdir -pm755 /etc/apt/keyrings && \
+#     wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key - && \
+#     wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/jammy/winehq-jammy.sources && \
+#     apt-get update && \
+#     apt install -y --install-recommends winehq-stable
+
 RUN PYTHON_VERSION_COMPACT=$(echo "${PYTHON_VERSION}" | awk -F. '{print $1 $2}') && \
     wget ${PYTHON_URL} &&\
     unzip python-${PYTHON_VERSION}-embed-amd64.zip -dpython-${PYTHON_VERSION}-embed-amd64 &&\

@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="O48PNkfvRvmSjr1T7r3z" name="Page-1">
-        <mxGraphModel dx="1345" dy="854" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1345" dy="827" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -67,8 +67,11 @@
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-29" value="&lt;font&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;win-macosx-pookie&lt;/span&gt;-&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;lvl3&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;-&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;cp3xx-macosx&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-family: monospace ; font-size: 0px&quot;&gt;%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22cp3xx-win_amd64%26lt%3Bbr%26gt%3B(One%20for%20each%20Python%20version)%22%20style%3D%22rounded%3D1%3BwhiteSpace%3Dwrap%3Bhtml%3D1%3B%22%20vertex%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%22649%22%20y%3D%22310%22%20width%3D%22202%22%20height%3D%2260%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3&lt;/span&gt;(One for each Python version)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;" parent="1" vertex="1">
                     <mxGeometry x="787.5" y="308.13" width="168" height="61.87" as="geometry"/>
                 </mxCell>
-                <mxCell id="2" value="no consigo instalar pip" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FF0000;fontStyle=1" vertex="1" parent="1">
+                <mxCell id="2" value="no consigo instalar pip" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FF0000;fontStyle=1" parent="1" vertex="1">
                     <mxGeometry x="551" y="380" width="140" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="probar a instalar wine manualmente en el mismo RUN en el que se instala pip" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="411.5" y="400" width="419" height="30" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
