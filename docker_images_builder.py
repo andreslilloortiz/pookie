@@ -104,6 +104,31 @@ def build_docker_images(targets, logfile, python_versions_dic):
 
                 build_lvl3_image(tree, general_image_name, image_name, python_version, python_url, logfile)
 
+        if target == 'musllinux_1_2_x86_64':
+            print(">> Creating docker images for musllinux_1_2_x86_64")
+            tree = "musllinux"
+
+            # level 1
+            image_name = "musllinux-lvl1-base"
+            build_lvl1_or_lvl2_image(tree, image_name, logfile)
+
+            # level 2
+            image_name = "musllinux-lvl2-musl-gcc"
+            build_lvl1_or_lvl2_image(tree, image_name, logfile)
+
+            # level 3
+            for python_version, urls_dic in python_versions_dic.items():
+
+                general_image_name = "musllinux-lvl3-cp3xx-musllinux_1_2"
+
+                cp_version_parts = python_version.split(".")
+                cp_version = f"{cp_version_parts[0]}{cp_version_parts[1]}"
+                image_name = f"musllinux-lvl3-cp{cp_version}-musllinux_1_2"
+
+                python_url = urls_dic["tar_xz"]
+
+                build_lvl3_image(tree, general_image_name, image_name, python_version, python_url, logfile)
+
         if target == 'win_amd64':
             print(">> Creating docker images for win_amd64")
             tree = "win-macosx-pookie"

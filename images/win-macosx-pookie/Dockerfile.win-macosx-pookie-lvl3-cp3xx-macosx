@@ -6,7 +6,7 @@ ARG PYTHON_VERSION
 RUN wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz && \
     tar -xJf Python-${PYTHON_VERSION}.tar.xz && \
     cd Python-${PYTHON_VERSION} && \
-    ./configure --enable-optimizations && \
+    ./configure && \
     make -j$(nproc) && \
     make install && \
     cd .. && \
