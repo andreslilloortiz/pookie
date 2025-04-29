@@ -36,7 +36,7 @@ def main():
     required_files = []
     for target in args.target:
         # map target to required files
-        if target == 'manylinux_2_17_x86_64' or target == 'musllinux_1_2_x86_64':
+        if target == 'manylinux_2_17_x86_64' or target == 'musllinux_1_2_x86_64' or target == 'macosx_x86_64':
             required_files.append('tar_xz')
         if target == 'win_amd64':
             required_files.append('embed_zip')

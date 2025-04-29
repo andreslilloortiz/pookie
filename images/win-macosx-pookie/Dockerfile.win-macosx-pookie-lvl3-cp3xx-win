@@ -3,13 +3,12 @@ FROM win-macosx-pookie-lvl2-msvc-mingw64:latest
 ARG PYTHON_URL
 ARG PYTHON_VERSION
 
-# RUN mkdir -pm755 /etc/apt/keyrings && \
-#     wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key - && \
-#     wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/jammy/winehq-jammy.sources && \
-#     apt-get update && \
-#     apt install -y --install-recommends winehq-stable
-
-RUN PYTHON_VERSION_COMPACT=$(echo "${PYTHON_VERSION}" | awk -F. '{print $1 $2}') && \
+RUN mkdir -pm755 /etc/apt/keyrings && \
+    wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key - && \
+    wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/jammy/winehq-jammy.sources && \
+    apt-get update && \
+    apt install -y --install-recommends winehq-stable && \
+    PYTHON_VERSION_COMPACT=$(echo "${PYTHON_VERSION}" | awk -F. '{print $1 $2}') && \
     wget ${PYTHON_URL} &&\
     unzip python-${PYTHON_VERSION}-embed-amd64.zip -dpython-${PYTHON_VERSION}-embed-amd64 &&\
     unzip python-${PYTHON_VERSION}-embed-amd64/python${PYTHON_VERSION_COMPACT}.zip -dpython-${PYTHON_VERSION}-embed-amd64/python${PYTHON_VERSION_COMPACT} &&\
@@ -23,7 +22,6 @@ RUN PYTHON_VERSION_COMPACT=$(echo "${PYTHON_VERSION}" | awk -F. '{print $1 $2}')
     } > ./python-${PYTHON_VERSION}-embed-amd64/python${PYTHON_VERSION_COMPACT}._pth && \
     echo "import sys" > python-${PYTHON_VERSION}-embed-amd64/sitecustomize.py && \
     mkdir -p python-${PYTHON_VERSION}-embed-amd64/DLLs && \
-    wget -P python-${PYTHON_VERSION}-embed-amd64 https://bootstrap.pypa.io/get-pip.py
-
-# && \
-# wine python-${PYTHON_VERSION}-embed-amd64/python.exe python-${PYTHON_VERSION}-embed-amd64/get-pip.py
+    wget -P python-${PYTHON_VERSION}-embed-amd64 https://bootstrap.pypa.io/get-pip.py && \
+    wine python-${PYTHON_VERSION}-embed-amd64/python.exe python-${PYTHON_VERSION}-embed-amd64/get-pip.py && \
+    rm python-${PYTHON_VERSION}-embed-amd64.zip
