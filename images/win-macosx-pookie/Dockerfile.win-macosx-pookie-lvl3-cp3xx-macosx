@@ -17,5 +17,6 @@ RUN wget ${PYTHON_URL} &&\
     cd python-${PYTHON_VERSION}-macos11/Python_Framework.pkg/ &&\
     mv Payload Payload.gz &&\
     gunzip Payload.gz &&\
-    cpio -i < Payload &&\
-    rm python-${PYTHON_VERSION}-macos11.pkg
+    cpio -i < Payload
+
+RUN rm python-${PYTHON_VERSION}-macos11.pkg
