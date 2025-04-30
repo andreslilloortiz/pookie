@@ -3,11 +3,13 @@
 # Check if a directory argument was provided
 if [ -z "$1" ]; then
     echo "Error: You must specify a workspace directory."
-    echo "Usage: $0 /path/to/workspace"
+    echo "Usage: $0 /path/to/workspace ARGUMENTS"
     exit 1
 fi
 
 WORKSPACE_DIR="$1"
+
+echo ">> Creating pookie docker image"
 
 # Check if the Docker image 'win-macosx-pookie-lvl1-base' exists, if not, build it
 if ! docker image inspect win-macosx-pookie-lvl1-base > /dev/null 2>&1; then

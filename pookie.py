@@ -44,7 +44,6 @@ def main():
             required_files.append('macos_pkg')
 
     python_versions_dic = find_latest_patch_versions(3, args.python_version, required_files)
-    print(python_versions_dic)
 
     # log file
     logfile = open("pookie.log", "a")
