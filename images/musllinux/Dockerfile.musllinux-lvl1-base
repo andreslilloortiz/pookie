@@ -14,3 +14,4 @@ RUN apk add --no-cache \
     ncurses-dev \
     libnsl-dev \
     linux-headers \
+    bash

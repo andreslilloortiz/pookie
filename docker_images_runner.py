@@ -67,6 +67,27 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                     print(f">> Testing the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
+            # musllinux_1_2_x86_64
+            if target == 'musllinux_1_2_x86_64':
+
+                image_name = f"musllinux-lvl3-cp{cp_version}-musllinux_1_2"
+
+                # build the library
+                if build != None:
+
+                    build_command = build + ' && for f in dist/*-linux_x86_64.whl; do mv "$f" "${f/linux_x86_64/musllinux_1_2_x86_64}"; done'
+
+                    print(f">> Building the library for cp-{cp_version}-{target}")
+                    run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
+
+                # test the library
+                if test != None:
+
+                    test_command = f"python3 -m pip install dist/*-cp{cp_version}-cp{cp_version}-musllinux_1_2_x86_64.whl >> /dev/null 2>> /dev/null && " + test
+
+                    print(f">> Testing the library for cp-{cp_version}-{target}")
+                    run_lvl3_image(image_name, test_command, host_workspace_path, None)
+
     # Delete __pycache__
     subprocess.run([
         'rm',
