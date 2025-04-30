@@ -1,3 +1,5 @@
+**outdated**
+
 # pookie
 
 Tool for Automating the Build and Testing Process of Native Python Libraries Using Cross-Compilation and Emulation Technologies.

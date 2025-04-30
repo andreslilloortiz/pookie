@@ -1,19 +1,18 @@
 import argparse
 import os
-import subprocess
-import re
 from python_version_fetcher import find_latest_patch_versions
 from docker_images_builder import build_docker_images
+from docker_images_runner import run_docker_images
 
 def main():
     parser = argparse.ArgumentParser(description='Tool for Automating the Build and Testing Process of Native Python Libraries Using Cross-Compilation and Emulation Technologies')
 
     parser.add_argument('--build',
                             type = str,
-                            help = 'Python build command')
+                            help = 'Python build bash command')
     parser.add_argument('--test',
                             type = str,
-                            help = 'Python test command')
+                            help = 'Python test bash command')
     parser.add_argument('--python-version',
                             type = str,
                             nargs = '+',
@@ -52,57 +51,10 @@ def main():
     build_docker_images(args.target, logfile, python_versions_dic)
 
     # workspace for docker in docker
-    # host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')
+    host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')
 
-
-
-    # # build only one docker image for all python versions of x86_64-linux
-    # if any("x86_64-linux" in item.lower() for item in args.target):
-    #     if not image_exists("all-x86_64-linux"):
-    #         print(f">> Creating docker image for all-x86_64-linux")
-    #         subprocess.run([
-    #             'docker',
-    #                 'build',
-    #                 '-f',
-    #                     '/Dockerfile.x86_64-linux',
-    #                 '-t',
-    #                     'all-x86_64-linux',
-    #                 '.'
-    #         ], stdout=logfile, stderr=logfile)
-    #     else:
-    #         print(">> Docker image for all-x86_64-linux is already built")
-
-    # # build only one docker image for all architectures and python versions of windows
-    # if any("windows" in item.lower() for item in args.target):
-    #     if not image_exists("all-all-windows"):
-    #         print(f">> Creating docker image for all-all-windows")
-    #         subprocess.run([
-    #             'docker',
-    #                 'build',
-    #                 '-f',
-    #                     '/Dockerfile.all-windows',
-    #                 '-t',
-    #                     'all-all-windows',
-    #                 '/python-prebuilt-binaries' # context
-    #         ], stdout=logfile, stderr=logfile)
-    #     else:
-    #         print(">> Docker image for all-all-windows is already built")
-
-    # # build only one docker image for all architectures and python versions of macos
-    # if any("macos" in item.lower() for item in args.target):
-    #     if not image_exists("all-all-macos"):
-    #         print(f">> Creating docker image for all-all-macos")
-    #         subprocess.run([
-    #             'docker',
-    #                 'build',
-    #                 '-f',
-    #                     '/Dockerfile.all-macos',
-    #                 '-t',
-    #                     'all-all-macos',
-    #                 '/python-prebuilt-binaries' # context
-    #         ], stdout=logfile, stderr=logfile)
-    #     else:
-    #         print(">> Docker image for all-all-macos is already built")
+    # run build and test commands
+    run_docker_images(args.target, logfile, python_versions_dic, args.build, args.test, host_workspace_path)
 
     # # iterate versions and targets for build and test the library
     # for target in args.target:

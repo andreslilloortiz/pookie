@@ -37,7 +37,7 @@ def build_lvl1_or_lvl2_image(tree, image_name, logfile):
                 '-f',
                     f'/images/{tree}/Dockerfile.{image_name}',
                 '-t',
-                    f'{image_name}',
+                    image_name,
                 '.'
         ], stdout=logfile, stderr=logfile)
 
@@ -60,7 +60,7 @@ def build_lvl3_image(tree, general_image_name, image_name, python_version, pytho
                 '-f',
                     f'/images/{tree}/Dockerfile.{general_image_name}',
                 '-t',
-                    f'{image_name}',
+                    image_name,
                 '--build-arg',
                     f'PYTHON_VERSION={python_version}',
                 '--build-arg',

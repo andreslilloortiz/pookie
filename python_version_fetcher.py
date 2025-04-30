@@ -15,8 +15,7 @@ def get_versions(major_version, minor_version):
     - minor_version (int): The minor version for which the patch versions are being searched.
 
     Returns:
-    - A sorted list of version strings matching the major and minor version, sorted
-      in descending order.
+    - A sorted list of version strings matching the major and minor version, sorted in descending order.
     """
     response = requests.get(BASE_URL)
     soup = BeautifulSoup(response.text, "html.parser")
@@ -37,8 +36,7 @@ def check_files(version, required_files):
     - required_files (list): A list of required file types (e.g., ['tar_xz', 'embed_zip', 'macos_pkg']).
 
     Returns:
-    - A dictionary indicating the availability of each required file and their URLs if available.
-      If any required file is missing, returns None.
+    - A dictionary indicating the availability of each required file and their URLs if available. If any required file is missing, returns None.
     """
     url = f"{BASE_URL}{version}/"
     response = requests.get(url)
@@ -66,12 +64,10 @@ def find_latest_patch_versions(major_version, minor_versions=None, required_file
     Parameters:
     - major_version (int): The major version to search for.
     - minor_versions (list, optional): A list of minor versions to search for.
-    - required_files (list, optional): A list of required file types (e.g., ['tar_xz', 'embed_zip', 'macos_pkg']).
-      Defaults to all three file types.
+    - required_files (list, optional): A list of required file types (e.g., ['tar_xz', 'embed_zip', 'macos_pkg']). Defaults to all three file types.
 
     Returns:
-    - A dictionary where the keys are the full versions (major.minor.patch) and the values are dictionaries
-      with the required file types as keys and their corresponding URLs as values.
+    - A dictionary where the keys are the full versions (major.minor.patch) and the values are dictionaries with the required file types as keys and their corresponding URLs as values.
     """
     if required_files is None:
         required_files = ["tar_xz", "embed_zip", "macos_pkg"]

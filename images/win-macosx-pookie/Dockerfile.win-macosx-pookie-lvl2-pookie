@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
 COPY pookie.py .
 COPY python_version_fetcher.py .
 COPY docker_images_builder.py .
+COPY docker_images_runner.py .
 
 COPY images /images
 
