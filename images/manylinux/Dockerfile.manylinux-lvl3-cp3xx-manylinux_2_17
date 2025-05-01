@@ -3,6 +3,7 @@ FROM manylinux-lvl2-gnu-gcc:latest
 ARG PYTHON_URL
 ARG PYTHON_VERSION
 
+# Download and install Python
 RUN wget ${PYTHON_URL} && \
     tar -xJf Python-${PYTHON_VERSION}.tar.xz && \
     cd Python-${PYTHON_VERSION} && \

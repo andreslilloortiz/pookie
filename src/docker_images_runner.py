@@ -87,10 +87,3 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
 
                     print(f">> Testing the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
-
-    # Delete __pycache__
-    subprocess.run([
-        'rm',
-            '-rf',
-            '__pycache__'
-    ], stdout = logfile, stderr = logfile)

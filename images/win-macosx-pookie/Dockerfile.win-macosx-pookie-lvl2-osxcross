@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y \
     gzip \
     && rm -rf /var/lib/apt/lists/*
 
+# Download and install osxcross
 RUN wget https://github.com/joseluisq/macosx-sdks/releases/download/11.1/MacOSX11.1.sdk.tar.xz && \
     git clone https://github.com/tpoechtrager/osxcross.git && \
     mv MacOSX11.1.sdk.tar.xz osxcross/tarballs/ && \
