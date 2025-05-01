@@ -88,7 +88,6 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
             cp_version_parts = python_version.split(".")
             cp_version = f"{cp_version_parts[0]}{cp_version_parts[1]}"
 
-            # manylinux_2_17_x86_64
             if target == 'manylinux_2_17_x86_64':
 
                 image_name = f"manylinux-lvl3-cp{cp_version}-manylinux_2_17"
@@ -111,7 +110,6 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                     print(f">> Testing the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
-            # musllinux_1_2_x86_64
             if target == 'musllinux_1_2_x86_64':
 
                 image_name = f"musllinux-lvl3-cp{cp_version}-musllinux_1_2"
@@ -134,7 +132,6 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                     print(f">> Testing the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
-            # win_amd64
             if target == 'win_amd64':
 
                 image_name = f"win-macosx-pookie-lvl3-cp{cp_version}-win"
@@ -144,6 +141,18 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 if build != None:
 
                     build_command = wrapper_python3(new_python3_command) + build
+
+                    print(f">> Building the library for cp-{cp_version}-{target}")
+                    run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
+
+            if target == 'macosx_x86_64':
+
+                image_name = f"win-macosx-pookie-lvl3-cp{cp_version}-macosx"
+
+                # build the library
+                if build != None:
+
+                    build_command = build
 
                     print(f">> Building the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
