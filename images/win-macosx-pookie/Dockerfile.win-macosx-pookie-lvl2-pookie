@@ -6,10 +6,10 @@ RUN apt-get update && apt-get install -y \
     python3-bs4 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY pookie.py .
-COPY python_version_fetcher.py .
-COPY docker_images_builder.py .
-COPY docker_images_runner.py .
+COPY src/pookie.py .
+COPY src/python_version_fetcher.py .
+COPY src/docker_images_builder.py .
+COPY src/docker_images_runner.py .
 
 COPY images /images
 
