@@ -149,7 +149,7 @@ def build_docker_images(targets, logfile, python_versions_dic):
                 cp_version = f"{cp_version_parts[0]}{cp_version_parts[1]}"
                 image_name = f"win-macosx-pookie-lvl3-cp{cp_version}-win"
 
-                python_url = urls_dic["embed_zip"]
+                python_url = urls_dic["exe"]
 
                 build_lvl3_image(tree, general_image_name, image_name, python_version, python_url, logfile)
 
@@ -173,6 +173,6 @@ def build_docker_images(targets, logfile, python_versions_dic):
                 cp_version = f"{cp_version_parts[0]}{cp_version_parts[1]}"
                 image_name = f"win-macosx-pookie-lvl3-cp{cp_version}-macosx"
 
-                python_url = urls_dic["macos_pkg"]
+                python_url = urls_dic["pkg"]
 
                 build_lvl3_image(tree, general_image_name, image_name, python_version, python_url, logfile)

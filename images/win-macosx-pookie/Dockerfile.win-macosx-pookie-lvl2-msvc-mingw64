@@ -23,3 +23,10 @@ RUN git clone https://github.com/mstorsjo/msvc-wine.git && \
     echo "yes" | ./vsdownload.py --dest ../my_msvc/opt/msvc && \
     ./install.sh ../my_msvc/opt/msvc && \
     cd .. && rm -r msvc-wine
+
+# Download and install wine
+RUN mkdir -pm755 /etc/apt/keyrings && \
+    wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key - && \
+    wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/jammy/winehq-jammy.sources && \
+    apt-get update && \
+    apt install -y --install-recommends winehq-stable

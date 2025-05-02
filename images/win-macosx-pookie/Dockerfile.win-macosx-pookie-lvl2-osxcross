@@ -16,7 +16,6 @@ RUN apt-get update && apt-get install -y \
     liblzma-dev \
     build-essential \
     patch \
-    p7zip-full \
     gzip \
     && rm -rf /var/lib/apt/lists/*
 

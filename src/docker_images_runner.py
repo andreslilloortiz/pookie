@@ -135,7 +135,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
             if target == 'win_amd64':
 
                 image_name = f"win-macosx-pookie-lvl3-cp{cp_version}-win"
-                new_python3_command = f"wine /python-{python_version}-embed-amd64/python.exe"
+                new_python3_command = f"wine /python{python_version}/*/python*/python.exe"
 
                 # build the library
                 if build != None:
