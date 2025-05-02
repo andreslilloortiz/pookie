@@ -5,4 +5,5 @@ ARG PYTHON_VERSION
 
 # Download and install Python
 RUN wget ${PYTHON_URL} &&\
-    7z x Winpython64-* -opython${PYTHON_VERSION}
+    7z x Winpython64-* -opython${PYTHON_VERSION} && \
+    rm -f Winpython64-*.exe
