@@ -41,7 +41,7 @@ def wrapper_python3(new_python3_command):
     Returns:
     - str: The command to create the wrapper.
     """
-    return f'echo -e "#!/bin/bash\n{new_python3_command} \"\$@\"" > /bin/python3 && chmod +x /bin/python3 && '
+    return f'mkdir -p /wrapper && echo -e "#!/bin/bash\n{new_python3_command} \"\$@\"" > /wrapper/python3 && chmod +x /wrapper/python3 && export PATH="/wrapper:$PATH" && '
 
 def run_lvl3_image(image_name, command, host_workspace_path, logfile):
     """
