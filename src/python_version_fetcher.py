@@ -44,6 +44,7 @@ def get_winpython_exe(version):
     soup = BeautifulSoup(response.text, "html.parser")
     subfolders = []
 
+    # Find all subfolders that match the version pattern
     for a in soup.find_all("a", href=True):
         folder_name = a.text.strip().strip('/')
         if re.match(rf"{major}\.{minor}\.\d+\.\d+", folder_name):
@@ -58,17 +59,19 @@ def get_winpython_exe(version):
     # Sort subfolders by version number in descending order
     subfolders = sorted(subfolders, key=extract_version_number, reverse=True)
 
+    # Check each subfolder for the latest WinPython executable
     for folder in subfolders:
         folder_url = f"{url}{folder}/"
         sub_response = requests.get(folder_url)
         if sub_response.status_code != 200:
             continue
 
+        # Parse the subfolder page
         sub_soup = BeautifulSoup(sub_response.text, "html.parser")
         for a in sub_soup.find_all("a", href=True):
             filename = a.text.strip()
             if re.match(rf"Winpython64-{folder}.*\.exe", filename):
-                return f"https://sourceforge.net/projects/winpython/files/WinPython_{major}.{minor}/{folder}/{filename}/download"
+                return f"https://sourceforge.net/projects/winpython/files/WinPython_{major}.{minor}/{folder}/{filename}"
 
     return None
 
@@ -95,6 +98,7 @@ def check_files(version, required_files):
 
     result = {}
 
+    # Check for the presence of required files
     for key in required_files:
         if key == "exe":
             win_url = get_winpython_exe(version)
@@ -121,16 +125,19 @@ def find_latest_patch_versions(major_version, minor_versions=None, required_file
     if required_files is None:
         required_files = ["tar_xz", "exe", "pkg"]
 
+    # Check if minor_versions is provided
     if not minor_versions:
         response = requests.get(BASE_URL)
         soup = BeautifulSoup(response.text, "html.parser")
         all_versions = set()
 
+        # Find all minor versions available for the major version
         for a in soup.find_all("a", href=True):
             match = re.match(rf"{major_version}\.(\d+)\.\d+/?", a['href'])
             if match:
                 all_versions.add(int(match.group(1)))
 
+        # Sort and get the last 4 available minor versions
         valid_minor_versions = []
         for minor_version in sorted(all_versions, reverse=True):
             versions = get_versions(major_version, minor_version)
@@ -143,6 +150,7 @@ def find_latest_patch_versions(major_version, minor_versions=None, required_file
 
         minor_versions = valid_minor_versions
 
+    # Check for each minor version
     result = {}
     for minor_version in minor_versions:
         versions = get_versions(major_version, minor_version)
