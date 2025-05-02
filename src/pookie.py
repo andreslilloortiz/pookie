@@ -32,15 +32,16 @@ def main():
         print(f"- {arg}: {getattr(args, arg)}")
 
     # Fetch python-versions
+    print(">> Fetching python versions from python.org")
     required_files = []
     for target in args.target:
         # map target to required files
         if target == 'manylinux_2_17_x86_64' or target == 'musllinux_1_2_x86_64' or target == 'macosx_x86_64':
             required_files.append('tar_xz')
         if target == 'win_amd64':
-            required_files.append('embed_zip')
+            required_files.append('exe')
         if target == 'macosx_x86_64':
-            required_files.append('macos_pkg')
+            required_files.append('pkg')
 
     python_versions_dic = find_latest_patch_versions(3, args.python_version, required_files)
 
