@@ -44,6 +44,11 @@ def main():
             required_files.append('pkg')
 
     python_versions_dic = find_latest_patch_versions(3, args.python_version, required_files)
+    print(">> Python versions fetched")
+    for python_version, urls_dic in python_versions_dic.items():
+        print(f"- {".".join(python_version.split(".")[:2])}:")
+        for url_type, url in urls_dic.items():
+            print(f"  - {url_type}: {url}")
 
     # log file
     logfile = open("pookie.log", "a")
