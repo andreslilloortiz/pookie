@@ -161,3 +161,15 @@ def find_latest_patch_versions(major_version, minor_versions=None, required_file
                 break
 
     return result
+
+if __name__ == "__main__":
+    # Example usage
+    major_version = 3
+    minor_versions = [11, 10]
+    required_files = ["tar_xz", "exe", "pkg"]
+
+    latest_versions = find_latest_patch_versions(major_version, minor_versions, required_files)
+    for version, files in latest_versions.items():
+        print(f"Version: {version}")
+        for file_type, url in files.items():
+            print(f"  {file_type}: {url}")
