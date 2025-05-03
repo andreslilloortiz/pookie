@@ -1,9 +1,7 @@
-python-prebuilt-binaries/
-workspace/*
-!workspace/.keepme
 pookie.log
 __pycache__/
 
+# tmp
 tmp/python_compile/python-3.13-x86_64-linux/
 tmp/python_compile/python-3.13-arm64-linux/
 tmp/python_compile/python-3.13-x86_64-windows/
