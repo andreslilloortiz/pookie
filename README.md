@@ -1,5 +1,3 @@
-**outdated**
-
 # pookie
 
 Tool for Automating the Build and Testing Process of Native Python Libraries Using Cross-Compilation and Emulation Technologies.
@@ -10,134 +8,112 @@ This project focuses on developing an Open Source application to optimize the bu
 
 The proposed solution leverages technologies like QEMU and Wine to implement cross-compilation and emulation, enabling efficient binary generation without the time and resource limitations of commercial continuous integration platforms. This project aims to enhance accessibility and efficiency in the development of scientific and computational software.
 
+## Prerequisites
+
+Before getting started, ensure you have the following installed and configured on your system:
+
+1. **Docker**:
+
+   Install Docker by following the official installation guide for your operating system: [Docker Installation Guide](https://docs.docker.com/get-docker/). Verify Docker is installed correctly by running:
+
+    ```bash
+    docker --version
+    ```
+
+    To run Docker without `sudo`, add your user to the Docker group:
+
+    ```bash
+    sudo usermod -aG docker $USER
+    ```
+
+    Log out and back in for the changes to take effect.
+
+3. **Disk Space**:
+
+    Ensure sufficient disk space for Docker images and containers. Check current usage with:
+
+    ```bash
+    docker system df
+    ```
+
+4. **Internet Connection**:
+
+    Required to download python and dependencies during the Docker images building process.
+
 ## Quick Start
 
-1. **Add source and test files**
+1. **Grant Execution Permissions**:
 
-    Place the files you want to compile and test inside the `workspace` directory.
+   Ensure the `pookie.sh` script has execution permissions. Run the following command:
 
-2. **Clone Python prebuilt binaries**
+   ```bash
+   chmod +x pookie.sh
+   ```
 
-    This repository contains precompiled Python binaries for multiple platforms and architectures (targets), organized by operating system and CPU architecture.
+2. **Run Pookie**:
 
-    Clone this repository in the root of pookie.
-
-    ```bash
-    git clone https://github.com/andreslilloortiz/python-prebuilt-binaries.git
-    ```
-
-3. **Build pookie-base Docker image**
+    Execute the `pookie.sh` script to run pookie. Yo have to provide the `workspace` directory as an argument. This directory tipically is the directory of the project you want to build.
 
     ```bash
-    docker build -t pookie-base -f images/Dockerfile.pookie-base .
+    ./pookie.sh --workspace /path/to/workspace --help
     ```
 
-4. 3. **Build pookie-launcher Docker image**
+## Running pookie: Command Line Options
 
-    ```bash
-    docker build -t pookie-launcher -f images/Dockerfile.pookie-launcher .
-    ```
+> **Note:** Searching for Python versions on python.org and creating Docker images can take some time. It is recommended to first run pookie without the `--build` and `--test` options to generate the required images for the specified Python versions and targets. Once the images are created, you can run the `build` and `test` commands as needed, which will execute much faster.
 
-5. **Run pookie**
-
-    You can run pookie either by using the Docker command directly or by executing a simple shell script.
-
-    **Option 1**: Using Docker command directly.
-
-    ```bash
-    docker run -it --rm \
-        -v $(pwd)/workspace:/workspace \
-        -e WORKSPACE_PWD=$(pwd)/workspace \
-        -w /workspace \
-        -v /var/run/docker.sock:/var/run/docker.sock \
-        pookie-launcher --help
-    ```
-
-    **Option 2**: Using the provided shell script.
-
-    Make the script executable.
-
-    ```bash
-    chmod +x pookie.sh
-    ```
-
-    Run the script.
-
-    ```bash
-    ./pookie.sh --help
-    ```
-
-
-## Running Pookie: Command Line Options
-
-> **Recomendation:** First run Pookie without arguments to allow it to generate the required Docker images for building and testing. This may take a few minutes the first time.
-
-| Argument                                                                                               | Description                                                                  |
-|--------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|
-| `-h, --help`                                                                                           | Show this help message and exit                                              |
-| `--clean`                                                                                              | Clean the workspace by removing all files and directories                    |
-| `--build BUILD [BUILD ...]`                                                                            | Python command to build                                                      |
-| `--test TEST`                                                                                          | Test Python command to run after building the library                        |
-| `--python-version {3.13.2,3.12.9,3.11.9,3.10.11} [{3.13.2,3.12.9,3.11.9,3.10.11} ...]`                 | Python version(s) to compile for (if not specified: all)                     |
-| `--target {x86_64-linux,x86_64-windows,x86_64-macos} [{x86_64-linux,x86_64-windows,x86_64-macos} ...]` | Target platform(s) to build and test the library for (if not specified: all) |
-
-> **Note:** For `x86_64-linux` target, compilation uses setuptools. That means you can provide via `--build` a `setup.py` file, which defines the necessary source files.
+| Argument                                                                                               | Description                                                                 |
+|--------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| `-h, --help`                                                                                           | Show this help message and exit                                             |
+| `--build BUILD`                                                                                        | Python build bash command                                                   |
+| `--test TEST`                                                                                          | Python test bash command                                                    |
+| `--python-version PYTHON_VERSION [PYTHON_VERSION ...]`                                                 | Minor Python version(s) to compile for (if not specified: last 4 available) |
+| `--target {manylinux_2_17_x86_64,musllinux_1_2_x86_64,win_amd64,macosx_x86_64} [{manylinux_2_17_x86_64,musllinux_1_2_x86_64,win_amd64,macosx_x86_64} ...]` | Target platform(s) to build and test the library for (if not specified: all) |
 
 ## Examples
 
-Compile the source file `mylib.c` and test it with `test.py` script for Python versions `3.12.9` and `3.11.9` targeting both `x86_64-macos` and `x86_64-windows`.
+Build the native Python librarie `mylib` and test it with `test.py` script for Python minor versions `11` and `10` for all targets.
 
 ```bash
 ./pookie.sh \
-    --build mylib.c \
+    --workspace /path/to/mylib \
+    --build "python3 -m pip install setuptools build wheel && python3 -m build" \
     --test "python3 test.py" \
-    --python-version 3.12.9 3.11.9 \
-    --target x86_64-macos x86_64-windows
+    --python-version 11 10
 ```
 
-Compile the source files with `setup.py` file and test it with test files in the module `tests` (directory with `__init__.py`) for Python version `3.10.11` targeting `x86_64-linux`.
+Build the native Python librarie `mylib` and test it with test files in the module `tests` (directory with `__init__.py`) for the last 4 available Python minor versions targeting both `manylinux_2_17_x86_64` and `musllinux_1_2_x86_64`.
 
 ```bash
 ./pookie.sh \
-    --build setup.py \
+    --workspace /path/to/mylib \
+    --build "python3 -m pip install setuptools build wheel && python3 -m build" \
     --test "python3 -m tests" \
-    --python-version 3.10.11 \
-    --target x86_64-linux
+    --target manylinux_2_17_x86_64 musllinux_1_2_x86_64
 ```
 
-Compile the source files with `setup.py` file and test it with test files located in the `tests` folder using `pytest` for Python versions `3.13.2` and `3.12.9` targeting `x86_64-linux`.
+Build the native Python librarie `mylib` and test it with `pytest` on the test files on `tests` directory for `13` Python minor version targeting both `win_amd64`.
 
 ```bash
 ./pookie.sh \
-    --build setup.py \
-    --test "python3 -m pip install pytest && pytest tests/test1.py && pytest tests/test2.py" \
-    --python-version 3.13.2 3.12.9 \
-    --target x86_64-linux
+    --workspace /path/to/mylib \
+    --build "python3 -m pip install setuptools build wheel && python3 -m build" \
+    --test "python3 -m pip install pytest && pytest tests" \
+    --python-version 13 \
+    --target win_amd64
 ```
 
 ## Output
 
-Build artifacts (e.g., .so, .pyd, .whl) will be placed inside versioned folders in the workspace directory, such as:
+Build artifacts will be placed inside the `dist` directory.
 
-```bash
-workspace
-    ├── 3.10.11-x86_64-linux
-    ├── 3.10.11-x86_64-macos
-    ├── 3.10.11-x86_64-windows
-    ├── 3.11.9-x86_64-linux
-    ├── 3.11.9-x86_64-macos
-    ├── 3.11.9-x86_64-windows
-    ├── 3.12.9-x86_64-linux
-    ├── 3.12.9-x86_64-macos
-    ├── 3.12.9-x86_64-windows
-    ├── 3.13.2-x86_64-linux
-    ├── 3.13.2-x86_64-macos
-    ├── 3.13.2-x86_64-windows
-```
+## Docker Layer Graph
 
-## Extending the Tool with Other Python Versions
+Below is a visual representation of the Docker layer graph used by pookie. This graph illustrates the structure and relationships between the layers of the Docker images.
 
-By following the steps in [`extending-the-tool-whit-other-python-versions.md`](docs/extending-the-tool-whit-other-python-versions.md) found in the `docs` folder, you can extend the tool to support additional Python versions across multiple targets.
+![Docker Layer Graph](./images/Docker_layer_graph.png)
+
+This graph can help you understand how the images are built and how layers are shared across different targets.
 
 ## Developer Notes
 
