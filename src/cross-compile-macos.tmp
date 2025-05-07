@@ -1,0 +1,9 @@
+export OSXCROSS_ROOT=/osxcross
+export CC=$(pwd)/clang-wrapper.sh
+export CXX=$CC
+export AR=x86_64-apple-darwin20.2-ar
+export RANLIB=x86_64-apple-darwin20.2-ranlib
+export STRIP=x86_64-apple-darwin20.2-strip
+export PYTHON_ROOT=/python-3.10.11-macos11/Python_Framework.pkg/Versions/3.10
+export CFLAGS="--target=x86_64-apple-darwin -isysroot $OSXCROSS_ROOT/target/SDK/MacOSX11.1.sdk -I$PYTHON_ROOT/include/python3.10 -I$PYTHON_ROOT/Headers"
+export LDFLAGS="-isysroot $OSXCROSS_ROOT/target/SDK/MacOSX11.1.sdk -Wl,-syslibroot,$OSXCROSS_ROOT/target/SDK/MacOSX11.1.sdk -L$PYTHON_ROOT/lib -lpython3.10"

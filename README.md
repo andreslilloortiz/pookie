@@ -72,7 +72,7 @@ Before getting started, ensure you have the following installed and configured o
 
 ## Examples
 
-Build the native Python librarie `mylib` and test it with `test.py` script for Python minor versions `11` and `10` for all targets.
+Build the native Python library `mylib` and test it with `test.py` script for Python minor versions `11` and `10` for all targets.
 
 ```bash
 ./pookie.sh \
@@ -82,7 +82,7 @@ Build the native Python librarie `mylib` and test it with `test.py` script for P
     --python-version 11 10
 ```
 
-Build the native Python librarie `mylib` and test it with test files in the module `tests` (directory with `__init__.py`) for the last 4 available Python minor versions targeting both `manylinux_2_17_x86_64` and `musllinux_1_2_x86_64`.
+Build the native Python library `mylib` and test it with test files in the module `tests` (directory with `__init__.py`) for the last 4 available Python minor versions targeting both `manylinux_2_17_x86_64` and `musllinux_1_2_x86_64`.
 
 ```bash
 ./pookie.sh \
@@ -92,7 +92,7 @@ Build the native Python librarie `mylib` and test it with test files in the modu
     --target manylinux_2_17_x86_64 musllinux_1_2_x86_64
 ```
 
-Build the native Python librarie `mylib` and test it with `pytest` on the test files on `tests` directory for `13` Python minor version targeting both `win_amd64`.
+Build the native Python library `mylib` and test it with `pytest` on the test files on `tests` directory for `13` Python minor version targeting both `win_amd64`.
 
 ```bash
 ./pookie.sh \
