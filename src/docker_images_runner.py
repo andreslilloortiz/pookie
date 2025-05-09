@@ -1,5 +1,4 @@
 import subprocess
-import os
 
 def rename_dist(original_dist_target, new_dist_target):
     """
@@ -41,7 +40,7 @@ def wrapper_python3(new_python3_command):
     Returns:
     - str: The command to create the wrapper.
     """
-    return f'''mkdir -p /wrapper && echo -e "#!/bin/bash\n{new_python3_command} \"\$@\"" > /wrapper/python3 && chmod +x /wrapper/python3 && export PATH="/wrapper:$PATH" && '''
+    return f'''mkdir -p /wrapper && echo -e "#!/bin/bash\n{new_python3_command} "\\$@"" > /wrapper/python3 && chmod +x /wrapper/python3 && export PATH="/wrapper:$PATH" && '''
 
 def prepare_environment_macosx(python_major_dot_minor_version):
     """
@@ -53,7 +52,7 @@ def prepare_environment_macosx(python_major_dot_minor_version):
     - str: The command to prepare the environment.
     """
 
-    return f'''echo -e "#!/bin/bash\nexec o64-clang -fuse-ld=/osxcross/target/bin/x86_64-apple-darwin20.2-ld \"\$@\"" > clang-wrapper.sh && chmod +x clang-wrapper.sh && \
+    return f'''echo -e "#!/bin/bash\nexec o64-clang -fuse-ld=/osxcross/target/bin/x86_64-apple-darwin20.2-ld \"\\$@\"" > clang-wrapper.sh && chmod +x clang-wrapper.sh && \
         python_version=$(python3 --version | awk '{{print $2}}') && \
         export CC=$(pwd)/clang-wrapper.sh && \
         export CXX=$CC && \
@@ -78,11 +77,11 @@ def fix_EXT_SUFFIX_macosx(cp_version):
     return f''' && cd dist && \
         orig_whl=$(ls *-cp{cp_version}-cp{cp_version}-linux_x86_64.whl) && \
         unzip -o *-cp{cp_version}-cp{cp_version}-linux_x86_64.whl -d tmp && cd tmp && \
-        for f in *.cpython-{cp_version}-x86_64-linux-gnu.so; do mv "$f" "${{f/-x86_64-linux-gnu/-darwin}}"; done && \
+        find . -type f -name "*.cpython-{cp_version}-x86_64-linux-gnu.so" -exec bash -c 'mv "$0" "${{0/-x86_64-linux-gnu/-darwin}}"' {{}} \\; && \
         sed -i 's/linux_x86_64/macosx_10_11_x86_64/g' *.dist-info/WHEEL && \
         sed -i 's/x86_64-linux-gnu/darwin/g' *.dist-info/RECORD && \
         zip -r "../${{orig_whl/-linux_x86_64/-macosx_10_11_x86_64}}" * && \
-        cd .. && rm -rf *-cp{cp_version}-cp{cp_version}-linux_x86_64.whl tmp/ clang-wrapper.sh'''
+        cd .. && rm -rf *-cp{cp_version}-cp{cp_version}-linux_x86_64.whl tmp/ ../clang-wrapper.sh'''
 
 def run_lvl3_image(image_name, command, host_workspace_path, logfile):
     """
@@ -203,3 +202,10 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 if test != None:
 
                     print("Not supported yet :(")
+
+    # Delete __pycache__ folders
+    subprocess.run([
+        'rm',
+            '-rf',
+            '__pycache__'
+    ], stdout = logfile, stderr = logfile)
