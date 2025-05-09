@@ -48,6 +48,9 @@ def prepare_environment_macosx(python_major_dot_minor_version):
     This includes setting up the compiler and linker flags.
     Place this command before the build command.
 
+    Parameters:
+    - python_major_dot_minor_version (str): The major and minor version of Python to use (e.g., "3.12").
+
     Returns:
     - str: The command to prepare the environment.
     """
@@ -69,6 +72,9 @@ def fix_EXT_SUFFIX_macosx(cp_version):
     Generate the command to fix the EXT_SUFFIX for macOS builds.
     This is necessary to ensure that the built library can be imported correctly.
     Place this command after the build command.
+
+    Parameters:
+    - cp_version (str): The CP version to use in the filename.
 
     Returns:
     - str: The command to fix the EXT_SUFFIX.
