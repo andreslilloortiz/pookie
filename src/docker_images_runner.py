@@ -13,7 +13,7 @@ def rename_dist(original_dist_target, new_dist_target):
     Returns:
     - str: The command to rename the built library files.
     """
-    return f' && for f in dist/*-{original_dist_target}.whl; do mv "$f" "${{f/{original_dist_target}/{new_dist_target}}}"; done'
+    return f''' && for f in dist/*-{original_dist_target}.whl; do mv "$f" "${{f/{original_dist_target}/{new_dist_target}}}"; done'''
 
 def install_dist(cp_version, dist_target):
     """
@@ -27,7 +27,7 @@ def install_dist(cp_version, dist_target):
     Returns:
     - str: The command to install the built library.
     """
-    return f"python3 -m pip install dist/*-cp{cp_version}-cp{cp_version}*-{dist_target}.whl >> /dev/null 2>> /dev/null && "
+    return f'''python3 -m pip install dist/*-cp{cp_version}-cp{cp_version}*-{dist_target}.whl >> /dev/null 2>> /dev/null && '''
 
 def wrapper_python3(new_python3_command):
     """
@@ -41,9 +41,9 @@ def wrapper_python3(new_python3_command):
     Returns:
     - str: The command to create the wrapper.
     """
-    return f'mkdir -p /wrapper && echo -e "#!/bin/bash\n{new_python3_command} \"\$@\"" > /wrapper/python3 && chmod +x /wrapper/python3 && export PATH="/wrapper:$PATH" && '
+    return f'''mkdir -p /wrapper && echo -e "#!/bin/bash\n{new_python3_command} \"\$@\"" > /wrapper/python3 && chmod +x /wrapper/python3 && export PATH="/wrapper:$PATH" && '''
 
-def prepare_environment_macosx():
+def prepare_environment_macosx(python_major_dot_minor_version):
     """
     Generate the command to prepare the environment for macOS builds.
     This includes setting up the compiler and linker flags.
@@ -53,18 +53,19 @@ def prepare_environment_macosx():
     - str: The command to prepare the environment.
     """
 
-    return 'echo -e "#!/bin/bash\nexec o64-clang -fuse-ld=/osxcross/target/bin/x86_64-apple-darwin20.2-ld \"\$@\"" > clang-wrapper.sh && chmod +x clang-wrapper.sh &&\
-        export CC=$(pwd)/clang-wrapper.sh &&\
-        export CXX=$CC &&\
-        export AR=x86_64-apple-darwin20.2-ar &&\
-        export RANLIB=x86_64-apple-darwin20.2-ranlib &&\
-        export STRIP=x86_64-apple-darwin20.2-strip &&\
-        export PYTHON_ROOT=/python-3.10.11-macos11/Python_Framework.pkg/Versions/3.10 &&\
-        export CFLAGS="--target=x86_64-apple-darwin -isysroot /osxcross/target/SDK/MacOSX11.1.sdk -I$PYTHON_ROOT/include/python3.10 -I$PYTHON_ROOT/Headers" &&\
-        export LDFLAGS="-isysroot /osxcross/target/SDK/MacOSX11.1.sdk -Wl,-syslibroot,/osxcross/target/SDK/MacOSX11.1.sdk -L$PYTHON_ROOT/lib -lpython3.10" \
-        && '
+    return f'''echo -e "#!/bin/bash\nexec o64-clang -fuse-ld=/osxcross/target/bin/x86_64-apple-darwin20.2-ld \"\$@\"" > clang-wrapper.sh && chmod +x clang-wrapper.sh && \
+        python_version=$(python3 --version | awk '{{print $2}}') && \
+        export CC=$(pwd)/clang-wrapper.sh && \
+        export CXX=$CC && \
+        export AR=x86_64-apple-darwin20.2-ar && \
+        export RANLIB=x86_64-apple-darwin20.2-ranlib && \
+        export STRIP=x86_64-apple-darwin20.2-strip && \
+        export PYTHON_ROOT="/python-${{python_version}}-macos11/Python_Framework.pkg/Versions/{python_major_dot_minor_version}" && \
+        export CFLAGS="--target=x86_64-apple-darwin -isysroot /osxcross/target/SDK/MacOSX11.1.sdk -I$PYTHON_ROOT/include/python{python_major_dot_minor_version} -I$PYTHON_ROOT/Headers" && \
+        export LDFLAGS="-isysroot /osxcross/target/SDK/MacOSX11.1.sdk -Wl,-syslibroot,/osxcross/target/SDK/MacOSX11.1.sdk -L$PYTHON_ROOT/lib -lpython{python_major_dot_minor_version}" \
+        && '''
 
-def fix_EXT_SUFFIX_macosx():
+def fix_EXT_SUFFIX_macosx(cp_version):
     """
     Generate the command to fix the EXT_SUFFIX for macOS builds.
     This is necessary to ensure that the built library can be imported correctly.
@@ -74,12 +75,14 @@ def fix_EXT_SUFFIX_macosx():
     - str: The command to fix the EXT_SUFFIX.
     """
 
-    return " && cd dist && unzip -o sum-1.0-cp310-cp310-linux_x86_64.whl -d tmp && cd tmp && \
-        mv sum.cpython-310-x86_64-linux-gnu.so sum.cpython-310-darwin.so && \
-        sed -i 's/linux_x86_64/macosx_10_11_x86_64/g' sum-1.0.dist-info/WHEEL && \
-        sed -i 's/x86_64-linux-gnu/darwin/g' sum-1.0.dist-info/RECORD && \
-        zip -r ../sum-1.0-cp310-cp310-macosx_10_11_x86_64.whl * && \
-        cd .. && rm -rf sum-1.0-cp310-cp310-linux_x86_64.whl tmp/"
+    return f''' && cd dist && \
+        orig_whl=$(ls *-cp{cp_version}-cp{cp_version}-linux_x86_64.whl) && \
+        unzip -o *-cp{cp_version}-cp{cp_version}-linux_x86_64.whl -d tmp && cd tmp && \
+        for f in *.cpython-{cp_version}-x86_64-linux-gnu.so; do mv "$f" "${{f/-x86_64-linux-gnu/-darwin}}"; done && \
+        sed -i 's/linux_x86_64/macosx_10_11_x86_64/g' *.dist-info/WHEEL && \
+        sed -i 's/x86_64-linux-gnu/darwin/g' *.dist-info/RECORD && \
+        zip -r "../${{orig_whl/-linux_x86_64/-macosx_10_11_x86_64}}" * && \
+        cd .. && rm -rf *-cp{cp_version}-cp{cp_version}-linux_x86_64.whl tmp/ clang-wrapper.sh'''
 
 def run_lvl3_image(image_name, command, host_workspace_path, logfile):
     """
@@ -125,6 +128,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
 
             cp_version_parts = python_version.split(".")
             cp_version = f"{cp_version_parts[0]}{cp_version_parts[1]}"
+            python_major_dot_minor_version = ".".join(python_version.split(".")[:2])
 
             if target == 'manylinux_2_17_x86_64':
 
@@ -190,7 +194,12 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # build the library
                 if build != None:
 
-                    build_command = prepare_environment_macosx() + build + fix_EXT_SUFFIX_macosx()
+                    build_command = prepare_environment_macosx(python_major_dot_minor_version) + build + fix_EXT_SUFFIX_macosx(cp_version)
 
                     print(f">> Building the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
+
+                # test the library
+                if test != None:
+
+                    print("Not supported yet :(")
