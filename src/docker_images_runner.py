@@ -67,14 +67,16 @@ def prepare_environment_macosx(python_major_dot_minor_version):
         export LDFLAGS="-isysroot /osxcross/target/SDK/MacOSX11.1.sdk -Wl,-syslibroot,/osxcross/target/SDK/MacOSX11.1.sdk -L$PYTHON_ROOT/lib -lpython{python_major_dot_minor_version}" \
         && '''
 
-def fix_EXT_SUFFIX_macosx(cp_version):
+def fix_EXT_SUFFIX(cp_version, new_base_os, new_dist_target):
     """
-    Generate the command to fix the EXT_SUFFIX for macOS builds.
+    Generate the command to fix the EXT_SUFFIX for cross builds.
     This is necessary to ensure that the built library can be imported correctly.
     Place this command after the build command.
 
     Parameters:
     - cp_version (str): The CP version to use in the filename.
+    - new_base_os (str): The new base OS for the library (target name in .so files).
+    - new_dist_target (str): The new distribution target.
 
     Returns:
     - str: The command to fix the EXT_SUFFIX.
@@ -83,10 +85,10 @@ def fix_EXT_SUFFIX_macosx(cp_version):
     return f''' && cd dist && \
         orig_whl=$(ls *-cp{cp_version}-cp{cp_version}-linux_x86_64.whl) && \
         unzip -o *-cp{cp_version}-cp{cp_version}-linux_x86_64.whl -d tmp && cd tmp && \
-        find . -type f -name "*.cpython-{cp_version}-x86_64-linux-gnu.so" -exec bash -c 'mv "$0" "${{0/-x86_64-linux-gnu/-darwin}}"' {{}} \\; && \
-        sed -i 's/linux_x86_64/macosx_10_11_x86_64/g' *.dist-info/WHEEL && \
-        sed -i 's/x86_64-linux-gnu/darwin/g' *.dist-info/RECORD && \
-        zip -r "../${{orig_whl/-linux_x86_64/-macosx_10_11_x86_64}}" * && \
+        find . -type f -name "*.cpython-{cp_version}-x86_64-linux-gnu.so" -exec bash -c 'mv "$0" "${{0/-x86_64-linux-gnu/-{new_base_os}}}"' {{}} \\; && \
+        sed -i 's/linux_x86_64/{new_dist_target}/g' *.dist-info/WHEEL && \
+        sed -i 's/x86_64-linux-gnu/{new_base_os}/g' *.dist-info/RECORD && \
+        zip -r "../${{orig_whl/-linux_x86_64/-{new_dist_target}}}" * && \
         cd .. && rm -rf *-cp{cp_version}-cp{cp_version}-linux_x86_64.whl tmp/ ../clang-wrapper.sh'''
 
 def run_lvl3_image(image_name, command, host_workspace_path, logfile):
@@ -195,11 +197,13 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
             if target == 'macosx_x86_64':
 
                 image_name = f"win-macosx-pookie-lvl3-cp{cp_version}-macosx"
+                new_base_os = "darwin"
+                new_dist_target = "macosx_10_11_x86_64"
 
                 # build the library
                 if build != None:
 
-                    build_command = prepare_environment_macosx(python_major_dot_minor_version) + build + fix_EXT_SUFFIX_macosx(cp_version)
+                    build_command = prepare_environment_macosx(python_major_dot_minor_version) + build + fix_EXT_SUFFIX(cp_version, new_base_os, new_dist_target)
 
                     print(f">> Building the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
@@ -207,6 +211,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # test the library
                 if test != None:
 
+                    print(f">> Testing the library for cp-{cp_version}-{target}")
                     print("Not supported yet :(")
 
     # Delete __pycache__ folders
