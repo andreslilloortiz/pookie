@@ -198,7 +198,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
 
                 image_name = f"win-macosx-pookie-lvl3-cp{cp_version}-macosx"
                 new_base_os = "darwin"
-                new_dist_target = "macosx_10_11_x86_64"
+                new_dist_target = "macosx_11_0_x86_64"
 
                 # build the library
                 if build != None:
