@@ -42,7 +42,7 @@ def wrapper_python3(new_python3_command):
     """
     return f'''mkdir -p /wrapper && echo -e "#!/bin/bash\n{new_python3_command} "\\$@"" > /wrapper/python3 && chmod +x /wrapper/python3 && export PATH="/wrapper:$PATH" && '''
 
-def prepare_environment_macosx(python_major_dot_minor_version):
+def prepare_environment_macosx_x86_64(python_major_dot_minor_version):
     """
     Generate the command to prepare the environment for macOS builds.
     This includes setting up the compiler and linker flags.
@@ -203,7 +203,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # build the library
                 if build != None:
 
-                    build_command = prepare_environment_macosx(python_major_dot_minor_version) + build + fix_EXT_SUFFIX(cp_version, new_base_os, new_dist_target)
+                    build_command = prepare_environment_macosx_x86_64(python_major_dot_minor_version) + build + fix_EXT_SUFFIX(cp_version, new_base_os, new_dist_target)
 
                     print(f">> Building the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
