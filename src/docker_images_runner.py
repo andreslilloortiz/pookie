@@ -43,6 +43,44 @@ def wrapper_python3(new_python3_command):
     """
     return f'mkdir -p /wrapper && echo -e "#!/bin/bash\n{new_python3_command} \"\$@\"" > /wrapper/python3 && chmod +x /wrapper/python3 && export PATH="/wrapper:$PATH" && '
 
+def prepare_environment_macosx():
+    """
+    Generate the command to prepare the environment for macOS builds.
+    This includes setting up the compiler and linker flags.
+    Place this command before the build command.
+
+    Returns:
+    - str: The command to prepare the environment.
+    """
+
+    return 'echo -e "#!/bin/bash\nexec o64-clang -fuse-ld=/osxcross/target/bin/x86_64-apple-darwin20.2-ld \"\$@\"" > clang-wrapper.sh && chmod +x clang-wrapper.sh &&\
+        export CC=$(pwd)/clang-wrapper.sh &&\
+        export CXX=$CC &&\
+        export AR=x86_64-apple-darwin20.2-ar &&\
+        export RANLIB=x86_64-apple-darwin20.2-ranlib &&\
+        export STRIP=x86_64-apple-darwin20.2-strip &&\
+        export PYTHON_ROOT=/python-3.10.11-macos11/Python_Framework.pkg/Versions/3.10 &&\
+        export CFLAGS="--target=x86_64-apple-darwin -isysroot /osxcross/target/SDK/MacOSX11.1.sdk -I$PYTHON_ROOT/include/python3.10 -I$PYTHON_ROOT/Headers" &&\
+        export LDFLAGS="-isysroot /osxcross/target/SDK/MacOSX11.1.sdk -Wl,-syslibroot,/osxcross/target/SDK/MacOSX11.1.sdk -L$PYTHON_ROOT/lib -lpython3.10" \
+        && '
+
+def fix_EXT_SUFFIX_macosx():
+    """
+    Generate the command to fix the EXT_SUFFIX for macOS builds.
+    This is necessary to ensure that the built library can be imported correctly.
+    Place this command after the build command.
+
+    Returns:
+    - str: The command to fix the EXT_SUFFIX.
+    """
+
+    return " && cd dist && unzip -o sum-1.0-cp310-cp310-linux_x86_64.whl -d tmp && cd tmp && \
+        mv sum.cpython-310-x86_64-linux-gnu.so sum.cpython-310-darwin.so && \
+        sed -i 's/linux_x86_64/macosx_10_11_x86_64/g' sum-1.0.dist-info/WHEEL && \
+        sed -i 's/x86_64-linux-gnu/darwin/g' sum-1.0.dist-info/RECORD && \
+        zip -r ../sum-1.0-cp310-cp310-macosx_10_11_x86_64.whl * && \
+        cd .. && rm -rf sum-1.0-cp310-cp310-linux_x86_64.whl tmp/"
+
 def run_lvl3_image(image_name, command, host_workspace_path, logfile):
     """
     Run a level 3 CP3xx Docker image.
@@ -152,7 +190,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # build the library
                 if build != None:
 
-                    build_command = build
+                    build_command = prepare_environment_macosx() + build + fix_EXT_SUFFIX_macosx()
 
                     print(f">> Building the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
