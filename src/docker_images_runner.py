@@ -1,9 +1,10 @@
 import subprocess
+from python_wrapper import wrapper_python3, wrapper_python, wrapper_pip3, wrapper_pip
 
 def rename_dist(original_dist_target, new_dist_target):
     """
     Generate the command to rename the built library files.
-    Place this command after the build command.
+    Place this command AFTER the build command.
 
     Parameters:
     - original_target (str): The original target architecture.
@@ -17,7 +18,7 @@ def rename_dist(original_dist_target, new_dist_target):
 def install_dist(cp_version, dist_target):
     """
     Generate the command to install the built library.
-    Place this command before the test command.
+    Place this command BEFORE the test command.
 
     Parameters:
     - cp_version (str): The CP version to use in the filename.
@@ -28,25 +29,11 @@ def install_dist(cp_version, dist_target):
     """
     return f'''python3 -m pip install dist/*-cp{cp_version}-cp{cp_version}*-{dist_target}.whl >> /dev/null 2>> /dev/null && '''
 
-def wrapper_python3(new_python3_command):
-    """
-    Generate the command to create a wrapper for Python 3.
-    This is used to ensure that the correct Python interpreter is used in the Docker container.
-    Place this command before the build command.
-
-    Parameters:
-    - new_python3_command (str): The command to run the new Python 3 interpreter.
-
-    Returns:
-    - str: The command to create the wrapper.
-    """
-    return f'''mkdir -p /wrapper && echo -e "#!/bin/bash\n{new_python3_command} "\\$@"" > /wrapper/python3 && chmod +x /wrapper/python3 && export PATH="/wrapper:$PATH" && '''
-
 def prepare_environment_macosx_x86_64(python_major_dot_minor_version):
     """
     Generate the command to prepare the environment for macOS builds.
     This includes setting up the compiler and linker flags.
-    Place this command before the build command.
+    Place this command BEFORE the build command.
 
     Parameters:
     - python_major_dot_minor_version (str): The major and minor version of Python to use (e.g., "3.12").
@@ -71,7 +58,7 @@ def fix_EXT_SUFFIX(cp_version, new_base_os, new_dist_target):
     """
     Generate the command to fix the EXT_SUFFIX for cross builds.
     This is necessary to ensure that the built library can be imported correctly.
-    Place this command after the build command.
+    Place this command AFTER the build command.
 
     Parameters:
     - cp_version (str): The CP version to use in the filename.
@@ -146,7 +133,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # build the library
                 if build != None:
 
-                    build_command = build + rename_dist(original_dist_target, new_dist_target)
+                    build_command = wrapper_python("python3") + wrapper_pip("pip3") + build + rename_dist(original_dist_target, new_dist_target)
 
                     print(f">> Building the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
@@ -154,7 +141,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # test the library
                 if test != None:
 
-                    test_command = install_dist(cp_version, new_dist_target) + test
+                    test_command = install_dist(cp_version, new_dist_target) + wrapper_python("python3") + wrapper_pip("pip3") + test
 
                     print(f">> Testing the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
@@ -168,7 +155,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # build the library
                 if build != None:
 
-                    build_command = build + rename_dist(original_dist_target, new_dist_target)
+                    build_command = wrapper_python("python3") + wrapper_pip("pip3") + build + rename_dist(original_dist_target, new_dist_target)
 
                     print(f">> Building the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
@@ -176,7 +163,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # test the library
                 if test != None:
 
-                    test_command = install_dist(cp_version, new_dist_target) + test
+                    test_command = install_dist(cp_version, new_dist_target) + wrapper_python("python3") + wrapper_pip("pip3") + test
 
                     print(f">> Testing the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
@@ -184,12 +171,13 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
             if target == 'win_amd64':
 
                 image_name = f"win-macosx-pookie-lvl3-cp{cp_version}-win"
-                new_python3_command = f"wine /python*/*/python*/python.exe"
+                new_python_command = f"wine /python*/*/python*/python.exe"
+                new_pip_command = f"wine /python*/*/python*/python.exe -m pip"
 
                 # build the library
                 if build != None:
 
-                    build_command = wrapper_python3(new_python3_command) + build
+                    build_command = wrapper_python3(new_python_command) + wrapper_python(new_python_command) + wrapper_pip3(new_pip_command) + wrapper_pip(new_pip_command) + build
 
                     print(f">> Building the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
@@ -203,7 +191,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # build the library
                 if build != None:
 
-                    build_command = prepare_environment_macosx_x86_64(python_major_dot_minor_version) + build + fix_EXT_SUFFIX(cp_version, new_base_os, new_dist_target)
+                    build_command = prepare_environment_macosx_x86_64(python_major_dot_minor_version) + wrapper_python("python3") + wrapper_pip("pip3") + build + fix_EXT_SUFFIX(cp_version, new_base_os, new_dist_target)
 
                     print(f">> Building the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
@@ -213,10 +201,3 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
 
                     print(f">> Testing the library for cp-{cp_version}-{target}")
                     print("Not supported yet :(")
-
-    # Delete __pycache__ folders
-    subprocess.run([
-        'rm',
-            '-rf',
-            '__pycache__'
-    ], stdout = logfile, stderr = logfile)

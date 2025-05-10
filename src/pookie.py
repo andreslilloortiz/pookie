@@ -1,5 +1,6 @@
 import argparse
 import os
+import subprocess
 from python_version_fetcher import find_latest_patch_versions
 from docker_images_builder import build_docker_images
 from docker_images_runner import run_docker_images
@@ -61,6 +62,13 @@ def main():
 
     # run build and test commands
     run_docker_images(args.target, logfile, python_versions_dic, args.build, args.test, host_workspace_path)
+
+    # Delete __pycache__ folders
+    subprocess.run([
+        'rm',
+            '-rf',
+            '__pycache__'
+    ], stdout = logfile, stderr = logfile)
 
     # # iterate versions and targets for build and test the library
     # for target in args.target:
