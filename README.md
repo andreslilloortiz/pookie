@@ -62,6 +62,8 @@ Before getting started, ensure you have the following installed and configured o
 
 > **Note:** Searching for Python versions on python.org and creating Docker images can take some time. It is recommended to first run pookie without the `--build` and `--test` options to generate the required images for the specified Python versions and targets. Once the images are created, you can run the `build` and `test` commands as needed, which will execute much faster.
 
+> **Note:** In `--build` and `--test` bash commands you can use python or python3, pip or pip3.
+
 | Argument                                                                                               | Description                                                                 |
 |--------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
 | `-h, --help`                                                                                           | Show this help message and exit                                             |
@@ -87,7 +89,7 @@ Build the native Python library `mylib` and test it with test files in the modul
 ```bash
 ./pookie.sh \
     --workspace /path/to/mylib \
-    --build "python3 -m pip install setuptools build wheel && python3 -m build" \
+    --build "pip install setuptools build wheel && python3 -m build" \
     --test "python3 -m tests" \
     --target manylinux_2_17_x86_64 musllinux_1_2_x86_64
 ```
@@ -97,7 +99,7 @@ Build the native Python library `mylib` and test it with `pytest` on the test fi
 ```bash
 ./pookie.sh \
     --workspace /path/to/mylib \
-    --build "python3 -m pip install setuptools build wheel && python3 -m build" \
+    --build "pip3 install setuptools build wheel && python -m build" \
     --test "python3 -m pip install pytest && pytest tests" \
     --python-version 13 \
     --target win_amd64

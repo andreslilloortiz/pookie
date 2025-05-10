@@ -10,7 +10,6 @@ COPY src/pookie.py .
 COPY src/python_version_fetcher.py .
 COPY src/docker_images_builder.py .
 COPY src/docker_images_runner.py .
-COPY src/python_wrapper.py .
 
 COPY images /images
 

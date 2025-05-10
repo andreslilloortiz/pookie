@@ -1,5 +1,19 @@
 import subprocess
-from python_wrapper import wrapper_python3, wrapper_python, wrapper_pip3, wrapper_pip
+
+def wrapper(container_command, user_command):
+    """
+    Generate the command to create a wrapper for the specified command.
+    This is used to ensure that the correct command is used in the Docker container.
+    Place this command BEFORE the build command.
+
+    Parameters:
+    - container_command (str): The command to run inside the Docker container.
+    - user_command (str): The command that the user specifies.
+
+    Returns:
+    - str: The command to create the wrapper.
+    """
+    return f'''mkdir -p /wrapper && echo -e "#!/bin/bash\n{container_command} "\\$@"" > /wrapper/{user_command} && chmod +x /wrapper/{user_command} && export PATH="/wrapper:$PATH" && '''
 
 def rename_dist(original_dist_target, new_dist_target):
     """
@@ -133,7 +147,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # build the library
                 if build != None:
 
-                    build_command = wrapper_python("python3") + wrapper_pip("pip3") + build + rename_dist(original_dist_target, new_dist_target)
+                    build_command = wrapper("python3", "python") + wrapper("pip3", "pip") + build + rename_dist(original_dist_target, new_dist_target)
 
                     print(f">> Building the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
@@ -141,7 +155,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # test the library
                 if test != None:
 
-                    test_command = install_dist(cp_version, new_dist_target) + wrapper_python("python3") + wrapper_pip("pip3") + test
+                    test_command = install_dist(cp_version, new_dist_target) + wrapper("python3", "python") + wrapper("pip3", "pip") + test
 
                     print(f">> Testing the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
@@ -155,7 +169,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # build the library
                 if build != None:
 
-                    build_command = wrapper_python("python3") + wrapper_pip("pip3") + build + rename_dist(original_dist_target, new_dist_target)
+                    build_command = wrapper("python3", "python") + wrapper("pip3", "pip") + build + rename_dist(original_dist_target, new_dist_target)
 
                     print(f">> Building the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
@@ -163,7 +177,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # test the library
                 if test != None:
 
-                    test_command = install_dist(cp_version, new_dist_target) + wrapper_python("python3") + wrapper_pip("pip3") + test
+                    test_command = install_dist(cp_version, new_dist_target) + wrapper("python3", "python") + wrapper("pip3", "pip") + test
 
                     print(f">> Testing the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
@@ -177,7 +191,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # build the library
                 if build != None:
 
-                    build_command = wrapper_python3(new_python_command) + wrapper_python(new_python_command) + wrapper_pip3(new_pip_command) + wrapper_pip(new_pip_command) + build
+                    build_command = wrapper(new_python_command, "python3") + wrapper(new_python_command, "python") + wrapper(new_pip_command, "pip3") + wrapper(new_pip_command, "pip") + build
 
                     print(f">> Building the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
@@ -191,7 +205,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # build the library
                 if build != None:
 
-                    build_command = prepare_environment_macosx_11_0_x86_64(python_major_dot_minor_version) + wrapper_python("python3") + wrapper_pip("pip3") + build + fix_EXT_SUFFIX(cp_version, new_base_os, new_dist_target)
+                    build_command = prepare_environment_macosx_11_0_x86_64(python_major_dot_minor_version) + wrapper("python3", "python") + wrapper("pip3", "pip") + build + fix_EXT_SUFFIX(cp_version, new_base_os, new_dist_target)
 
                     print(f">> Building the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
