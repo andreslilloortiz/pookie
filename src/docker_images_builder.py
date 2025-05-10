@@ -153,8 +153,8 @@ def build_docker_images(targets, logfile, python_versions_dic):
 
                 build_lvl3_image(tree, general_image_name, image_name, python_version, python_url, logfile)
 
-        if target == 'macosx_x86_64':
-            print(">> Creating docker images for macosx_x86_64")
+        if target == 'macosx_11_0_x86_64':
+            print(">> Creating docker images for macosx_11_0_x86_64")
             tree = "win-macosx-pookie"
 
             # level 1

@@ -21,8 +21,8 @@ def main():
     parser.add_argument('--target',
                             type = str,
                             nargs = '+',
-                            choices = ['manylinux_2_17_x86_64', 'musllinux_1_2_x86_64', 'win_amd64', 'macosx_x86_64'],
-                            default = ['manylinux_2_17_x86_64', 'musllinux_1_2_x86_64', 'win_amd64', 'macosx_x86_64'],
+                            choices = ['manylinux_2_17_x86_64', 'musllinux_1_2_x86_64', 'win_amd64', 'macosx_11_0_x86_64'],
+                            default = ['manylinux_2_17_x86_64', 'musllinux_1_2_x86_64', 'win_amd64', 'macosx_11_0_x86_64'],
                             help = 'Target platform(s) to build and test the library for (if not specified: all)')
 
     args = parser.parse_args()
@@ -37,11 +37,11 @@ def main():
     required_files = []
     for target in args.target:
         # map target to required files
-        if target == 'manylinux_2_17_x86_64' or target == 'musllinux_1_2_x86_64' or target == 'macosx_x86_64':
+        if target == 'manylinux_2_17_x86_64' or target == 'musllinux_1_2_x86_64' or target == 'macosx_11_0_x86_64':
             required_files.append('tar_xz')
         if target == 'win_amd64':
             required_files.append('exe')
-        if target == 'macosx_x86_64':
+        if target == 'macosx_11_0_x86_64':
             required_files.append('pkg')
 
     python_versions_dic = find_latest_patch_versions(3, args.python_version, required_files)

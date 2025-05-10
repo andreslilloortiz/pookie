@@ -29,7 +29,7 @@ def install_dist(cp_version, dist_target):
     """
     return f'''python3 -m pip install dist/*-cp{cp_version}-cp{cp_version}*-{dist_target}.whl >> /dev/null 2>> /dev/null && '''
 
-def prepare_environment_macosx_x86_64(python_major_dot_minor_version):
+def prepare_environment_macosx_11_0_x86_64(python_major_dot_minor_version):
     """
     Generate the command to prepare the environment for macOS builds.
     This includes setting up the compiler and linker flags.
@@ -182,7 +182,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                     print(f">> Building the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
-            if target == 'macosx_x86_64':
+            if target == 'macosx_11_0_x86_64':
 
                 image_name = f"win-macosx-pookie-lvl3-cp{cp_version}-macosx"
                 new_base_os = "darwin"
@@ -191,7 +191,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 # build the library
                 if build != None:
 
-                    build_command = prepare_environment_macosx_x86_64(python_major_dot_minor_version) + wrapper_python("python3") + wrapper_pip("pip3") + build + fix_EXT_SUFFIX(cp_version, new_base_os, new_dist_target)
+                    build_command = prepare_environment_macosx_11_0_x86_64(python_major_dot_minor_version) + wrapper_python("python3") + wrapper_pip("pip3") + build + fix_EXT_SUFFIX(cp_version, new_base_os, new_dist_target)
 
                     print(f">> Building the library for cp-{cp_version}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
