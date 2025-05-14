@@ -3,11 +3,13 @@ FROM win-macosx-pookie-lvl2-osxcross:latest
 ARG PYTHON_URL
 
 # Download and install Python for cross-compilation
-RUN LINUX_URL="${PYTHON_URL/apple-darwin/unknown-linux-gnu}" && \
+RUN bash -c '\
+    LINUX_URL="${PYTHON_URL/apple-darwin/unknown-linux-gnu}" && \
     wget -O python_linux.tar.gz "$LINUX_URL" && \
     tar -xvzf python_linux.tar.gz && \
     mv python python_linux && \
-    rm -f python_linux.tar.gz
+    rm -f python_linux.tar.gz \
+    '
 
 # Download and install Python
 RUN wget -O python.tar.gz ${PYTHON_URL} && \

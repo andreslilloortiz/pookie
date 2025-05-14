@@ -58,7 +58,7 @@ def main():
     host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')
 
     # run build and test commands
-    # run_docker_images(args.target, logfile, python_versions_dic, args.build, args.test, host_workspace_path)
+    run_docker_images(args.target, logfile, python_versions_dic, args.build, args.test, host_workspace_path)
 
     # Delete __pycache__ folders
     subprocess.run([
