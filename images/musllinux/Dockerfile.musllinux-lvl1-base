@@ -1,17 +1,6 @@
 FROM alpine:3.14
 
 RUN apk add --no-cache \
-    make \
-    zlib-dev \
-    libffi-dev \
-    openssl-dev \
-    bzip2-dev \
-    xz-dev \
-    readline-dev \
-    sqlite-dev \
-    tk-dev \
-    gdbm-dev \
-    ncurses-dev \
-    libnsl-dev \
-    linux-headers \
+    wget \
+    tar \
     bash

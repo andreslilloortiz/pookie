@@ -52,7 +52,7 @@ def main():
     logfile = open("pookie.log", "a")
 
     # build docker images
-    # build_docker_images(args.target, logfile, python_versions_dic)
+    build_docker_images(args.target, logfile, python_versions_dic)
 
     # workspace for docker in docker
     host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')

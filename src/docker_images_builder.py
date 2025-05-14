@@ -41,7 +41,7 @@ def build_lvl1_or_lvl2_image(tree, image_name, logfile):
                 '.'
         ], stdout=logfile, stderr=logfile)
 
-def build_lvl3_image(tree, general_image_name, image_name, python_version, python_url, logfile):
+def build_lvl3_image(tree, general_image_name, image_name, python_url, logfile):
     """
     Build a level 3 CP3xx Docker image.
 
@@ -49,7 +49,7 @@ def build_lvl3_image(tree, general_image_name, image_name, python_version, pytho
     - tree (str): The tree from the Docker layer graph.
     - general_image_name (str): The image name.
     - image_name (str): The specific image name to build.
-    - python_version (str): The Python version to use.
+    - python_file (str): The Python file downloaded quith python_url.
     - python_url (str): The URL for the Python source.
     - logfile (file object): File object to log the output of the build process.
     """
@@ -61,8 +61,6 @@ def build_lvl3_image(tree, general_image_name, image_name, python_version, pytho
                     f'/images/{tree}/Dockerfile.{general_image_name}',
                 '-t',
                     image_name,
-                '--build-arg',
-                    f'PYTHON_VERSION={python_version}',
                 '--build-arg',
                     f'PYTHON_URL={python_url}',
                 '.'
@@ -80,7 +78,7 @@ def build_docker_images(targets, logfile, python_versions_dic):
     for target in targets:
 
         if target == 'manylinux_2_17_x86_64':
-            print(">> Creating docker images for manylinux_2_17_x86_64")
+            print(f">> Creating docker images for {target}")
             tree = "manylinux"
 
             # level 1
@@ -92,20 +90,20 @@ def build_docker_images(targets, logfile, python_versions_dic):
             build_lvl1_or_lvl2_image(tree, image_name, logfile)
 
             # level 3
-            for python_version, urls_dic in python_versions_dic.items():
+            for minor, target_data in python_versions_dic.items():
 
                 general_image_name = "manylinux-lvl3-cp3xx-manylinux_2_17"
 
-                cp_version_parts = python_version.split(".")
-                cp_version = f"{cp_version_parts[0]}{cp_version_parts[1]}"
-                image_name = f"manylinux-lvl3-cp{cp_version}-manylinux_2_17"
+                py_version_nodot = '3' + minor
+                image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17"
 
-                python_url = urls_dic["tar_xz"]
+                python_file = target_data[target]["filename"]
+                python_url = target_data[target]["url"]
 
-                build_lvl3_image(tree, general_image_name, image_name, python_version, python_url, logfile)
+                build_lvl3_image(tree, general_image_name, image_name, python_url, logfile)
 
         if target == 'musllinux_1_2_x86_64':
-            print(">> Creating docker images for musllinux_1_2_x86_64")
+            print(f">> Creating docker images for {target}")
             tree = "musllinux"
 
             # level 1
@@ -117,17 +115,17 @@ def build_docker_images(targets, logfile, python_versions_dic):
             build_lvl1_or_lvl2_image(tree, image_name, logfile)
 
             # level 3
-            for python_version, urls_dic in python_versions_dic.items():
+            for minor, target_data in python_versions_dic.items():
 
                 general_image_name = "musllinux-lvl3-cp3xx-musllinux_1_2"
 
-                cp_version_parts = python_version.split(".")
-                cp_version = f"{cp_version_parts[0]}{cp_version_parts[1]}"
-                image_name = f"musllinux-lvl3-cp{cp_version}-musllinux_1_2"
+                py_version_nodot = '3' + minor
+                image_name = f"musllinux-lvl3-cp{py_version_nodot}-musllinux_1_2"
 
-                python_url = urls_dic["tar_xz"]
+                python_file = target_data[target]["filename"]
+                python_url = target_data[target]["url"]
 
-                build_lvl3_image(tree, general_image_name, image_name, python_version, python_url, logfile)
+                build_lvl3_image(tree, general_image_name, image_name, python_url, logfile)
 
         if target == 'win_amd64':
             print(">> Creating docker images for win_amd64")

@@ -1,14 +1,8 @@
 FROM manylinux-lvl2-gnu-gcc:latest
 
 ARG PYTHON_URL
-ARG PYTHON_VERSION
 
 # Download and install Python
-RUN wget ${PYTHON_URL} && \
-    tar -xJf Python-${PYTHON_VERSION}.tar.xz && \
-    cd Python-${PYTHON_VERSION} && \
-    ./configure && \
-    make -j$(nproc) && \
-    make install && \
-    cd .. && \
-    rm -rf Python-${PYTHON_VERSION}*
+RUN wget -O python.tar.gz ${PYTHON_URL} && \
+    tar -xvzf python.tar.gz && \
+    rm -f python.tar.gz
