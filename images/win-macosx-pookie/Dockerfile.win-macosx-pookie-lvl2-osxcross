@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     liblzma-dev \
     build-essential \
     patch \
+    cpio \
     && rm -rf /var/lib/apt/lists/*
 
 # Download and install osxcross
