@@ -1,9 +1,8 @@
 FROM win-macosx-pookie-lvl2-msvc-mingw64:latest
 
 ARG PYTHON_URL
-ARG PYTHON_VERSION
 
 # Download and install Python
-RUN wget ${PYTHON_URL} &&\
-    7z x Winpython64-* -opython${PYTHON_VERSION} && \
-    rm -f Winpython64-*.exe
+RUN wget -O python.tar.gz ${PYTHON_URL} && \
+    tar -xvzf python.tar.gz && \
+    rm -f python.tar.gz
