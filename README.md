@@ -90,7 +90,7 @@ Build the native Python library `mylib` and test it with test files in the modul
 ./pookie.sh \
     --workspace /path/to/mylib \
     --build "pip install setuptools build wheel && python3 -m build" \
-    --test "python3 -m tests" \
+    --test "python -m tests" \
     --target manylinux_2_17_x86_64 musllinux_1_2_x86_64
 ```
 
@@ -100,7 +100,7 @@ Build the native Python library `mylib` and test it with `pytest` on the test fi
 ./pookie.sh \
     --workspace /path/to/mylib \
     --build "pip3 install setuptools build wheel && python -m build" \
-    --test "python3 -m pip install pytest && pytest tests" \
+    --test "python -m pip install pytest && python -m pytest tests" \
     --python-version 13 \
     --target win_amd64
 ```

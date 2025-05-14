@@ -2,4 +2,5 @@ FROM musllinux-lvl1-base:latest
 
 RUN apk add --no-cache \
     gcc \
+    g++ \
     musl-dev
