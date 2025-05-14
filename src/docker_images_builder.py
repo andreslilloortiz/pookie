@@ -126,7 +126,7 @@ def build_docker_images(targets, logfile, python_versions_dic):
                 build_lvl3_image(tree, general_image_name, image_name, python_url, logfile)
 
         if target == 'win_amd64':
-            print(">> Creating docker images for win_amd64")
+            print(f">> Creating docker images for {target}")
             tree = "win-macosx-pookie"
 
             # level 1
@@ -149,7 +149,7 @@ def build_docker_images(targets, logfile, python_versions_dic):
                 build_lvl3_image(tree, general_image_name, image_name, python_url, logfile)
 
         if target == 'macosx_11_0_x86_64':
-            print(">> Creating docker images for macosx_11_0_x86_64")
+            print(f">> Creating docker images for {target}")
             tree = "win-macosx-pookie"
 
             # level 1
@@ -160,14 +160,13 @@ def build_docker_images(targets, logfile, python_versions_dic):
             build_lvl1_or_lvl2_image(tree, image_name, logfile)
 
             # level 3
-            for python_version, urls_dic in python_versions_dic.items():
+            for minor, target_data in python_versions_dic.items():
 
                 general_image_name = "win-macosx-pookie-lvl3-cp3xx-macosx"
 
-                cp_version_parts = python_version.split(".")
-                cp_version = f"{cp_version_parts[0]}{cp_version_parts[1]}"
-                image_name = f"win-macosx-pookie-lvl3-cp{cp_version}-macosx"
+                py_version_nodot = '3' + minor
+                image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-macosx"
 
-                python_url = urls_dic["pkg"]
+                python_url = target_data[target]["url"]
 
-                build_lvl3_image(tree, general_image_name, image_name, python_version, python_url, logfile)
+                build_lvl3_image(tree, general_image_name, image_name, python_url, logfile)
