@@ -89,5 +89,7 @@ def main():
             print(f"    Download URL: {info['url']}")
         print()
 
+    print(results)
+
 if __name__ == "__main__":
     main()

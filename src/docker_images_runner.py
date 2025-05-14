@@ -1,6 +1,6 @@
 import subprocess
 
-def wrapper(container_command, user_command):
+def wrapper(user_command, container_command):
     """
     Generate the command to create a wrapper for the specified command.
     This is used to ensure that the correct command is used in the Docker container.
@@ -57,25 +57,23 @@ def prepare_environment_macosx_11_0_x86_64(python_major_dot_minor_version):
     """
 
     return f'''echo -e "#!/bin/bash\nexec o64-clang -fuse-ld=/osxcross/target/bin/x86_64-apple-darwin20.2-ld \"\\$@\"" > clang-wrapper.sh && chmod +x clang-wrapper.sh && \
-        python_version=$(python3 --version | awk '{{print $2}}') && \
         export CC=$(pwd)/clang-wrapper.sh && \
         export CXX=$CC && \
         export AR=x86_64-apple-darwin20.2-ar && \
         export RANLIB=x86_64-apple-darwin20.2-ranlib && \
         export STRIP=x86_64-apple-darwin20.2-strip && \
-        export PYTHON_ROOT="/python-${{python_version}}-macos11/Python_Framework.pkg/Versions/{python_major_dot_minor_version}" && \
-        export CFLAGS="--target=x86_64-apple-darwin -isysroot /osxcross/target/SDK/MacOSX11.1.sdk -I$PYTHON_ROOT/include/python{python_major_dot_minor_version} -I$PYTHON_ROOT/Headers" && \
-        export LDFLAGS="-isysroot /osxcross/target/SDK/MacOSX11.1.sdk -Wl,-syslibroot,/osxcross/target/SDK/MacOSX11.1.sdk -L$PYTHON_ROOT/lib -lpython{python_major_dot_minor_version}" \
+        export CFLAGS="--target=x86_64-apple-darwin -isysroot /osxcross/target/SDK/MacOSX11.1.sdk -Ipython/include/python{python_major_dot_minor_version}" && \
+        export LDFLAGS="-isysroot /osxcross/target/SDK/MacOSX11.1.sdk -Wl,-syslibroot,/osxcross/target/SDK/MacOSX11.1.sdk -Lpython/lib -lpython{python_major_dot_minor_version}" \
         && '''
 
-def fix_EXT_SUFFIX(cp_version, new_base_os, new_dist_target):
+def fix_EXT_SUFFIX(py_version_nodot, new_base_os, new_dist_target):
     """
     Generate the command to fix the EXT_SUFFIX for cross builds.
     This is necessary to ensure that the built library can be imported correctly.
     Place this command AFTER the build command.
 
     Parameters:
-    - cp_version (str): The CP version to use in the filename.
+    - py_version_nodot (str): The CP version to use in the filename.
     - new_base_os (str): The new base OS for the library (target name in .so files).
     - new_dist_target (str): The new distribution target.
 
@@ -84,13 +82,13 @@ def fix_EXT_SUFFIX(cp_version, new_base_os, new_dist_target):
     """
 
     return f''' && cd dist && \
-        orig_whl=$(ls *-cp{cp_version}-cp{cp_version}-linux_x86_64.whl) && \
-        unzip -o *-cp{cp_version}-cp{cp_version}-linux_x86_64.whl -d tmp && cd tmp && \
-        find . -type f -name "*.cpython-{cp_version}-x86_64-linux-gnu.so" -exec bash -c 'mv "$0" "${{0/-x86_64-linux-gnu/-{new_base_os}}}"' {{}} \\; && \
+        orig_whl=$(ls *-cp{py_version_nodot}-cp{py_version_nodot}-linux_x86_64.whl) && \
+        unzip -o *-cp{py_version_nodot}-cp{py_version_nodot}-linux_x86_64.whl -d tmp && cd tmp && \
+        find . -type f -name "*.cpython-{py_version_nodot}-x86_64-linux-gnu.so" -exec bash -c 'mv "$0" "${{0/-x86_64-linux-gnu/-{new_base_os}}}"' {{}} \\; && \
         sed -i 's/linux_x86_64/{new_dist_target}/g' *.dist-info/WHEEL && \
         sed -i 's/x86_64-linux-gnu/{new_base_os}/g' *.dist-info/RECORD && \
         zip -r "../${{orig_whl/-linux_x86_64/-{new_dist_target}}}" * && \
-        cd .. && rm -rf *-cp{cp_version}-cp{cp_version}-linux_x86_64.whl tmp/ ../clang-wrapper.sh'''
+        cd .. && rm -rf *-cp{py_version_nodot}-cp{py_version_nodot}-linux_x86_64.whl tmp/ ../clang-wrapper.sh'''
 
 def run_lvl3_image(image_name, command, host_workspace_path, logfile):
     """
@@ -132,86 +130,91 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
 
     # Run build and test commands
     for target in targets:
-        for python_version in python_versions_dic:
+        for minor in python_versions_dic:
 
-            cp_version_parts = python_version.split(".")
-            cp_version = f"{cp_version_parts[0]}{cp_version_parts[1]}"
-            python_major_dot_minor_version = ".".join(python_version.split(".")[:2])
+            py_version_nodot = '3' + minor
+            python_major_dot_minor_version = '3.' + minor
 
             if target == 'manylinux_2_17_x86_64':
 
-                image_name = f"manylinux-lvl3-cp{cp_version}-manylinux_2_17"
+                image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17"
                 original_dist_target = "linux_x86_64"
                 new_dist_target = "manylinux_2_17_x86_64.manylinux2014_x86_64"
+                python_executable = '/python/bin/python3'
+                pip_executable = '/python/bin/pip3'
 
                 # build the library
                 if build != None:
 
-                    build_command = wrapper("python3", "python") + wrapper("pip3", "pip") + build + rename_dist(original_dist_target, new_dist_target)
+                    build_command = wrapper("python3", python_executable) + wrapper("pip3", pip_executable) + wrapper("python", python_executable) + wrapper("pip", pip_executable) + build + rename_dist(original_dist_target, new_dist_target)
 
-                    print(f">> Building the library for cp-{cp_version}-{target}")
+                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
                 # test the library
                 if test != None:
 
-                    test_command = install_dist(cp_version, new_dist_target) + wrapper("python3", "python") + wrapper("pip3", "pip") + test
+                    test_command = install_dist(py_version_nodot, new_dist_target) + wrapper("python3", python_executable) + wrapper("pip3", pip_executable) + wrapper("python", python_executable) + wrapper("pip", pip_executable) + test
 
-                    print(f">> Testing the library for cp-{cp_version}-{target}")
+                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
             if target == 'musllinux_1_2_x86_64':
 
-                image_name = f"musllinux-lvl3-cp{cp_version}-musllinux_1_2"
+                image_name = f"musllinux-lvl3-cp{py_version_nodot}-musllinux_1_2"
                 original_dist_target = "linux_x86_64"
                 new_dist_target = "musllinux_1_2_x86_64"
+                python_executable = '/python/bin/python3'
+                pip_executable = '/python/bin/pip3'
 
                 # build the library
                 if build != None:
 
-                    build_command = wrapper("python3", "python") + wrapper("pip3", "pip") + build + rename_dist(original_dist_target, new_dist_target)
+                    build_command = wrapper("python3", python_executable) + wrapper("pip3", pip_executable) + wrapper("python", python_executable) + wrapper("pip", pip_executable) + build + rename_dist(original_dist_target, new_dist_target)
 
-                    print(f">> Building the library for cp-{cp_version}-{target}")
+                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
                 # test the library
                 if test != None:
 
-                    test_command = install_dist(cp_version, new_dist_target) + wrapper("python3", "python") + wrapper("pip3", "pip") + test
+                    test_command = install_dist(py_version_nodot, new_dist_target) + wrapper("python3", python_executable) + wrapper("pip3", pip_executable) + wrapper("python", python_executable) + wrapper("pip", pip_executable) + test
 
-                    print(f">> Testing the library for cp-{cp_version}-{target}")
+                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
             if target == 'win_amd64':
 
-                image_name = f"win-macosx-pookie-lvl3-cp{cp_version}-win"
-                new_python_command = f"wine /python*/*/python*/python.exe"
-                new_pip_command = f"wine /python*/*/python*/python.exe -m pip"
+                image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-win"
+                python_executable = '/python/python.exe'
+                pip_executable = '/python/python.exe -m pip'
 
                 # build the library
                 if build != None:
 
-                    build_command = wrapper(new_python_command, "python3") + wrapper(new_python_command, "python") + wrapper(new_pip_command, "pip3") + wrapper(new_pip_command, "pip") + build
+                    build_command = wrapper("python3", python_executable) + wrapper("pip3", pip_executable) + wrapper("python", python_executable) + wrapper("pip", pip_executable) + build
 
-                    print(f">> Building the library for cp-{cp_version}-{target}")
+                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
             if target == 'macosx_11_0_x86_64':
 
-                image_name = f"win-macosx-pookie-lvl3-cp{cp_version}-macosx"
+                image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-macosx"
                 new_base_os = "darwin"
                 new_dist_target = "macosx_11_0_x86_64"
+                python_executable = '/python_linux/bin/python3'
+                pip_executable = '/python_linux/bin/pip3'
 
                 # build the library
                 if build != None:
 
-                    build_command = prepare_environment_macosx_11_0_x86_64(python_major_dot_minor_version) + wrapper("python3", "python") + wrapper("pip3", "pip") + build + fix_EXT_SUFFIX(cp_version, new_base_os, new_dist_target)
+                    build_command = wrapper("python3", python_executable) + wrapper("pip3", pip_executable) + wrapper("python", python_executable) + wrapper("pip", pip_executable) + prepare_environment_macosx_11_0_x86_64(python_major_dot_minor_version) + build + fix_EXT_SUFFIX(py_version_nodot, new_base_os, new_dist_target)
 
-                    print(f">> Building the library for cp-{cp_version}-{target}")
+                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
                 # test the library
                 if test != None:
 
-                    print(f">> Testing the library for cp-{cp_version}-{target}")
+                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
                     print("Not supported yet :(")
