@@ -1,7 +1,7 @@
 import argparse
 import os
 import subprocess
-from python_version_fetcher import find_latest_patch_versions
+from python_version_fetcher import get_latest_release_urls
 from docker_images_builder import build_docker_images
 from docker_images_runner import run_docker_images
 
@@ -33,35 +33,32 @@ def main():
         print(f"- {arg}: {getattr(args, arg)}")
 
     # Fetch python-versions
-    print(">> Fetching python versions from python.org")
-    required_files = []
-    for target in args.target:
-        # map target to required files
-        if target == 'manylinux_2_17_x86_64' or target == 'musllinux_1_2_x86_64' or target == 'macosx_11_0_x86_64':
-            required_files.append('tar_xz')
-        if target == 'win_amd64':
-            required_files.append('exe')
-        if target == 'macosx_11_0_x86_64':
-            required_files.append('pkg')
-
-    python_versions_dic = find_latest_patch_versions(3, args.python_version, required_files)
+    print(">> Fetching python versions")
+    python_versions_dic = get_latest_release_urls(args.python_version, args.target)
+    if not python_versions_dic:
+        print("No matching assets found in latest release.")
+        return
     print(">> Python versions fetched")
-    for python_version, urls_dic in python_versions_dic.items():
-        print(f"- {".".join(python_version.split(".")[:2])}:")
-        for url_type, url in urls_dic.items():
-            print(f"  - {url_type}: {url}")
+    for minor, target_data in python_versions_dic.items():
+        print(f"\nPython 3.{minor}.x:")
+        for target, info in target_data.items():
+            print(f"  Target: {target}")
+            print(f"    Filename: {info['filename']}")
+            print(f"    Release tag: {info['tag']}")
+            print(f"    Download URL: {info['url']}")
+        print()
 
     # log file
     logfile = open("pookie.log", "a")
 
     # build docker images
-    build_docker_images(args.target, logfile, python_versions_dic)
+    # build_docker_images(args.target, logfile, python_versions_dic)
 
     # workspace for docker in docker
     host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')
 
     # run build and test commands
-    run_docker_images(args.target, logfile, python_versions_dic, args.build, args.test, host_workspace_path)
+    # run_docker_images(args.target, logfile, python_versions_dic, args.build, args.test, host_workspace_path)
 
     # Delete __pycache__ folders
     subprocess.run([

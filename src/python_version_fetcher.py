@@ -1,175 +1,93 @@
 import requests
-from bs4 import BeautifulSoup
 import re
+from collections import defaultdict
 
-BASE_URL = "https://www.python.org/ftp/python/"
-WINPYTHON_BASE_URL = "https://sourceforge.net/projects/winpython/files/WinPython_{major}.{minor}/"
+TARGET_MAPPING = {
+    "manylinux_2_17_x86_64": "x86_64-unknown-linux-gnu",
+    "musllinux_1_2_x86_64": "x86_64-unknown-linux-musl",
+    "win_amd64": "x86_64-pc-windows-msvc",
+    "macosx_11_0_x86_64": "x86_64-apple-darwin"
+}
 
-def get_versions(major_version, minor_version):
+def get_latest_release_urls(minors, targets):
     """
-    Fetches all patch versions for a given major and minor version from the Python FTP server.
+    Fetches the latest release URLs for specified Python minor versions and targets.
 
     Parameters:
-    - major_version (str): Major version of Python (e.g., "3").
-    - minor_version (str): Minor version of Python (e.g., "10").
+    - minors: List of minor versions to fetch (e.g., ['10', '12']).
+    - targets: List of target platforms to fetch (e.g., ['manylinux_2_17_x86_64', 'win_amd64']).
 
     Returns:
-    - list: A sorted list of patch versions (e.g., ["3.10.0", "3.10.1", ...]).
+    - A dictionary with minor versions as keys and dictionaries of target URLs as values.
+      Each target dictionary contains the filename, download URL, and release tag.
     """
-    response = requests.get(BASE_URL)
-    soup = BeautifulSoup(response.text, "html.parser")
-    versions = []
-    for a in soup.find_all("a", href=True):
-        match = re.match(rf"{major_version}\.{minor_version}\.\d+/?", a['href'])
-        if match:
-            versions.append(match.group(0).strip('/'))
-    return sorted(versions, key=lambda s: list(map(int, s.split('.'))), reverse=True)
-
-def get_winpython_exe(version):
-    """
-    Fetches the latest WinPython executable URL for a given version.
-
-    Parameters:
-    - version (str): The version of Python (e.g., "3.10.0").
-
-    Returns:
-    - str: The URL of the latest WinPython executable.
-    """
-    major, minor = version.split('.')[:2]
-    url = WINPYTHON_BASE_URL.format(major=major, minor=minor)
+    url = "https://api.github.com/repos/astral-sh/python-build-standalone/releases/latest"
     response = requests.get(url)
     if response.status_code != 200:
-        return None
+        raise Exception(f"Failed to fetch latest release: {response.status_code}")
 
-    soup = BeautifulSoup(response.text, "html.parser")
-    subfolders = []
+    release = response.json()
+    tag = release["tag_name"]
+    assets = release.get("assets", [])
 
-    # Find all subfolders that match the version pattern
-    for a in soup.find_all("a", href=True):
-        folder_name = a.text.strip().strip('/')
-        if re.match(rf"{major}\.{minor}\.\d+\.\d+", folder_name):
-            subfolders.append(folder_name)
+    platforms_regex = '|'.join(re.escape(TARGET_MAPPING[t]) for t in targets if t in TARGET_MAPPING)
+    pattern = re.compile(
+        rf"^cpython-3\.(\d+)\.\d+\+\d+-({platforms_regex})-install_only\.tar\.gz$"
+    )
 
-    if not subfolders:
-        return None
+    platform_lookup = {v: k for k, v in TARGET_MAPPING.items() if k in targets}
+    temp_results = defaultdict(dict)
 
-    def extract_version_number(name):
-        return list(map(int, name.split('.')))
-
-    # Sort subfolders by version number in descending order
-    subfolders = sorted(subfolders, key=extract_version_number, reverse=True)
-
-    # Check each subfolder for the latest WinPython executable
-    for folder in subfolders:
-        folder_url = f"{url}{folder}/"
-        sub_response = requests.get(folder_url)
-        if sub_response.status_code != 200:
+    for asset in assets:
+        name = asset["name"]
+        match = pattern.match(name)
+        if not match:
             continue
 
-        # Parse the subfolder page
-        sub_soup = BeautifulSoup(sub_response.text, "html.parser")
-        for a in sub_soup.find_all("a", href=True):
-            filename = a.text.strip()
-            if re.match(rf"Winpython64-{folder}.*\.exe", filename):
-                return f"https://sourceforge.net/projects/winpython/files/WinPython_{major}.{minor}/{folder}/{filename}"
+        minor = match.group(1)
+        platform = match.group(2)
+        target = platform_lookup.get(platform)
 
-    return None
+        if target:
+            temp_results[minor][target] = {
+                "filename": name,
+                "url": asset["browser_download_url"],
+                "tag": tag
+            }
 
-def check_files(version, required_files):
-    """
-    Checks if the required files are available for a given version.
+    if minors is None:
+        sorted_minors = sorted(temp_results.keys(), key=lambda x: int(x))
+        selected_minors = sorted_minors[-4:]
+    else:
+        selected_minors = [str(m) for m in minors]
 
-    Parameters:
-    - version (str): The version of Python (e.g., "3.10.0").
-    - required_files (list): List of required files (e.g., ["tar_xz", "exe", "pkg"]).
+    results = {minor: temp_results[minor] for minor in selected_minors if minor in temp_results}
 
-    Returns:
-    - dict: A dictionary with the required files and their URLs if available, otherwise None.
-    """
-    url = f"{BASE_URL}{version}/"
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, "html.parser")
-    files = [a['href'] for a in soup.find_all("a", href=True)]
+    return results
 
-    file_map = {
-        "tar_xz": f"Python-{version}.tar.xz",
-        "pkg": f"python-{version}-macos11.pkg",
-    }
+def main():
+    minors = ['10', '12']
+    targets = [
+        "manylinux_2_17_x86_64",
+        "musllinux_1_2_x86_64",
+        "win_amd64",
+        "macosx_11_0_x86_64"
+    ]
 
-    result = {}
+    results = get_latest_release_urls(minors, targets)
 
-    # Check for the presence of required files
-    for key in required_files:
-        if key == "exe":
-            win_url = get_winpython_exe(version)
-            result[key] = win_url
-        elif key in file_map:
-            result[key] = url + file_map[key] if file_map[key] in files else None
+    if not results:
+        print("No matching assets found in latest release.")
+        return
 
-    return result if all(result.values()) else None
-
-def find_latest_patch_versions(major_version, minor_versions=None, required_files=None):
-    """
-    Finds the latest patch versions of Python for a given major version and optional minor versions.
-
-    Parameters:
-    - major_version (int): Major version of Python (e.g., 3).
-    - minor_versions (list): List of minor versions to check (e.g., [10, 11]).
-    - required_files (list): List of required files (e.g., ["tar_xz", "exe", "pkg"]).
-    - If minor_versions is None, it will fetch the last 4 available minor versions.
-    - If required_files is None, it will check for "tar_xz", "exe", and "pkg".
-
-    Returns:
-    - dict: A dictionary with the version as the key and a dictionary of required files and their URLs as the value.
-    """
-    if required_files is None:
-        required_files = ["tar_xz", "exe", "pkg"]
-
-    # Check if minor_versions is provided
-    if not minor_versions:
-        response = requests.get(BASE_URL)
-        soup = BeautifulSoup(response.text, "html.parser")
-        all_versions = set()
-
-        # Find all minor versions available for the major version
-        for a in soup.find_all("a", href=True):
-            match = re.match(rf"{major_version}\.(\d+)\.\d+/?", a['href'])
-            if match:
-                all_versions.add(int(match.group(1)))
-
-        # Sort and get the last 4 available minor versions
-        valid_minor_versions = []
-        for minor_version in sorted(all_versions, reverse=True):
-            versions = get_versions(major_version, minor_version)
-            for version in versions:
-                if check_files(version, required_files):
-                    valid_minor_versions.append(minor_version)
-                    break
-            if len(valid_minor_versions) == 4:
-                break
-
-        minor_versions = valid_minor_versions
-
-    # Check for each minor version
-    result = {}
-    for minor_version in minor_versions:
-        versions = get_versions(major_version, minor_version)
-        for version in versions:
-            files = check_files(version, required_files)
-            if files:
-                result[version] = files
-                break
-
-    return result
+    for minor, target_data in results.items():
+        print(f"\nPython 3.{minor}.x:")
+        for target, info in target_data.items():
+            print(f"  Target: {target}")
+            print(f"    Filename: {info['filename']}")
+            print(f"    Release tag: {info['tag']}")
+            print(f"    Download URL: {info['url']}")
+        print()
 
 if __name__ == "__main__":
-    # Example usage
-    major_version = 3
-    minor_versions = [11, 10]
-    required_files = ["tar_xz", "exe", "pkg"]
-
-    latest_versions = find_latest_patch_versions(major_version, minor_versions, required_files)
-    for version, files in latest_versions.items():
-        print(f"Version: {version}")
-        for file_type, url in files.items():
-            print(f"  {file_type}: {url}")
+    main()
