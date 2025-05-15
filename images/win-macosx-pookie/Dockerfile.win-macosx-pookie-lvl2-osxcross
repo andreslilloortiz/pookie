@@ -16,6 +16,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     patch \
     cpio \
+    zip \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
 
 # Download and install osxcross
