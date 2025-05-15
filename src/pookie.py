@@ -46,7 +46,7 @@ def main():
             print(f"    Filename: {info['filename']}")
             print(f"    Release tag: {info['tag']}")
             print(f"    Download URL: {info['url']}")
-        print()
+    print()
 
     # log file
     logfile = open("pookie.log", "a")
