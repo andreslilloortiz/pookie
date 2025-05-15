@@ -237,14 +237,14 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-macosx"
                 new_base_os = "darwin"
                 new_dist_target = "macosx_11_0_x86_64"
-                python_executable = '/python_linux/bin/python3'
-                pip_executable = '/python_linux/bin/pip3'
+                python_executable = 'python3'
+                pip_executable = 'pip3'
 
                 # build the library
                 if build != None:
 
                     build_command = \
-                        wrapper("python3", python_executable) + wrapper("pip3", pip_executable) + wrapper("python", python_executable) + wrapper("pip", pip_executable) + \
+                        wrapper("python", python_executable) + wrapper("pip", pip_executable) + \
                         prepare_environment_macosx_11_0_x86_64(python_major_dot_minor_version) + \
                         build + \
                         fix_EXT_SUFFIX(py_version_nodot, new_base_os, new_dist_target)
