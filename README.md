@@ -137,6 +137,12 @@ docker builder prune
 
 This will only remove dangling images (those that are untagged and not referenced by any container) and build cache not currently used by any active images or containers, helping to free up disk space without affecting running or tagged images.
 
+## License
+
+This project is open source and available under the terms of the  
+[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html).  
+See the [LICENSE](LICENSE) file for the full text.
+
 ---
 
 I hope this guide has been helpful!
