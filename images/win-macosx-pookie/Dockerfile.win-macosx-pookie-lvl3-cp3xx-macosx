@@ -20,16 +20,17 @@ FROM win-macosx-pookie-lvl2-osxcross:latest
 ARG PYTHON_URL
 
 # Download and install Python for cross-compilation
-RUN PYTHON_URL_TEMP=${PYTHON_URL} && \
-    PYTHON_VERSION=$(echo "$PYTHON_URL_TEMP" | grep -oP 'cpython-\K[0-9]+\.[0-9]+\.[0-9]+') && \
-    wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz && \
-    tar -xJf Python-${PYTHON_VERSION}.tar.xz && \
-    cd Python-${PYTHON_VERSION} && \
-    ./configure && \
-    make -j$(nproc) && \
-    make install && \
-    cd .. && \
-    rm -rf Python-${PYTHON_VERSION}*
+RUN bash -c '\
+    LINUX_URL="${PYTHON_URL/apple-darwin/unknown-linux-gnu}" && \
+    wget -O python_linux.tar.gz "$LINUX_URL" && \
+    tar -xvzf python_linux.tar.gz && \
+    mv python python_linux && \
+    rm -f python_linux.tar.gz \
+    '
+
+RUN cd /python_linux/lib/python* && \
+    sed -i 's#/install#/python_linux#g' _sysconfigdata__*.py && \
+    find . -name '__pycache__' -type d -exec rm -rf {} +
 
 # Download and install Python
 RUN wget -O python.tar.gz ${PYTHON_URL} && \

@@ -73,7 +73,9 @@ def prepare_environment_macosx_11_0_x86_64(python_major_dot_minor_version):
     - str: The command to prepare the environment.
     """
 
-    return f'''echo -e "#!/bin/bash\nexec o64-clang -fuse-ld=/osxcross/target/bin/x86_64-apple-darwin20.2-ld \"\\$@\"" > clang-wrapper.sh && chmod +x clang-wrapper.sh && \
+    return f'''export LDSHARED='$(python3 -c "import sysconfig; print(sysconfig.get_config_var(\\"LDSHARED\\").replace(\\"--exclude-libs,ALL\\",\\"\"))")' && \
+export LDSHARED="$(pwd)/clang-wrapper.sh -shared" && \
+    echo -e "#!/bin/bash\nexec o64-clang -fuse-ld=/osxcross/target/bin/x86_64-apple-darwin20.2-ld \"\\$@\"" > clang-wrapper.sh && chmod +x clang-wrapper.sh && \
         export CC=$(pwd)/clang-wrapper.sh && \
         export CXX=$CC && \
         export AR=x86_64-apple-darwin20.2-ar && \
@@ -254,14 +256,14 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-macosx"
                 new_base_os = "darwin"
                 new_dist_target = "macosx_11_0_x86_64"
-                python_executable = 'python3'
-                pip_executable = 'pip3'
+                python_executable = '/python_linux/bin/python3'
+                pip_executable = '/python_linux/bin/pip3'
 
                 # build the library
                 if build != None:
 
                     build_command = \
-                        wrapper("python", python_executable) + wrapper("pip", pip_executable) + \
+                        wrapper("python3", python_executable) + wrapper("pip3", pip_executable) + wrapper("python", python_executable) + wrapper("pip", pip_executable) + \
                         prepare_environment_macosx_11_0_x86_64(python_major_dot_minor_version) + \
                         build + \
                         fix_EXT_SUFFIX(py_version_nodot, new_base_os, new_dist_target)
