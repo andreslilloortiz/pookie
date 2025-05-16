@@ -22,15 +22,15 @@ ARG PYTHON_URL
 # Download and install Python for cross-compilation
 RUN bash -c '\
     LINUX_URL="${PYTHON_URL/apple-darwin/unknown-linux-gnu}" && \
-    wget -O python_linux.tar.gz "$LINUX_URL" && \
-    tar -xvzf python_linux.tar.gz && \
-    mv python python_linux && \
-    rm -f python_linux.tar.gz \
+    wget -O python_cross.tar.gz "$LINUX_URL" && \
+    tar -xvzf python_cross.tar.gz && \
+    mv python python_cross && \
+    rm -f python_cross.tar.gz \
     '
 
 # Fix the sysconfigdata file for cross-compilation
-RUN cd /python_linux/lib/python* && \
-    sed -i 's#/install#/python_linux#g' _sysconfigdata__*.py && \
+RUN cd /python_cross/lib/python* && \
+    sed -i 's#/install#/python_cross#g' _sysconfigdata__*.py && \
     find . -name '__pycache__' -type d -exec rm -rf {} +
 
 # Download and install Python

@@ -256,8 +256,8 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-macosx"
                 new_base_os = "darwin"
                 new_dist_target = "macosx_11_0_x86_64"
-                python_executable = '/python_linux/bin/python3'
-                pip_executable = '/python_linux/bin/pip3'
+                python_executable = '/python_cross/bin/python3'
+                pip_executable = '/python_cross/bin/pip3'
 
                 # build the library
                 if build != None:
