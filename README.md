@@ -139,8 +139,7 @@ This will only remove dangling images (those that are untagged and not reference
 
 ## License
 
-This project is open source and available under the terms of the  
-[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html).  
+This project is open source and available under the terms of the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html).  
 See the [LICENSE](LICENSE) file for the full text.
 
 ---
