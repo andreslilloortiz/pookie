@@ -23,3 +23,8 @@ ARG PYTHON_URL
 RUN wget -O python.tar.gz ${PYTHON_URL} && \
     tar -xvzf python.tar.gz && \
     rm -f python.tar.gz
+
+# Fix the sysconfigdata file
+RUN cd /python/lib/python* && \
+    sed -i 's#/install#/python#g' _sysconfigdata__*.py && \
+    find . -name '__pycache__' -type d -exec rm -rf {} +
