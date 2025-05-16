@@ -74,8 +74,8 @@ def prepare_environment_macosx_11_0_x86_64(python_major_dot_minor_version):
     """
 
     return f'''export LDSHARED='$(python3 -c "import sysconfig; print(sysconfig.get_config_var(\\"LDSHARED\\").replace(\\"--exclude-libs,ALL\\",\\"\"))")' && \
-export LDSHARED="$(pwd)/clang-wrapper.sh -shared" && \
-    echo -e "#!/bin/bash\nexec o64-clang -fuse-ld=/osxcross/target/bin/x86_64-apple-darwin20.2-ld \"\\$@\"" > clang-wrapper.sh && chmod +x clang-wrapper.sh && \
+        export LDSHARED="$(pwd)/clang-wrapper.sh -shared" && \
+        echo -e "#!/bin/bash\nexec o64-clang -fuse-ld=/osxcross/target/bin/x86_64-apple-darwin20.2-ld \"\\$@\"" > clang-wrapper.sh && chmod +x clang-wrapper.sh && \
         export CC=$(pwd)/clang-wrapper.sh && \
         export CXX=$CC && \
         export AR=x86_64-apple-darwin20.2-ar && \
