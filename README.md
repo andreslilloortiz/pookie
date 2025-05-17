@@ -85,14 +85,15 @@ Build the native Python library `mylib` and test it with `test.py` script for Py
     --python-version 11 10
 ```
 
-Build the native Python library `mylib` and test it with test files in the module `tests` (directory with `__init__.py`) for the last 4 available Python minor versions targeting both `manylinux_2_17_x86_64` and `musllinux_1_2_x86_64`.
+Build the native Python library `mylib` with `clang`and test it with test files in the module `tests` (directory with `__init__.py`) for the last 4 available Python minor versions targeting both `manylinux_2_17_x86_64` and `musllinux_1_2_x86_64`.
 
 ```bash
 ./pookie.sh \
     --workspace /path/to/mylib \
     --build "pip install setuptools build wheel && python3 -m build" \
     --test "python -m tests" \
-    --target manylinux_2_17_x86_64 musllinux_1_2_x86_64
+    --target manylinux_2_17_x86_64 musllinux_1_2_x86_64 \
+    --linux-compiler clang
 ```
 
 Build the native Python library `mylib` and test it with `pytest` on the test files on `tests` directory for `13` Python minor version targeting both `win_amd64`.
