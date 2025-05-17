@@ -19,6 +19,10 @@ FROM win-macosx-pookie-lvl2-osxcross:latest
 
 ARG PYTHON_URL
 
+# Set the Python and pip executables
+ARG PYTHON_EXECUTABLE="/python_cross/bin/python3"
+ARG PIP_EXECUTABLE="/python_cross/bin/pip3"
+
 # Download and install Python for cross-compilation
 RUN bash -c '\
     LINUX_URL="${PYTHON_URL/apple-darwin/unknown-linux-gnu}" && \
@@ -42,3 +46,14 @@ RUN wget -O python.tar.gz ${PYTHON_URL} && \
 RUN cd /python/lib/python* && \
     sed -i 's#/install#/python#g' _sysconfigdata__*.py && \
     find . -name '__pycache__' -type d -exec rm -rf {} +
+
+# Create wrapper scripts for Python and pip
+RUN mkdir -p /wrapper && \
+    printf "#!/bin/bash\n${PYTHON_EXECUTABLE} \"\$@\"" > /wrapper/python3 && \
+    printf "#!/bin/bash\n${PYTHON_EXECUTABLE} \"\$@\"" > /wrapper/python && \
+    printf "#!/bin/bash\n${PIP_EXECUTABLE} \"\$@\"" > /wrapper/pip3 && \
+    printf "#!/bin/bash\n${PIP_EXECUTABLE} \"\$@\"" > /wrapper/pip && \
+    chmod +x /wrapper/python3 /wrapper/python /wrapper/pip3 /wrapper/pip
+
+# Set the PATH to include the wrapper directory
+ENV PATH="/wrapper:${PATH}"

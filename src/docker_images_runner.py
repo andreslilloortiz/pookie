@@ -17,21 +17,6 @@
 
 import subprocess
 
-def wrapper(user_command, container_command):
-    """
-    Generate the command to create a wrapper for the specified command.
-    This is used to ensure that the correct command is used in the Docker container.
-    Place this command BEFORE the build command.
-
-    Parameters:
-    - container_command (str): The command to run inside the Docker container.
-    - user_command (str): The command that the user specifies.
-
-    Returns:
-    - str: The command to create the wrapper.
-    """
-    return f'''mkdir -p /wrapper && echo -e "#!/bin/bash\n{container_command} "\\$@"" > /wrapper/{user_command} && chmod +x /wrapper/{user_command} && export PATH="/wrapper:$PATH" && '''
-
 def rename_dist(original_dist_target, new_dist_target):
     """
     Generate the command to rename the built library files.
@@ -174,8 +159,6 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17"
                 original_dist_target = "linux_x86_64"
                 new_dist_target = "manylinux_2_17_x86_64.manylinux2014_x86_64"
-                python_executable = '/python/bin/python3'
-                pip_executable = '/python/bin/pip3'
                 CC = "gcc"
                 CXX = "g++"
 
@@ -183,7 +166,6 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 if build != None:
 
                     build_command = \
-                        wrapper("python3", python_executable) + wrapper("pip3", pip_executable) + wrapper("python", python_executable) + wrapper("pip", pip_executable) + \
                         prepare_environment_manylinux_2_17_x86_64_and_musllinux_1_2_x86_64(CC, CXX) + \
                         build + \
                         rename_dist(original_dist_target, new_dist_target)
@@ -195,7 +177,6 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 if test != None:
 
                     test_command = \
-                        wrapper("python3", python_executable) + wrapper("pip3", pip_executable) + wrapper("python", python_executable) + wrapper("pip", pip_executable) + \
                         install_dist(py_version_nodot, new_dist_target) + \
                         test
 
@@ -207,8 +188,6 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 image_name = f"musllinux-lvl3-cp{py_version_nodot}-musllinux_1_2"
                 original_dist_target = "linux_x86_64"
                 new_dist_target = "musllinux_1_2_x86_64"
-                python_executable = '/python/bin/python3'
-                pip_executable = '/python/bin/pip3'
                 CC = "gcc"
                 CXX = "g++"
 
@@ -216,7 +195,6 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 if build != None:
 
                     build_command = \
-                        wrapper("python3", python_executable) + wrapper("pip3", pip_executable) + wrapper("python", python_executable) + wrapper("pip", pip_executable) + \
                         prepare_environment_manylinux_2_17_x86_64_and_musllinux_1_2_x86_64(CC, CXX) + \
                         build + \
                         rename_dist(original_dist_target, new_dist_target)
@@ -228,7 +206,6 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 if test != None:
 
                     test_command = \
-                        wrapper("python3", python_executable) + wrapper("pip3", pip_executable) + wrapper("python", python_executable) + wrapper("pip", pip_executable) + \
                         install_dist(py_version_nodot, new_dist_target) + \
                         test
 
@@ -238,14 +215,11 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
             if target == 'win_amd64':
 
                 image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-win"
-                python_executable = 'wine /python/python.exe'
-                pip_executable = 'wine /python/python.exe -m pip'
 
                 # build the library
                 if build != None:
 
                     build_command = \
-                        wrapper("python3", python_executable) + wrapper("pip3", pip_executable) + wrapper("python", python_executable) + wrapper("pip", pip_executable) + \
                         build
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
@@ -256,14 +230,11 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-macosx"
                 new_base_os = "darwin"
                 new_dist_target = "macosx_11_0_x86_64"
-                python_executable = '/python_cross/bin/python3'
-                pip_executable = '/python_cross/bin/pip3'
 
                 # build the library
                 if build != None:
 
                     build_command = \
-                        wrapper("python3", python_executable) + wrapper("pip3", pip_executable) + wrapper("python", python_executable) + wrapper("pip", pip_executable) + \
                         prepare_environment_macosx_11_0_x86_64(python_major_dot_minor_version) + \
                         build + \
                         fix_EXT_SUFFIX(py_version_nodot, new_base_os, new_dist_target)
