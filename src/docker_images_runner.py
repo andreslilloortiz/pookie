@@ -134,7 +134,7 @@ def run_lvl3_image(image_name, command, host_workspace_path, logfile):
                 command
     ], stdout = logfile, stderr = logfile)
 
-def run_docker_images(targets, logfile, python_versions_dic, build, test, host_workspace_path):
+def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_compiler, host_workspace_path):
     """
     Run Docker images for building and testing the library.
 
@@ -159,8 +159,12 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17"
                 original_dist_target = "linux_x86_64"
                 new_dist_target = "manylinux_2_17_x86_64.manylinux2014_x86_64"
-                CC = "gcc"
-                CXX = "g++"
+                if linux_compiler == 'gcc':
+                    CC = "gcc"
+                    CXX = "g++"
+                else:
+                    CC = "clang"
+                    CXX = "clang++"
 
                 # build the library
                 if build != None:
@@ -188,8 +192,12 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, host_w
                 image_name = f"musllinux-lvl3-cp{py_version_nodot}-musllinux_1_2"
                 original_dist_target = "linux_x86_64"
                 new_dist_target = "musllinux_1_2_x86_64"
-                CC = "gcc"
-                CXX = "g++"
+                if linux_compiler == 'gcc':
+                    CC = "gcc"
+                    CXX = "g++"
+                else:
+                    CC = "clang"
+                    CXX = "clang++"
 
                 # build the library
                 if build != None:

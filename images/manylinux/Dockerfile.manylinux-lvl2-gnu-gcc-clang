@@ -20,4 +20,5 @@ FROM manylinux-lvl1-base:latest
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
+    clang \
     && rm -rf /var/lib/apt/lists/*

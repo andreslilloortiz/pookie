@@ -41,6 +41,11 @@ def main():
                             choices = ['manylinux_2_17_x86_64', 'musllinux_1_2_x86_64', 'win_amd64', 'macosx_11_0_x86_64'],
                             default = ['manylinux_2_17_x86_64', 'musllinux_1_2_x86_64', 'win_amd64', 'macosx_11_0_x86_64'],
                             help = 'Target platform(s) to build and test the library for (if not specified: all)')
+    parser.add_argument('--linux-compiler',
+                            type=str,
+                            choices=['gcc', 'clang'],
+                            default='gcc',
+                            help='Compiler to use for manylinux_2_17_x86_64 or musllinux_1_2_x86_64 targets (if not specified: gcc)')
 
     args = parser.parse_args()
 
@@ -75,7 +80,7 @@ def main():
     host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')
 
     # run build and test commands
-    run_docker_images(args.target, logfile, python_versions_dic, args.build, args.test, host_workspace_path)
+    run_docker_images(args.target, logfile, python_versions_dic, args.build, args.test, args.linux_compiler, host_workspace_path)
 
     # Delete __pycache__ folders
     subprocess.run([

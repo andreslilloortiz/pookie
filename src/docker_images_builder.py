@@ -103,7 +103,7 @@ def build_docker_images(targets, logfile, python_versions_dic):
             build_lvl1_or_lvl2_image(tree, image_name, logfile)
 
             # level 2
-            image_name = "manylinux-lvl2-gnu-gcc"
+            image_name = "manylinux-lvl2-gnu-gcc-clang"
             build_lvl1_or_lvl2_image(tree, image_name, logfile)
 
             # level 3
@@ -127,7 +127,7 @@ def build_docker_images(targets, logfile, python_versions_dic):
             build_lvl1_or_lvl2_image(tree, image_name, logfile)
 
             # level 2
-            image_name = "musllinux-lvl2-musl-gcc"
+            image_name = "musllinux-lvl2-musl-gcc-clang"
             build_lvl1_or_lvl2_image(tree, image_name, logfile)
 
             # level 3
