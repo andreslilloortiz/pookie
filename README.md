@@ -119,6 +119,30 @@ Below is a visual representation of the Docker layer graph used by pookie. This 
 
 This graph can help you understand how the images are built and how layers are shared across different targets.
 
+## Proyect Structure
+
+The repository is organized as follows:
+
+```
+pookie/
+├── images/                                    # Dockerfiles for building cross-platform environments
+│ ├── manylinux/                                   # Dockerfiles targeting manylinux-based builds
+│ ├── musllinux/                                   # Dockerfiles targeting musllinux-based builds
+│ └── win-macosx-pookie/                           # Dockerfiles for Windows and macOS cross-compilation
+│ ├── Docker_layer_graph.drawio                    # Editable Docker layer diagram
+│ └── Docker_layer_graph.png                       # Rendered Docker layer diagram
+├── src/                                       # Python scripts for building and running images
+│ ├── docker_images_builder.py                     # Python script for building Docker images following the layer graph
+│ ├── docker_images_runner.py                      # Python script for running build and test commands on Docker images
+│ ├── pookie.py                                    # Python script for managing the user arguments
+│ └── python_version_fetcher.py                    # Python script for fetching available Python versions
+├── pookie.sh                                  # Shell script for lunching pookie
+├── LICENSE                                    # Project license
+├── .gitignore                                 # Git ignore rules
+├── .gitattributes                             # Git attributes config
+└── README.md                                  # Project documentation
+```
+
 ## Developer Notes
 
 During development, if you're rebuilding images frequently (for example, when testing changes) Docker may retain old layers from previous builds. Even when images are overwritten, the old layers can remain in the cache and gradually consume a large amount of disk space.
