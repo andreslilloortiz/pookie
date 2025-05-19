@@ -171,7 +171,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
 
             if target == 'manylinux_2_17_x86_64':
 
-                image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17"
+                image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_x86_64"
                 original_dist_target = "linux_x86_64"
                 new_dist_target = "manylinux_2_17_x86_64.manylinux2014_x86_64"
                 if linux_compiler == 'gcc':
@@ -204,7 +204,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
 
             if target == 'musllinux_1_2_x86_64':
 
-                image_name = f"musllinux-lvl3-cp{py_version_nodot}-musllinux_1_2"
+                image_name = f"musllinux-lvl3-cp{py_version_nodot}-musllinux_1_2_x86_64"
                 original_dist_target = "linux_x86_64"
                 new_dist_target = "musllinux_1_2_x86_64"
                 if linux_compiler == 'gcc':
@@ -237,7 +237,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
 
             if target == 'win_amd64':
 
-                image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-win"
+                image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-win_amd64"
 
                 # build the library
                 if build != None:
@@ -250,7 +250,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
 
             if target == 'macosx_11_0_x86_64':
 
-                image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-macosx"
+                image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-macosx_11_0_x86_64"
                 new_base_os = "darwin"
                 new_dist_target = "macosx_11_0_x86_64"
 

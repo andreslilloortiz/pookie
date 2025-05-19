@@ -109,10 +109,10 @@ def build_docker_images(targets, logfile, python_versions_dic):
             # level 3
             for minor, target_data in python_versions_dic.items():
 
-                general_image_name = "manylinux-lvl3-cp3xx-manylinux_2_17"
+                general_image_name = "manylinux-lvl3-cp3xx-manylinux_2_17_x86_64"
 
                 py_version_nodot = '3' + minor
-                image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17"
+                image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_x86_64"
 
                 python_url = target_data[target]["url"]
 
@@ -133,10 +133,10 @@ def build_docker_images(targets, logfile, python_versions_dic):
             # level 3
             for minor, target_data in python_versions_dic.items():
 
-                general_image_name = "musllinux-lvl3-cp3xx-musllinux_1_2"
+                general_image_name = "musllinux-lvl3-cp3xx-musllinux_1_2_x86_64"
 
                 py_version_nodot = '3' + minor
-                image_name = f"musllinux-lvl3-cp{py_version_nodot}-musllinux_1_2"
+                image_name = f"musllinux-lvl3-cp{py_version_nodot}-musllinux_1_2_x86_64"
 
                 python_url = target_data[target]["url"]
 
@@ -156,10 +156,10 @@ def build_docker_images(targets, logfile, python_versions_dic):
             # level 3
             for minor, target_data in python_versions_dic.items():
 
-                general_image_name = "win-macosx-pookie-lvl3-cp3xx-win"
+                general_image_name = "win-macosx-pookie-lvl3-cp3xx-win_amd64"
 
                 py_version_nodot = '3' + minor
-                image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-win"
+                image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-win_amd64"
 
                 python_url = target_data[target]["url"]
 
@@ -179,10 +179,10 @@ def build_docker_images(targets, logfile, python_versions_dic):
             # level 3
             for minor, target_data in python_versions_dic.items():
 
-                general_image_name = "win-macosx-pookie-lvl3-cp3xx-macosx"
+                general_image_name = "win-macosx-pookie-lvl3-cp3xx-macosx_11_0_x86_64"
 
                 py_version_nodot = '3' + minor
-                image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-macosx"
+                image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-macosx_11_0_x86_64"
 
                 python_url = target_data[target]["url"]
 
