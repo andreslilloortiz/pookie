@@ -2,6 +2,7 @@ docker run --privileged -it --rm -v "/home/andres/Documentos/TFG/Ejemplos de PyP
 
 cp -r python/ python_cross
 rm -r python
+
 wget -O python.tar.gz https://github.com/astral-sh/python-build-standalone/releases/download/20250517/cpython-3.10.17+20250517-aarch64-unknown-linux-gnu-install_only.tar.gz
 tar -xvzf python.tar.gz
 rm -f python.tar.gz
@@ -18,5 +19,5 @@ cd workspace
 export CFLAGS="-I/python/include/python3.10" && export LDFLAGS="-L/python/lib"
 python -m build
 
-apt-get update && apt-get install qemu-user qemu-user-static
-qemu-aarch64-static /python/bin/python3
+apt-get update && apt-get install qemu-user qemu-user-static -y
+qemu-aarch64-static /python/bin/python3 # missing dependencies
