@@ -137,6 +137,7 @@ def run_lvl3_image(image_name, command, host_workspace_path, logfile):
     subprocess.run([
         'docker',
             'run',
+            '--privileged',
             '-it',
             '--rm',
             '-v',

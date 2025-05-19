@@ -1,4 +1,4 @@
-docker run -it --rm -v "/home/andres/Documentos/TFG/Ejemplos de PyPI/sum-1.0":/workspace manylinux-lvl3-cp310-manylinux_2_17_x86_64:latest
+docker run --privileged -it --rm -v "/home/andres/Documentos/TFG/Ejemplos de PyPI/sum-1.0":/workspace manylinux-lvl3-cp310-manylinux_2_17_x86_64:latest
 
 cp -r python/ python_cross
 rm -r python
@@ -9,7 +9,7 @@ rm -f python.tar.gz
 apt-get update && apt-get install gcc-aarch64-linux-gnu -y
 
 ./python_cross/bin/python3 -m pip install crossenv
-./python_cross/bin/python3 -m crossenv ./python/bin/python3 cross_aarch64
+./python_cross/bin/python3 -m crossenv /python/bin/python3 cross_aarch64
 source cross_aarch64/bin/activate
 python -m pip install setuptools wheel build
 
@@ -17,3 +17,6 @@ cd workspace
 
 export CFLAGS="-I/python/include/python3.10" && export LDFLAGS="-L/python/lib"
 python -m build
+
+apt-get update && apt-get install qemu-user qemu-user-static
+qemu-aarch64-static /python/bin/python3
