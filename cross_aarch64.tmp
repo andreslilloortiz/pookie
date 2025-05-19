@@ -1,4 +1,4 @@
-docker run -it --rm -v "/home/andres/Documentos/TFG/Ejemplos de PyPI/sum-1.0":/workspace manylinux-lvl3-cp310-manylinux_2_17:latest
+docker run -it --rm -v "/home/andres/Documentos/TFG/Ejemplos de PyPI/sum-1.0":/workspace manylinux-lvl3-cp310-manylinux_2_17_x86_64:latest
 
 cp -r python/ python_cross
 rm -r python
