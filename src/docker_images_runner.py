@@ -17,6 +17,21 @@
 
 import subprocess
 
+def wrapper(user_command, container_command):
+    """
+    Generate the command to create a wrapper for the specified command.
+    This is used to ensure that the correct command is used in the Docker container.
+    Place this command BEFORE the build command.
+
+    Parameters:
+    - container_command (str): The command to run inside the Docker container.
+    - user_command (str): The command that the user specifies.
+
+    Returns:
+    - str: The command to create the wrapper.
+    """
+    return f'''mkdir -p /wrapper && echo -e "#!/bin/bash\n{container_command} "\\$@"" > /wrapper/{user_command} && chmod +x /wrapper/{user_command} && export PATH="/wrapper:$PATH" && '''
+
 def rename_dist(original_dist_target, new_dist_target):
     """
     Generate the command to rename the built library files.
