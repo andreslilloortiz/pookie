@@ -203,6 +203,22 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                     print(f">> Testing the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
+            if target == 'manylinux_2_17_aarch64':
+
+                image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_aarch64"
+                original_dist_target = "linux_aarch64"
+                new_dist_target = "manylinux_2_17_aarch64.manylinux2014_aarch64"
+
+                # build the library
+                if build != None:
+
+                    build_command = \
+                        build + \
+                        rename_dist(original_dist_target, new_dist_target)
+
+                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
+                    run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
+
             if target == 'musllinux_1_2_x86_64':
 
                 image_name = f"musllinux-lvl3-cp{py_version_nodot}-musllinux_1_2_x86_64"
