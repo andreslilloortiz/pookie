@@ -118,6 +118,10 @@ def build_docker_images(targets, logfile, python_versions_dic):
 
                 build_lvl3_image(tree, general_image_name, image_name, python_url, logfile)
 
+        if target == 'manylinux_2_17_aarch64':
+            pass
+            #TODO: add support for aarch64
+
         if target == 'musllinux_1_2_x86_64':
             print(f">> Creating docker images for {target}")
             tree = "musllinux"
