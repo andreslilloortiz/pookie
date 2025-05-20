@@ -38,8 +38,8 @@ def main():
     parser.add_argument('--target',
                             type = str,
                             nargs = '+',
-                            choices = ['manylinux_2_17_x86_64', 'musllinux_1_2_x86_64', 'win_amd64', 'macosx_11_0_x86_64'],
-                            default = ['manylinux_2_17_x86_64', 'musllinux_1_2_x86_64', 'win_amd64', 'macosx_11_0_x86_64'],
+                            choices = ['manylinux_2_17_x86_64', 'manylinux_2_17_aarch64',  'musllinux_1_2_x86_64', 'win_amd64', 'macosx_11_0_x86_64'],
+                            default = ['manylinux_2_17_x86_64', 'manylinux_2_17_aarch64',  'musllinux_1_2_x86_64', 'win_amd64', 'macosx_11_0_x86_64'],
                             help = 'Target platform(s) to build and test the library for (if not specified: all)')
     parser.add_argument('--linux-compiler',
                             type=str,

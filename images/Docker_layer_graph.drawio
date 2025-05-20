@@ -8,7 +8,7 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-2" value="&lt;font&gt;manylinux-lvl1-base&lt;/font&gt;&lt;div&gt;&lt;font&gt;(ubuntu:18.04)&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;" parent="1" vertex="1">
-                    <mxGeometry x="97.5" y="70" width="95" height="60" as="geometry"/>
+                    <mxGeometry x="210" y="70" width="95" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="CWzqWhJCWG_4Mf81_h5I-6" target="CWzqWhJCWG_4Mf81_h5I-7" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -23,16 +23,16 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-11" value="&lt;font&gt;musllinux-lvl1-base&lt;br&gt;(alpine:3.14)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="328.25" y="70" width="101" height="60" as="geometry"/>
+                    <mxGeometry x="540.87" y="70" width="101" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="CWzqWhJCWG_4Mf81_h5I-12" target="CWzqWhJCWG_4Mf81_h5I-14" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-12" value="&lt;font&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;musllinux-lvl2-&lt;/span&gt;musl-gcc-clang&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="328.25" y="190" width="101.5" height="60" as="geometry"/>
+                    <mxGeometry x="540.87" y="190" width="101.5" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-14" value="&lt;div&gt;&lt;font&gt;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;musllinux&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;-&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;lvl3&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;-&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;cp3xx-musllinux_1_2_x86_64&lt;/span&gt;&lt;br&gt;(One for each Python version)&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="287.38" y="310" width="182.75" height="60" as="geometry"/>
+                    <mxGeometry x="500" y="310" width="182.75" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="CWzqWhJCWG_4Mf81_h5I-16" target="CWzqWhJCWG_4Mf81_h5I-17" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -44,28 +44,45 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-16" value="&lt;div&gt;&lt;font&gt;win-macosx-pookie-lvl1-base&lt;/font&gt;&lt;/div&gt;&lt;font&gt;(ubuntu:24.04)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="797.5" y="70" width="148" height="60" as="geometry"/>
+                    <mxGeometry x="1010.12" y="70" width="148" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-17" value="&lt;font&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;win-macosx-pookie-lvl2-&lt;/span&gt;pookie&lt;/font&gt;&lt;div&gt;&lt;font&gt;(manage the images)&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;" parent="1" vertex="1">
-                    <mxGeometry x="1030" y="190" width="140" height="60" as="geometry"/>
+                    <mxGeometry x="1242.62" y="190" width="140" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="CWzqWhJCWG_4Mf81_h5I-19" target="CWzqWhJCWG_4Mf81_h5I-23" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-19" value="win&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;-macosx-pookie-lvl2-msvc-mingw64&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="546" y="190" width="150" height="60" as="geometry"/>
+                    <mxGeometry x="758.62" y="190" width="150" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-23" value="&lt;div&gt;&lt;font&gt;&lt;span style=&quot;background-color: transparent; color: rgb(63, 63, 63);&quot;&gt;win-macosx-pookie&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;-&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;lvl3&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;-&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;cp3xx-win_amd64&lt;/span&gt;&lt;br&gt;(One for each Python version)&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="535.88" y="308.13" width="170.25" height="63.75" as="geometry"/>
+                    <mxGeometry x="748.5" y="308.13" width="170.25" height="63.75" as="geometry"/>
                 </mxCell>
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="CWzqWhJCWG_4Mf81_h5I-24" target="CWzqWhJCWG_4Mf81_h5I-29" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-24" value="&lt;font&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;win-macosx-pookie-lvl2-&lt;/span&gt;osxcross&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="797.5" y="190" width="149" height="60" as="geometry"/>
+                    <mxGeometry x="1010.12" y="190" width="149" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="CWzqWhJCWG_4Mf81_h5I-29" value="&lt;font&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;win-macosx-pookie&lt;/span&gt;-&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;lvl3&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;-&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;cp3xx-macosx_11_0_x86_64&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-family: monospace ; font-size: 0px&quot;&gt;%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22cp3xx-win_amd64%26lt%3Bbr%26gt%3B(One%20for%20each%20Python%20version)%22%20style%3D%22rounded%3D1%3BwhiteSpace%3Dwrap%3Bhtml%3D1%3B%22%20vertex%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%22649%22%20y%3D%22310%22%20width%3D%22202%22%20height%3D%2260%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3&lt;/span&gt;(One for each Python version)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="787.5" y="308.13" width="168" height="61.87" as="geometry"/>
+                    <mxGeometry x="1000.12" y="308.13" width="168" height="61.87" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="&lt;font&gt;manylinux-lvl2-gcc-aarch64-linux-gnu&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="300" y="190" width="130" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="CWzqWhJCWG_4Mf81_h5I-2" target="2">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="290" y="180" as="sourcePoint"/>
+                        <mxPoint x="193" y="240" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="4" value="&lt;font&gt;manylinux-&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;lvl3&lt;/span&gt;-&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;cp3xx-manylinux_2_17_aarch64&lt;/span&gt;&lt;/font&gt;&lt;div&gt;&lt;font&gt;(One for each Python version)&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="271.17" y="310" width="187.66" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" target="4" parent="1" source="2">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="363.45" y="250" as="sourcePoint"/>
+                    </mxGeometry>
                 </mxCell>
             </root>
         </mxGraphModel>
