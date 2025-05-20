@@ -52,7 +52,7 @@ Before getting started, ensure you have the following installed and configured o
 
 2. **Run Pookie**:
 
-    Execute the `pookie.sh` script to run pookie. Yo have to provide the `workspace` directory as an argument. This directory tipically is the directory of the project you want to build.
+    Execute the `pookie.sh` script to run pookie. Yo have to provide the `workspace` directory as an argument (use absolute path). This directory tipically is the directory of the project you want to build.
 
     ```bash
     ./pookie.sh --workspace /path/to/workspace --help

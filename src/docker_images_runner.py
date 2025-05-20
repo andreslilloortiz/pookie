@@ -219,6 +219,20 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
+                # test the library
+                if test != None:
+
+                    test_command = \
+                        wrapper('python3', '/usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 --library-path /usr/aarch64-linux-gnu/lib /python/bin/python3') + \
+                        wrapper('python', '/usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 --library-path /usr/aarch64-linux-gnu/lib /python/bin/python3') + \
+                        wrapper('pip3', '/usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 --library-path /usr/aarch64-linux-gnu/lib /python/bin/python3 -m pip') + \
+                        wrapper('pip', '/usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 --library-path /usr/aarch64-linux-gnu/lib /python/bin/python3 -m pip') + \
+                        install_dist(py_version_nodot, new_dist_target) + \
+                        test
+
+                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
+                    run_lvl3_image(image_name, test_command, host_workspace_path, None)
+
             if target == 'musllinux_1_2_x86_64':
 
                 image_name = f"musllinux-lvl3-cp{py_version_nodot}-musllinux_1_2_x86_64"
