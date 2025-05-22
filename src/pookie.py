@@ -52,7 +52,7 @@ def main():
                     type=str,
                     choices=['cross', 'emulate'],
                     default='cross',
-                    help='Compilation mode for linux aarch64 targets: "cross" for cross-compilation or "emulate" for QEMU-based emulation (if not specified: cross)')
+                    help='Compilation mode for manylinux_2_17_aarch64 targets: "cross" for cross-compilation or "emulate" for QEMU-based emulation (if not specified: cross)')
 
     args = parser.parse_args()
 
