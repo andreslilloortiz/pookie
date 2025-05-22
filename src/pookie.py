@@ -43,11 +43,16 @@ def main():
                             choices = targets,
                             default = targets,
                             help = 'Target platform(s) to build and test the library for (if not specified: all)')
-    parser.add_argument('--linux-compiler',
+    parser.add_argument('--linux-x86_64-compiler',
                             type=str,
                             choices=['gcc', 'clang'],
                             default='gcc',
                             help='Compiler to use for manylinux_2_17_x86_64 or musllinux_1_2_x86_64 targets (if not specified: gcc)')
+    parser.add_argument('--linux-aarch64-mode',
+                    type=str,
+                    choices=['cross', 'emulate'],
+                    default='cross',
+                    help='Compilation mode for linux aarch64 targets: "cross" for cross-compilation or "emulate" for QEMU-based emulation (if not specified: cross)')
 
     args = parser.parse_args()
 
@@ -82,7 +87,7 @@ def main():
     host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')
 
     # run build and test commands
-    run_docker_images(args.target, logfile, python_versions_dic, args.build, args.test, args.linux_compiler, host_workspace_path)
+    run_docker_images(args.target, logfile, python_versions_dic, args.build, args.test, args.linux_x86_64_compiler, args.linux_aarch64_mode, host_workspace_path)
 
     # Delete __pycache__ folders
     subprocess.run([

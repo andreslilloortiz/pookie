@@ -71,7 +71,8 @@ Before getting started, ensure you have the following installed and configured o
 | `--test TEST`                                                                                          | Python test bash command                                                    |
 | `--python-version PYTHON_VERSION [PYTHON_VERSION ...]`                                                 | Minor Python version(s) to compile for (if not specified: last 4 available) |
 | `--target {manylinux_2_17_x86_64,manylinux_2_17_aarch64,musllinux_1_2_x86_64,win_amd64,macosx_11_0_x86_64} [{manylinux_2_17_x86_64,manylinux_2_17_aarch64,musllinux_1_2_x86_64,win_amd64,macosx_11_0_x86_64} ...]` | Target platform(s) to build and test the library for (if not specified: all) |
-| `--linux-compiler {gcc,clang}`                                                                         | Compiler to use for manylinux_2_17_x86_64 or musllinux_1_2_x86_64 targets (if not specified: gcc) |
+| `--linux-x86_64-compiler {gcc,clang}`                                                                         | Compiler to use for manylinux_2_17_x86_64 or musllinux_1_2_x86_64 targets (if not specified: gcc) |
+| `--linux-aarch64-mode {cross,emulate}`                                                                       | Compilation mode for linux aarch64 targets: "cross" for cross-compilation or "emulate" for QEMU-based emulation (if not specified: cross) |
 
 ## Examples
 
@@ -93,7 +94,7 @@ Build the native Python library `mylib` with `clang`and test it with test files 
     --build "pip install setuptools build wheel && python3 -m build" \
     --test "python -m tests" \
     --target manylinux_2_17_x86_64 musllinux_1_2_x86_64 \
-    --linux-compiler clang
+    --linux-x86_64-compiler clang
 ```
 
 Build the native Python library `mylib` and test it with `pytest` on the test files on `tests` directory for `13` Python minor version targeting `win_amd64`.

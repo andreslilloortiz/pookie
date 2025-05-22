@@ -20,3 +20,5 @@ FROM manylinux-lvl1-base:latest
 RUN apt-get update && apt-get install -y \
     gcc-aarch64-linux-gnu \
     && rm -rf /var/lib/apt/lists/*
+
+RUN ln -s /usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 /lib/ld-linux-aarch64.so.1

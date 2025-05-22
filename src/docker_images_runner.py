@@ -150,7 +150,7 @@ def run_lvl3_image(image_name, command, host_workspace_path, logfile):
                 command
     ], stdout = logfile, stderr = logfile)
 
-def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_compiler, host_workspace_path):
+def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_x86_64_compiler, linux_aarch64_mode, host_workspace_path):
     """
     Run Docker images for building and testing the library.
 
@@ -175,7 +175,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                 image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_x86_64"
                 original_dist_target = "linux_x86_64"
                 new_dist_target = "manylinux_2_17_x86_64.manylinux2014_x86_64"
-                if linux_compiler == 'gcc':
+                if linux_x86_64_compiler == 'gcc':
                     CC = "gcc"
                     CXX = "g++"
                 else:
@@ -209,12 +209,24 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                 original_dist_target = "linux_aarch64"
                 new_dist_target = "manylinux_2_17_aarch64.manylinux2014_aarch64"
 
+                python_aarch64 = "LD_LIBRARY_PATH=/usr/aarch64-linux-gnu/lib /usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 --library-path /usr/aarch64-linux-gnu/lib /python/bin/python3"
+                pip_aarch64 = "LD_LIBRARY_PATH=/usr/aarch64-linux-gnu/lib /usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 --library-path /usr/aarch64-linux-gnu/lib /python/bin/python3 -m pip"
+
                 # build the library
                 if build != None:
 
-                    build_command = \
-                        build + \
-                        rename_dist(original_dist_target, new_dist_target)
+                    if linux_aarch64_mode == 'cross':
+                        build_command = \
+                            build + \
+                            rename_dist(original_dist_target, new_dist_target)
+                    else:
+                        build_command = \
+                            wrapper('python3', python_aarch64) + \
+                            wrapper('python', python_aarch64) + \
+                            wrapper('pip3', pip_aarch64) + \
+                            wrapper('pip', pip_aarch64) + \
+                            build + \
+                            rename_dist(original_dist_target, new_dist_target)
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
@@ -223,10 +235,10 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                 if test != None:
 
                     test_command = \
-                        wrapper('python3', '/usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 --library-path /usr/aarch64-linux-gnu/lib /python/bin/python3') + \
-                        wrapper('python', '/usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 --library-path /usr/aarch64-linux-gnu/lib /python/bin/python3') + \
-                        wrapper('pip3', '/usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 --library-path /usr/aarch64-linux-gnu/lib /python/bin/python3 -m pip') + \
-                        wrapper('pip', '/usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 --library-path /usr/aarch64-linux-gnu/lib /python/bin/python3 -m pip') + \
+                        wrapper('python3', python_aarch64) + \
+                        wrapper('python', python_aarch64) + \
+                        wrapper('pip3', pip_aarch64) + \
+                        wrapper('pip', pip_aarch64) + \
                         install_dist(py_version_nodot, new_dist_target) + \
                         test
 
@@ -238,7 +250,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                 image_name = f"musllinux-lvl3-cp{py_version_nodot}-musllinux_1_2_x86_64"
                 original_dist_target = "linux_x86_64"
                 new_dist_target = "musllinux_1_2_x86_64"
-                if linux_compiler == 'gcc':
+                if linux_x86_64_compiler == 'gcc':
                     CC = "gcc"
                     CXX = "g++"
                 else:
