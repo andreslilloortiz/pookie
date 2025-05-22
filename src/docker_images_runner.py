@@ -266,6 +266,36 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                     print(f">> Testing the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
+            if target == 'musllinux_1_2_aarch64':
+
+                image_name = f"musllinux-lvl3-cp{py_version_nodot}-musllinux_1_2_aarch64"
+                original_dist_target = "linux_aarch64"
+                new_dist_target = "musllinux_1_2_aarch64"
+
+                # build the library
+                if build != None:
+
+                    build_command = \
+                        build + \
+                        rename_dist(original_dist_target, new_dist_target)
+
+                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
+                    run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
+
+                # test the library
+                if test != None:
+
+                    test_command = \
+                        wrapper('python3', '/aarch64-linux-musl-cross/aarch64-linux-musl/lib/ld-musl-aarch64.so.1 --library-path /aarch64-linux-musl-cross/aarch64-linux-musl/lib /python/bin/python3') + \
+                        wrapper('python', '/aarch64-linux-musl-cross/aarch64-linux-musl/lib/ld-musl-aarch64.so.1 --library-path /aarch64-linux-musl-cross/aarch64-linux-musl/lib /python/bin/python3') + \
+                        wrapper('pip3', '/aarch64-linux-musl-cross/aarch64-linux-musl/lib/ld-musl-aarch64.so.1 --library-path /aarch64-linux-musl-cross/aarch64-linux-musl/lib /python/bin/python3 -m pip') + \
+                        wrapper('pip', '/aarch64-linux-musl-cross/aarch64-linux-musl/lib/ld-musl-aarch64.so.1 --library-path /aarch64-linux-musl-cross/aarch64-linux-musl/lib /python/bin/python3 -m pip') + \
+                        install_dist(py_version_nodot, new_dist_target) + \
+                        test
+
+                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
+                    run_lvl3_image(image_name, test_command, host_workspace_path, None)
+
             if target == 'win_amd64':
 
                 image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-win_amd64"

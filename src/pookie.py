@@ -25,6 +25,8 @@ from docker_images_runner import run_docker_images
 def main():
     parser = argparse.ArgumentParser(description='Tool for Automating the Build and Testing Process of Native Python Libraries Using Cross-Compilation and Emulation Technologies')
 
+    targets = ['manylinux_2_17_x86_64', 'manylinux_2_17_aarch64',  'musllinux_1_2_x86_64', 'musllinux_1_2_aarch64', 'win_amd64', 'macosx_11_0_x86_64']
+
     parser.add_argument('--build',
                             type = str,
                             help = 'Python build bash command')
@@ -38,8 +40,8 @@ def main():
     parser.add_argument('--target',
                             type = str,
                             nargs = '+',
-                            choices = ['manylinux_2_17_x86_64', 'manylinux_2_17_aarch64',  'musllinux_1_2_x86_64', 'win_amd64', 'macosx_11_0_x86_64'],
-                            default = ['manylinux_2_17_x86_64', 'manylinux_2_17_aarch64',  'musllinux_1_2_x86_64', 'win_amd64', 'macosx_11_0_x86_64'],
+                            choices = targets,
+                            default = targets,
                             help = 'Target platform(s) to build and test the library for (if not specified: all)')
     parser.add_argument('--linux-compiler',
                             type=str,

@@ -23,6 +23,7 @@ TARGET_MAPPING = {
     "manylinux_2_17_x86_64": "x86_64-unknown-linux-gnu",
     "manylinux_2_17_aarch64": "aarch64-unknown-linux-gnu",
     "musllinux_1_2_x86_64": "x86_64-unknown-linux-musl",
+    "musllinux_1_2_aarch64": "aarch64-unknown-linux-gnu", # Note: This should be "aarch64-unknown-linux-musl" but its not available
     "win_amd64": "x86_64-pc-windows-msvc",
     "macosx_11_0_x86_64": "x86_64-apple-darwin"
 }
@@ -89,6 +90,7 @@ def main():
         "manylinux_2_17_x86_64",
         "manylinux_2_17_aarch64",
         "musllinux_1_2_x86_64",
+        "musllinux_1_2_aarch64",
         "win_amd64",
         "macosx_11_0_x86_64"
     ]
