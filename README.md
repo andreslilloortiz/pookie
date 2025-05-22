@@ -70,7 +70,7 @@ Before getting started, ensure you have the following installed and configured o
 | `--build BUILD`                                                                                        | Python build bash command                                                   |
 | `--test TEST`                                                                                          | Python test bash command                                                    |
 | `--python-version PYTHON_VERSION [PYTHON_VERSION ...]`                                                 | Minor Python version(s) to compile for (if not specified: last 4 available) |
-| `--target {manylinux_2_17_x86_64,manylinux_2_17_aarch64,musllinux_1_2_x86_64,win_amd64,macosx_11_0_x86_64} [{manylinux_2_17_x86_64,manylinux_2_17_aarch64,musllinux_1_2_x86_64,win_amd64,macosx_11_0_x86_64} ...]` | Target platform(s) to build and test the library for (if not specified: all) |
+| `--target {manylinux_2_17_x86_64,manylinux_2_17_aarch64,musllinux_1_2_x86_64,musllinux_1_2_aarch64,win_amd64,macosx_11_0_x86_64} [{manylinux_2_17_x86_64,manylinux_2_17_aarch64,musllinux_1_2_x86_64,musllinux_1_2_aarch64,win_amd64,macosx_11_0_x86_64} ...]` | Target platform(s) to build and test the library for (if not specified: all) |
 | `--linux-x86_64-compiler {gcc,clang}`                                                                         | Compiler to use for manylinux_2_17_x86_64 or musllinux_1_2_x86_64 targets (if not specified: gcc) |
 | `--linux-aarch64-mode {cross,emulate}`                                                                       | Compilation mode for manylinux_2_17_aarch64 targets: "cross" for cross-compilation or "emulate" for QEMU-based emulation (if not specified: cross) |
 
