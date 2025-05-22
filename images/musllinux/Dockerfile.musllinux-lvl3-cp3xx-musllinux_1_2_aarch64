@@ -24,7 +24,7 @@ ARG PYTHON_EXECUTABLE="source /cross_aarch64/bin/activate && python3"
 ARG PIP_EXECUTABLE="source /cross_aarch64/bin/activate && python3 -m pip"
 
 # Download and install Python for cross-compilation
-# Should be only aarch64/x86_64
+# Should be only aarch64/x86_64 but "aarch64-unknown-linux-musl" is not available in python fetcher
 RUN bash -c '\
     LINUX_URL="${PYTHON_URL/aarch64-unknown-linux-gnu/x86_64-unknown-linux-musl}" && \
     wget -O python_cross.tar.gz "$LINUX_URL" && \

@@ -58,7 +58,7 @@ def install_dist(cp_version, dist_target):
     Returns:
     - str: The command to install the built library.
     """
-    return f'''python3 -m pip install dist/*-cp{cp_version}-cp{cp_version}*-{dist_target}.whl >> /dev/null 2>> /dev/null && '''
+    return f'''python3 -m pip install dist/*-cp{cp_version}-cp{cp_version}*-{dist_target}.whl && '''
 
 def prepare_environment_macosx_11_0_x86_64(python_major_dot_minor_version):
     """
@@ -281,20 +281,6 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
-
-                # test the library
-                if test != None:
-
-                    test_command = \
-                        wrapper('python3', '/aarch64-linux-musl-cross/aarch64-linux-musl/lib/ld-musl-aarch64.so.1 --library-path /aarch64-linux-musl-cross/aarch64-linux-musl/lib /python/bin/python3') + \
-                        wrapper('python', '/aarch64-linux-musl-cross/aarch64-linux-musl/lib/ld-musl-aarch64.so.1 --library-path /aarch64-linux-musl-cross/aarch64-linux-musl/lib /python/bin/python3') + \
-                        wrapper('pip3', '/aarch64-linux-musl-cross/aarch64-linux-musl/lib/ld-musl-aarch64.so.1 --library-path /aarch64-linux-musl-cross/aarch64-linux-musl/lib /python/bin/python3 -m pip') + \
-                        wrapper('pip', '/aarch64-linux-musl-cross/aarch64-linux-musl/lib/ld-musl-aarch64.so.1 --library-path /aarch64-linux-musl-cross/aarch64-linux-musl/lib /python/bin/python3 -m pip') + \
-                        install_dist(py_version_nodot, new_dist_target) + \
-                        test
-
-                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
-                    run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
             if target == 'win_amd64':
 
