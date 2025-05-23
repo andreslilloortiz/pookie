@@ -114,11 +114,9 @@ Build artifacts will be placed inside the `dist` directory.
 
 ## Docker Layer Graph
 
-Below is a visual representation of the Docker layer graph used by pookie. This graph illustrates the structure and relationships between the layers of the Docker images.
+Below is a visual representation of the Docker layer graph used by pookie. This graph illustrates the structure and relationships between the layers of the Docker images. This graph can help you understand how the images are built and how layers are shared across different targets.
 
 ![Docker Layer Graph](./images/Docker_layer_graph.png)
-
-This graph can help you understand how the images are built and how layers are shared across different targets.
 
 ## Project Structure
 
