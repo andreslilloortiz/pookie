@@ -60,9 +60,9 @@ Before getting started, ensure you have the following installed and configured o
 
 ## Running pookie: Command Line Options
 
-> **Note:** Searching for Python versions on python.org and creating Docker images can take some time. It is recommended to first run pookie without the `--build` and `--test` options to generate the required images for the specified Python versions and targets. Once the images are created, you can run the `build` and `test` commands as needed, which will execute much faster.
+> **Note:** Searching for Python build standalone and creating Docker images can take some time. It is recommended to first run pookie without the `--build` and `--test` options to generate the required images for the specified Python versions and targets. Once the images are created, you can run the `build` and `test` commands as needed, which will execute much faster.
 
-> **Note:** In `--build` and `--test` bash commands you can use python or python3, pip or pip3.
+> **Note:** The environments provided by the tool only come with Python and pip pre-installed. In `--build` and `--test` bash commands you can use python or python3, pip or pip3. If you want to use any additional packages (for example, setuptools, wheel, build, pytest, poetry, etc.), you need to specify their installation using pip within the `--build` or `--test` command. Additionally, it is recommended to run these modules using `python -m <module>` rather than just calling the module name directly.
 
 | Argument                                                                                               | Description                                                                 |
 |--------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
