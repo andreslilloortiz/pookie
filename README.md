@@ -120,7 +120,7 @@ Below is a visual representation of the Docker layer graph used by pookie. This 
 
 This graph can help you understand how the images are built and how layers are shared across different targets.
 
-## Proyect Structure
+## Project Structure
 
 The repository is organized as follows:
 
