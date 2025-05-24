@@ -50,7 +50,7 @@ Before getting started, ensure you have the following installed and configured o
    chmod +x pookie.sh
    ```
 
-2. **Run Pookie**:
+2. **Run pookie**:
 
     Execute the `pookie.sh` script to run pookie. Yo have to provide the `workspace` directory as an argument (use absolute path). This directory tipically is the directory of the project you want to build.
 
@@ -64,16 +64,16 @@ Before getting started, ensure you have the following installed and configured o
 
 > **Note:** The environments provided by the tool only come with Python and pip pre-installed. In `--build` and `--test` bash commands you can use python or python3, pip or pip3. If you want to use any additional packages (for example, setuptools, wheel, build, pytest, poetry, etc.), you need to specify their installation using pip within the `--build` or `--test` command. Additionally, it is recommended to run these modules using `python -m <module>` rather than just calling the module name directly.
 
-| Argument                                                                                               | Description                                                                 |
-|--------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
-| `-h, --help`                                                                                           | Show this help message and exit                                             |
-| `--clean`                                                                                              | Remove all build artifacts and logs and end the script execution            |
-| `--build BUILD`                                                                                        | Python build bash command                                                   |
-| `--test TEST`                                                                                          | Python test bash command                                                    |
-| `--python-version PYTHON_VERSION [PYTHON_VERSION ...]`                                                 | Minor Python version(s) to compile for (if not specified: last 4 available) |
-| `--target {manylinux_2_17_x86_64,manylinux_2_17_aarch64,musllinux_1_2_x86_64,musllinux_1_2_aarch64,win_amd64,macosx_11_0_x86_64} [{manylinux_2_17_x86_64,manylinux_2_17_aarch64,musllinux_1_2_x86_64,musllinux_1_2_aarch64,win_amd64,macosx_11_0_x86_64} ...]` | Target platform(s) to build and test the library for (if not specified: all) |
-| `--linux-x86_64-compiler {gcc,clang}`                                                                         | Compiler to use for manylinux_2_17_x86_64 or musllinux_1_2_x86_64 targets (if not specified: gcc) |
-| `--linux-aarch64-mode {cross,emulate}`                                                                       | Compilation mode for manylinux_2_17_aarch64 targets: "cross" for cross-compilation or "emulate" for QEMU-based emulation (if not specified: cross) |
+| Argument | Description |
+| - | - |
+| `-h, --help` | Show this help message and exit |
+| `--clean` | Remove all build artifacts and end the script execution |
+| `--build BUILD` | Python build bash command |
+| `--test TEST` | Python test bash command |
+| `--python-version PYTHON_VERSION [PYTHON_VERSION ...]` | Minor Python version(s) to compile for (default: last 4 available) |
+| `--target {manylinux_2_17_x86_64,manylinux_2_17_aarch64,musllinux_1_2_x86_64,musllinux_1_2_aarch64,win_amd64,macosx_11_0_x86_64} [{manylinux_2_17_x86_64,manylinux_2_17_aarch64,musllinux_1_2_x86_64,musllinux_1_2_aarch64,win_amd64,macosx_11_0_x86_64} ...]` | Target platform(s) to build and test the library for (default: all) |
+| `--linux-x86_64-compiler {gcc,clang}` | Compiler to use for manylinux_2_17_x86_64 or musllinux_1_2_x86_64 targets (default: gcc) |
+| `--linux-aarch64-mode {cross,emulate}` | Compilation mode for manylinux_2_17_aarch64 targets: "cross" for cross-compilation or "emulate" for QEMU-based emulation (default: cross) |
 
 ## Examples
 
@@ -113,6 +113,28 @@ Build the native Python library `mylib` and test it with `pytest` on the test fi
 
 Build artifacts will be placed inside the `dist` directory.
 
+## Test pookie
+To test the functionality of pookie, you can run the provided test script `test_pookie.sh`. This script will execute a series of tests to ensure that pookie is functioning correctly and that the Docker images are built and run as expected.
+
+1. **Grant Execution Permissions**:
+
+   Ensure the `test_pookie.sh` script has execution permissions. Run the following command:
+
+   ```bash
+   chmod +x test_pookie.sh
+   ```
+
+2. ** Run the test script**:
+
+   Execute the `test_pookie.sh` script to run the tests.
+
+   ```bash
+   ./test_pookie.sh \
+        --workspace /path/to/workspace \
+        --build <build_command> \
+        --test <test_command> \
+   ```
+
 ## Docker Layer Graph
 
 Below is a visual representation of the Docker layer graph used by pookie. This graph illustrates the structure and relationships between the layers of the Docker images. This graph can help you understand how the images are built and how layers are shared across different targets.
@@ -137,6 +159,7 @@ pookie/
 │ ├── pookie.py                                    # Python script for managing the user arguments
 │ └── python_version_fetcher.py                    # Python script for fetching available Python versions
 ├── pookie.sh                                  # Shell script for lunching pookie
+├── test_pookie.sh                             # Shell script for testing pookie functionality
 ├── LICENSE                                    # Project license
 ├── .gitignore                                 # Git ignore rules
 ├── .gitattributes                             # Git attributes config

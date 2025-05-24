@@ -31,7 +31,7 @@ def main():
 
     parser.add_argument('--clean',
                             action='store_true',
-                            help='Remove all build artifacts and logs and end the script execution')
+                            help='Remove all build artifacts and end the script execution')
     parser.add_argument('--build',
                             type = str,
                             help = 'Python build bash command')
@@ -41,23 +41,23 @@ def main():
     parser.add_argument('--python-version',
                             type = str,
                             nargs = '+',
-                            help = 'Minor Python version(s) to compile for (if not specified: last 4 available)')
+                            help = 'Minor Python version(s) to compile for (default: last 4 available)')
     parser.add_argument('--target',
                             type = str,
                             nargs = '+',
                             choices = targets,
                             default = targets,
-                            help = 'Target platform(s) to build and test the library for (if not specified: all)')
+                            help = 'Target platform(s) to build and test the library for (default: all)')
     parser.add_argument('--linux-x86_64-compiler',
                             type=str,
                             choices=['gcc', 'clang'],
                             default='gcc',
-                            help='Compiler to use for manylinux_2_17_x86_64 or musllinux_1_2_x86_64 targets (if not specified: gcc)')
+                            help='Compiler to use for manylinux_2_17_x86_64 or musllinux_1_2_x86_64 targets (default: gcc)')
     parser.add_argument('--linux-aarch64-mode',
                     type=str,
                     choices=['cross', 'emulate'],
                     default='cross',
-                    help='Compilation mode for manylinux_2_17_aarch64 targets: "cross" for cross-compilation or "emulate" for QEMU-based emulation (if not specified: cross)')
+                    help='Compilation mode for manylinux_2_17_aarch64 targets: "cross" for cross-compilation or "emulate" for QEMU-based emulation (default: cross)')
 
     args = parser.parse_args()
 
@@ -73,7 +73,6 @@ def main():
             'rm',
                 '-rf',
                 '__pycache__',
-                'pookie.log',
                 'dist',
                 'build'
         ]
