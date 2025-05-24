@@ -110,7 +110,7 @@ eval $CLEAN >> "$WORKSPACE/pookie.log" 2>&1
 eval $CMD2 >> "$WORKSPACE/pookie.log" 2>&1
 
 awk '
-  />> Testing the library/ {show=1; next}
+  />> Testing the library/ {print $0; show=1; next}
   /^>> / {show=0}
   show {print}
 ' "$WORKSPACE/pookie.log"

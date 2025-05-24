@@ -22,6 +22,10 @@ from collections import defaultdict
 TARGET_MAPPING = {
     "manylinux_2_17_x86_64": "x86_64-unknown-linux-gnu",
     "manylinux_2_17_aarch64": "aarch64-unknown-linux-gnu",
+    "manylinux_2_17_armv7": "armv7-unknown-linux-gnueabihf",
+    "manylinux_2_17_ppc64le": "ppc64le-unknown-linux-gnu",
+    "manylinux_2_17_riscv64": "riscv64-unknown-linux-gnu",
+    "manylinux_2_17_s390x": "s390x-unknown-linux-gnu",
     "musllinux_1_2_x86_64": "x86_64-unknown-linux-musl",
     "musllinux_1_2_aarch64": "aarch64-unknown-linux-musl", # Not available in the latest release
     "win_amd64": "x86_64-pc-windows-msvc",
@@ -90,6 +94,10 @@ def main():
     targets = [
         "manylinux_2_17_x86_64",
         "manylinux_2_17_aarch64",
+        "manylinux_2_17_armv7",
+        "manylinux_2_17_ppc64le",
+        "manylinux_2_17_riscv64",
+        "manylinux_2_17_s390x",
         "musllinux_1_2_x86_64",
         "musllinux_1_2_aarch64",
         "win_amd64",
@@ -111,8 +119,6 @@ def main():
             print(f"    Release tag: {info['tag']}")
             print(f"    Download URL: {info['url']}")
     print()
-
-    print(results)
 
 if __name__ == "__main__":
     main()
