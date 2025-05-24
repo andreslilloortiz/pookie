@@ -67,6 +67,7 @@ Before getting started, ensure you have the following installed and configured o
 | Argument                                                                                               | Description                                                                 |
 |--------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
 | `-h, --help`                                                                                           | Show this help message and exit                                             |
+| `--clean`                                                                                              | Remove all build artifacts and logs and end the script execution            |
 | `--build BUILD`                                                                                        | Python build bash command                                                   |
 | `--test TEST`                                                                                          | Python test bash command                                                    |
 | `--python-version PYTHON_VERSION [PYTHON_VERSION ...]`                                                 | Minor Python version(s) to compile for (if not specified: last 4 available) |

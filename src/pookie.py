@@ -16,8 +16,10 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import argparse
+import glob
 import os
 import subprocess
+import sys
 from python_version_fetcher import get_latest_release_urls
 from docker_images_builder import build_docker_images
 from docker_images_runner import run_docker_images
@@ -27,6 +29,9 @@ def main():
 
     targets = ['manylinux_2_17_x86_64', 'manylinux_2_17_aarch64',  'musllinux_1_2_x86_64', 'musllinux_1_2_aarch64', 'win_amd64', 'macosx_11_0_x86_64']
 
+    parser.add_argument('--clean',
+                            action='store_true',
+                            help='Remove all build artifacts and logs and end the script execution')
     parser.add_argument('--build',
                             type = str,
                             help = 'Python build bash command')
@@ -61,6 +66,21 @@ def main():
     for arg in vars(args):
         print(f"- {arg}: {getattr(args, arg)}")
 
+    # Clean workspace if requested
+    if (args.clean):
+        print(">> Cleaning workspace")
+        subprocess.run([
+            'rm',
+                '-rf',
+                '__pycache__',
+                'pookie.log',
+                'dist',
+                'build'
+        ]
+        + glob.glob('*.egg-info'))
+        print(">> See you soon")
+        sys.exit()
+
     # Fetch python-versions
     print(">> Fetching python versions")
     python_versions_dic = get_latest_release_urls(args.python_version, args.target)
@@ -94,7 +114,7 @@ def main():
         'rm',
             '-rf',
             '__pycache__'
-    ], stdout = logfile, stderr = logfile)
+    ])
 
     print(">> See you soon")
 
