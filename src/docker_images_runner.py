@@ -62,7 +62,7 @@ def install_dist(cp_version, dist_target):
 
 def prepare_environment_macosx_11_0_x86_64(python_major_dot_minor_version):
     """
-    Generate the command to prepare the environment for macOS builds.
+    Generate the command to prepare the environment for macosx_11_0_x86_64 builds.
     This includes setting up the compiler and linker flags.
     Place this command BEFORE the build command.
 
@@ -85,9 +85,34 @@ def prepare_environment_macosx_11_0_x86_64(python_major_dot_minor_version):
         export LDFLAGS="-isysroot /osxcross/target/SDK/MacOSX11.1.sdk -Wl,-syslibroot,/osxcross/target/SDK/MacOSX11.1.sdk -L/python/lib -lpython{python_major_dot_minor_version}" \
         && '''
 
+def prepare_environment_macosx_11_0_arm64(python_major_dot_minor_version):
+    """
+    Generate the command to prepare the environment for macosx_11_0_arm64 builds.
+    This includes setting up the compiler and linker flags.
+    Place this command BEFORE the build command.
+
+    Parameters:
+    - python_major_dot_minor_version (str): The major and minor version of Python to use (e.g., "3.12").
+
+    Returns:
+    - str: The command to prepare the environment.
+    """
+
+    return f'''export LDSHARED='$(python3 -c "import sysconfig; print(sysconfig.get_config_var(\\"LDSHARED\\").replace(\\"--exclude-libs,ALL\\",\\"\"))")' && \
+        export LDSHARED="$(pwd)/clang-wrapper.sh -shared" && \
+        echo -e "#!/bin/bash\nexec oa64-clang -fuse-ld=/osxcross/target/bin/arm64-apple-darwin20.2-ld \"\\$@\"" > clang-wrapper.sh && chmod +x clang-wrapper.sh && \
+        export CC=$(pwd)/clang-wrapper.sh && \
+        export CXX=$CC && \
+        export AR=arm64-apple-darwin20.2-ar && \
+        export RANLIB=arm64-apple-darwin20.2-ranlib && \
+        export STRIP=arm64-apple-darwin20.2-strip && \
+        export CFLAGS="--target=arm64-apple-darwin -isysroot /osxcross/target/SDK/MacOSX11.1.sdk -I/python/include/python{python_major_dot_minor_version}" && \
+        export LDFLAGS="-isysroot /osxcross/target/SDK/MacOSX11.1.sdk -Wl,-syslibroot,/osxcross/target/SDK/MacOSX11.1.sdk -L/python/lib -lpython{python_major_dot_minor_version}" \
+        && '''
+
 def prepare_environment_manylinux_2_17_x86_64_and_musllinux_1_2_x86_64(CC, CXX):
     """
-    Generate the command to prepare the environment for manylinux and musllinux builds.
+    Generate the command to prepare the environment for manylinux_2_17_x86_64 and musllinux_1_2_x86_64 builds.
     Place this command BEFORE the build command.
 
     Parameters:
@@ -323,6 +348,29 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
+
+                # test the library
+                if test != None:
+
+                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
+                    print("Not supported yet :(")
+
+            if target == 'macosx_11_0_arm64':
+
+                image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-macosx_11_0_arm64"
+                new_base_os = "darwin"
+                new_dist_target = "macosx_11_0_arm64"
+
+                # build the library
+                if build != None:
+
+                    build_command = \
+                        prepare_environment_macosx_11_0_arm64(python_major_dot_minor_version) + \
+                        build + \
+                        fix_EXT_SUFFIX(py_version_nodot, new_base_os, new_dist_target)
+
+                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
+                    run_lvl3_image(image_name, build_command, host_workspace_path, None) #TODO
 
                 # test the library
                 if test != None:
