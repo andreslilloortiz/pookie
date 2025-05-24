@@ -349,7 +349,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                         fix_EXT_SUFFIX(py_version_nodot, new_base_os, new_dist_target)
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
-                    run_lvl3_image(image_name, build_command, host_workspace_path, logfile) #TODO
+                    run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
                 # test the library
                 if test != None:
