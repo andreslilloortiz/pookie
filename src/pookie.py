@@ -27,7 +27,7 @@ from docker_images_runner import run_docker_images
 def main():
     parser = argparse.ArgumentParser(description='Tool for Automating the Build and Testing Process of Native Python Libraries Using Cross-Compilation and Emulation Technologies')
 
-    targets = ['manylinux_2_17_x86_64', 'manylinux_2_17_aarch64',  'musllinux_1_2_x86_64', 'musllinux_1_2_aarch64', 'win_amd64', 'macosx_11_0_x86_64']
+    targets = ['manylinux_2_17_x86_64', 'manylinux_2_17_aarch64',  'musllinux_1_2_x86_64', 'musllinux_1_2_aarch64', 'win_amd64', 'macosx_11_0_x86_64', "macosx_11_0_arm64"]
 
     parser.add_argument('--clean',
                             action='store_true',

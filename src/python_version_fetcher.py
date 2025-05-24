@@ -25,7 +25,8 @@ TARGET_MAPPING = {
     "musllinux_1_2_x86_64": "x86_64-unknown-linux-musl",
     "musllinux_1_2_aarch64": "aarch64-unknown-linux-musl", # Not available in the latest release
     "win_amd64": "x86_64-pc-windows-msvc",
-    "macosx_11_0_x86_64": "x86_64-apple-darwin"
+    "macosx_11_0_x86_64": "x86_64-apple-darwin",
+    "macosx_11_0_arm64": "aarch64-apple-darwin"
 }
 
 def get_latest_release_urls(minors, targets):
@@ -92,7 +93,8 @@ def main():
         "musllinux_1_2_x86_64",
         "musllinux_1_2_aarch64",
         "win_amd64",
-        "macosx_11_0_x86_64"
+        "macosx_11_0_x86_64",
+        "macosx_11_0_arm64"
     ]
 
     results = get_latest_release_urls(minors, targets)

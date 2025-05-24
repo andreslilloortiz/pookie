@@ -233,3 +233,26 @@ def build_docker_images(targets, logfile, python_versions_dic):
                 python_url = target_data[target]["url"]
 
                 build_lvl3_image(tree, general_image_name, image_name, python_url, logfile)
+
+        if target == 'macosx_11_0_arm64':
+            print(f">> Creating docker images for {target}")
+            tree = "win-macosx-pookie"
+
+            # level 1
+            # (same base level as pookie so its created)
+
+            # level 2
+            image_name = "win-macosx-pookie-lvl2-osxcross"
+            build_lvl1_or_lvl2_image(tree, image_name, logfile)
+
+            # level 3
+            for minor, target_data in python_versions_dic.items():
+
+                general_image_name = "win-macosx-pookie-lvl3-cp3xx-macosx_11_0_arm64"
+
+                py_version_nodot = '3' + minor
+                image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-macosx_11_0_arm64"
+
+                python_url = target_data[target]["url"]
+
+                build_lvl3_image(tree, general_image_name, image_name, python_url, logfile)
