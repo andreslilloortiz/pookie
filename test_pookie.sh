@@ -71,7 +71,7 @@ echo ">> Build for all targets"
 
 CMD1="./pookie.sh \
     --workspace \"$WORKSPACE\" \
-    --target manylinux_2_17_x86_64 manylinux_2_17_aarch64 musllinux_1_2_x86_64 macosx_11_0_x86_64 \
+    --target manylinux_2_17_x86_64 manylinux_2_17_aarch64 musllinux_1_2_x86_64 macosx_11_0_x86_64 macosx_11_0_arm64 \
     --build \"$BUILD_CMD\" \
     --python-version 11"
 
@@ -83,6 +83,7 @@ FILES1=(
     "$BASE_WHEEL-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"
     "$BASE_WHEEL-musllinux_1_2_x86_64.whl"
     "$BASE_WHEEL-macosx_11_0_x86_64.whl"
+    "$BASE_WHEEL-macosx_11_0_arm64.whl"
 )
 
 for FILE in "${FILES1[@]}"; do
