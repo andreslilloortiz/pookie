@@ -163,6 +163,7 @@ for FILE in "${FILES3[@]}"; do
     fi
 done
 
+# End of tests
 echo ">> Cleaning workspace"
 eval $CLEAN >> "$WORKSPACE/pookie.log" 2>&1
 

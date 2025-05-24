@@ -139,7 +139,11 @@ To test the functionality of pookie, you can run the provided test script `test_
 
 Below is a visual representation of the Docker layer graph used by pookie. This graph illustrates the structure and relationships between the layers of the Docker images. This graph can help you understand how the images are built and how layers are shared across different targets.
 
-![Docker Layer Graph](./images/Docker_layer_graph.png)
+![Docker Layer Graph](./images/manylinux/Docker_layer_graph_manylinux.png)
+
+![Docker Layer Graph](./images/musllinux/Docker_layer_graph_musllinux.png)
+
+![Docker Layer Graph](./images/win-macosx-pookie/Docker_layer_graph_win-macosx-pookie.png)
 
 ## Project Structure
 
@@ -150,9 +154,8 @@ pookie/
 ├── images/                                    # Dockerfiles for building cross-platform environments
 │ ├── manylinux/                                   # Dockerfiles targeting manylinux-based builds
 │ ├── musllinux/                                   # Dockerfiles targeting musllinux-based builds
-│ └── win-macosx-pookie/                           # Dockerfiles for Windows and macOS cross-compilation
-│ ├── Docker_layer_graph.drawio                    # Editable Docker layer diagram
-│ └── Docker_layer_graph.png                       # Rendered Docker layer diagram
+│ ├── win-macosx-pookie/                           # Dockerfiles for Windows and macOS cross-compilation
+│ └── Docker_layer_graph.drawio                    # Editable Docker layer diagram
 ├── src/                                       # Python scripts for building and running images
 │ ├── docker_images_builder.py                     # Python script for building Docker images following the layer graph
 │ ├── docker_images_runner.py                      # Python script for running build and test commands on Docker images
