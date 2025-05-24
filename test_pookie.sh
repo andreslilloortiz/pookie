@@ -75,7 +75,7 @@ CMD1="./pookie.sh \
     --build \"$BUILD_CMD\" \
     --python-version 11"
 
-eval $CLEAN >> "$WORKSPACE/pookie.log" 2>&1
+eval $CLEAN > "$WORKSPACE/pookie.log" 2>&1
 eval $CMD1 >> "$WORKSPACE/pookie.log" 2>&1
 
 FILES1=(
@@ -108,6 +108,12 @@ CMD2="./pookie.sh \
 
 eval $CLEAN >> "$WORKSPACE/pookie.log" 2>&1
 eval $CMD2 >> "$WORKSPACE/pookie.log" 2>&1
+
+awk '
+  />> Testing the library/ {show=1; next}
+  /^>> / {show=0}
+  show {print}
+' "$WORKSPACE/pookie.log"
 
 # -------------------------------------------------
 # Build for linux x86_64 with clang
