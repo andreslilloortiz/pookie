@@ -26,22 +26,22 @@ NC=$'\033[0m'
 while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
-    --workspace)
-        WORKSPACE="$2"
-        shift; shift
-        ;;
-    --build)
-        BUILD_CMD="$2"
-        shift; shift
-        ;;
-    --test)
-        TEST_CMD="$2"
-        shift; shift
-        ;;
-    *)
-        echo "Unknown option: $1"
-        exit 1
-        ;;
+        --workspace)
+            WORKSPACE="$2"
+            shift; shift
+            ;;
+        --build)
+            BUILD_CMD="$2"
+            shift; shift
+            ;;
+        --test)
+            TEST_CMD="$2"
+            shift; shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
     esac
 done
 
@@ -56,17 +56,18 @@ DIST_DIR="$WORKSPACE/dist"
 PACKAGE_NAME=$(basename "$WORKSPACE")
 BASE_WHEEL="${PACKAGE_NAME}-cp311-cp311"
 
-echo ">> Workspace: $WORKSPACE"
-echo ">> Wheel base: $BASE_WHEEL"
-echo ">> Build command: $BUILD_CMD"
-echo ">> Test command: $TEST_CMD"
+echo ">> Configuration"
+echo "- workspace: $WORKSPACE"
+echo "- wheel base: $BASE_WHEEL"
+echo "- build command: $BUILD_CMD"
+echo "- test command: $TEST_CMD"
 
 CLEAN="./pookie.sh --workspace \"$WORKSPACE\" --clean"
 
-# -------------------------------
-# BUILD
-# -------------------------------
-echo ">> BUILD"
+# -------------------------------------------------
+# Build for all targets
+# -------------------------------------------------
+echo ">> Build for all targets"
 
 CMD1="./pookie.sh \
     --workspace \"$WORKSPACE\" \
@@ -84,19 +85,18 @@ FILES1=(
     "$BASE_WHEEL-macosx_11_0_x86_64.whl"
 )
 
-echo ">> Checking general build files:"
 for FILE in "${FILES1[@]}"; do
     if [ -f "$DIST_DIR/$FILE" ]; then
-        echo "${GREEN}$FILE found${NC}"
+        echo "${GREEN}$FILE was successfully built and is present in dist dir${NC}"
     else
-        echo "${RED}$FILE NOT found${NC}"
+        echo "${RED}$FILE is missing so build may have failed${NC}"
     fi
 done
 
-# -------------------------------
-# TEST
-# -------------------------------
-echo ">> TEST"
+# -------------------------------------------------
+# Test for available targets
+# -------------------------------------------------
+echo ">> Test for available targets"
 
 CMD2="./pookie.sh \
     --workspace \"$WORKSPACE\" \
@@ -108,10 +108,10 @@ CMD2="./pookie.sh \
 eval $CLEAN >> "$WORKSPACE/pookie.log" 2>&1
 eval $CMD2 >> "$WORKSPACE/pookie.log" 2>&1
 
-# -------------------------------
-# BUILD LINUX X86_64 WITH CLANG
-# -------------------------------
-echo ">> BUILD LINUX X86_64 WITH CLANG"
+# -------------------------------------------------
+# Build for linux x86_64 with clang
+# -------------------------------------------------
+echo ">> Build for linux x86_64 with clang"
 
 CMD3="./pookie.sh \
     --workspace \"$WORKSPACE\" \
@@ -128,19 +128,18 @@ FILES2=(
     "$BASE_WHEEL-musllinux_1_2_x86_64.whl"
 )
 
-echo ">> Checking clang build files:"
 for FILE in "${FILES2[@]}"; do
     if [ -f "$DIST_DIR/$FILE" ]; then
-        echo "${GREEN}$FILE found${NC}"
+        echo "${GREEN}$FILE was successfully built and is present in dist dir${NC}"
     else
-        echo "${RED}$FILE NOT found${NC}"
+        echo "${RED}$FILE is missing so build may have failed${NC}"
     fi
 done
 
-# -------------------------------
-# BUILD LINUX AARCH64 EMULATE MODE
-# -------------------------------
-echo ">> BUILD LINUX AARCH64 EMULATE MODE"
+# -------------------------------------------------
+# Build for linux aarch64 in emulate mode
+# -------------------------------------------------
+echo ">> Build for linux aarch64 in emulate mode"
 
 CMD4="./pookie.sh \
     --workspace \"$WORKSPACE\" \
@@ -156,12 +155,11 @@ FILES3=(
     "$BASE_WHEEL-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"
 )
 
-echo ">> Checking emulate mode build files:"
 for FILE in "${FILES3[@]}"; do
     if [ -f "$DIST_DIR/$FILE" ]; then
-        echo "${GREEN}$FILE found${NC}"
+        echo "${GREEN}$FILE was successfully built and is present in dist dir${NC}"
     else
-        echo "${RED}$FILE NOT found${NC}"
+        echo "${RED}$FILE is missing so build may have failed${NC}"
     fi
 done
 
