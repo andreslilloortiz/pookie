@@ -133,6 +133,7 @@ To test the functionality of pookie, you can run the provided test script `test_
         --workspace /path/to/workspace \
         --build <build_command> \
         --test <test_command> \
+        --python-version <minor_version>
    ```
 
 ## Docker Layer Graph

@@ -38,6 +38,10 @@ while [[ $# -gt 0 ]]; do
             TEST_CMD="$2"
             shift; shift
             ;;
+        --python-version)
+            PYTHON_VERSION="$2"
+            shift; shift
+            ;;
         *)
             echo "Unknown option: $1"
             exit 1
@@ -46,15 +50,15 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Validate required arguments
-if [ -z "$WORKSPACE" ] || [ -z "$BUILD_CMD" ] || [ -z "$TEST_CMD" ]; then
-    echo "Usage: $0 --workspace <path> --build <build_command> --test <test_command>"
+if [ -z "$WORKSPACE" ] || [ -z "$BUILD_CMD" ] || [ -z "$TEST_CMD" ] || [ -z "$PYTHON_VERSION" ]; then
+    echo "Usage: $0 --workspace <path> --build <build_command> --test <test_command> --python-version <minor_version>"
     exit 1
 fi
 
 # Variables
 DIST_DIR="$WORKSPACE/dist"
 PACKAGE_NAME=$(basename "$WORKSPACE")
-BASE_WHEEL="${PACKAGE_NAME}-cp311-cp311"
+BASE_WHEEL="${PACKAGE_NAME}-cp3$PYTHON_VERSION-cp3$PYTHON_VERSION"
 
 echo ">> Configuration"
 echo "- workspace: $WORKSPACE"
@@ -71,9 +75,9 @@ echo ">> Build for all targets"
 
 CMD1="./pookie.sh \
     --workspace \"$WORKSPACE\" \
-    --target manylinux_2_17_x86_64 manylinux_2_17_aarch64 musllinux_1_2_x86_64 macosx_11_0_x86_64 macosx_11_0_arm64 \
+    --target manylinux_2_17_x86_64 manylinux_2_17_aarch64 manylinux_2_17_armv7l musllinux_1_2_x86_64 macosx_11_0_x86_64 macosx_11_0_arm64 \
     --build \"$BUILD_CMD\" \
-    --python-version 11"
+    --python-version $PYTHON_VERSION"
 
 eval $CLEAN > "$WORKSPACE/pookie.log" 2>&1
 eval $CMD1 >> "$WORKSPACE/pookie.log" 2>&1
@@ -81,6 +85,7 @@ eval $CMD1 >> "$WORKSPACE/pookie.log" 2>&1
 FILES1=(
     "$BASE_WHEEL-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
     "$BASE_WHEEL-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"
+    "$BASE_WHEEL-manylinux_2_17_armv7l.manylinux2014_armv7l.whl"
     "$BASE_WHEEL-musllinux_1_2_x86_64.whl"
     "$BASE_WHEEL-macosx_11_0_x86_64.whl"
     "$BASE_WHEEL-macosx_11_0_arm64.whl"
@@ -101,10 +106,10 @@ echo ">> Test for available targets"
 
 CMD2="./pookie.sh \
     --workspace \"$WORKSPACE\" \
-    --target manylinux_2_17_x86_64 manylinux_2_17_aarch64 musllinux_1_2_x86_64 \
+    --target manylinux_2_17_x86_64 manylinux_2_17_aarch64 manylinux_2_17_armv7l musllinux_1_2_x86_64 \
     --build \"$BUILD_CMD\" \
     --test \"$TEST_CMD\" \
-    --python-version 11"
+    --python-version $PYTHON_VERSION"
 
 eval $CLEAN >> "$WORKSPACE/pookie.log" 2>&1
 eval $CMD2 >> "$WORKSPACE/pookie.log" 2>&1
@@ -124,7 +129,7 @@ CMD3="./pookie.sh \
     --workspace \"$WORKSPACE\" \
     --target manylinux_2_17_x86_64 musllinux_1_2_x86_64 \
     --build \"$BUILD_CMD\" \
-    --python-version 11 \
+    --python-version $PYTHON_VERSION \
     --linux-x86_64-compiler clang"
 
 eval $CLEAN >> "$WORKSPACE/pookie.log" 2>&1
@@ -144,22 +149,23 @@ for FILE in "${FILES2[@]}"; do
 done
 
 # -------------------------------------------------
-# Build for linux aarch64 in emulate mode
+# Build for linux non native in emulate mode
 # -------------------------------------------------
-echo ">> Build for linux aarch64 in emulate mode"
+echo ">> Build for linux non native in emulate mode"
 
 CMD4="./pookie.sh \
     --workspace \"$WORKSPACE\" \
-    --target manylinux_2_17_aarch64 \
+    --target manylinux_2_17_aarch64 manylinux_2_17_armv7l \
     --build \"$BUILD_CMD\" \
-    --python-version 11 \
-    --linux-aarch64-mode emulate"
+    --python-version $PYTHON_VERSION \
+    --linux-non-native-mode emulate"
 
 eval $CLEAN >> "$WORKSPACE/pookie.log" 2>&1
 eval $CMD4 >> "$WORKSPACE/pookie.log" 2>&1
 
 FILES3=(
     "$BASE_WHEEL-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"
+    "$BASE_WHEEL-manylinux_2_17_armv7l.manylinux2014_armv7l.whl"
 )
 
 for FILE in "${FILES3[@]}"; do
