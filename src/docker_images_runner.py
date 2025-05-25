@@ -73,8 +73,7 @@ def prepare_environment_macosx_11_0_x86_64_and_macosx_11_0_arm64(cross_compiler,
     - str: The command to prepare the environment.
     """
 
-    return f'''export LDSHARED='$(python3 -c "import sysconfig; print(sysconfig.get_config_var(\\"LDSHARED\\").replace(\\"--exclude-libs,ALL\\",\\"\"))")' && \
-        export LDSHARED="$(pwd)/clang-wrapper.sh -shared" && \
+    return f'''export LDSHARED="$(pwd)/clang-wrapper.sh -shared" && \
         echo -e "#!/bin/bash\nexec {cross_compiler} -fuse-ld=/osxcross/target/bin/{arquitecture}-apple-darwin20.2-ld \"\\$@\"" > clang-wrapper.sh && chmod +x clang-wrapper.sh && \
         export CC=$(pwd)/clang-wrapper.sh && \
         export CXX=$CC && \
