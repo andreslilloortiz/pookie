@@ -1,0 +1,67 @@
+# This file is part of pookie.
+
+# Copyright (C) 2025 Andrés Lillo Ortiz
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+FROM manylinux-lvl2-gcc-powerpc64le-linux-gnu:latest
+
+ARG PYTHON_URL
+
+# Set the Python and pip executables
+ARG PYTHON_EXECUTABLE="source /cross_ppc64le/bin/activate && python3"
+ARG PIP_EXECUTABLE="source /cross_ppc64le/bin/activate && python3 -m pip"
+
+# Download and install Python for cross-compilation
+RUN bash -c '\
+    LINUX_URL="${PYTHON_URL/ppc64le/x86_64}" && \
+    wget -O python_cross.tar.gz "$LINUX_URL" && \
+    tar -xvzf python_cross.tar.gz && \
+    mv python python_cross && \
+    rm -f python_cross.tar.gz \
+    '
+
+# Fix the sysconfigdata file for cross-compilation
+RUN cd /python_cross/lib/python* && \
+    sed -i 's#/install#/python_cross#g' _sysconfigdata__*.py && \
+    find . -name '__pycache__' -type d -exec rm -rf {} +
+
+# Download and install Python
+RUN wget -O python.tar.gz ${PYTHON_URL} && \
+    tar -xvzf python.tar.gz && \
+    rm -f python.tar.gz
+
+# Fix the sysconfigdata file
+RUN cd /python/lib/python* && \
+    sed -i 's#/install#/python#g' _sysconfigdata__*.py && \
+    find . -name '__pycache__' -type d -exec rm -rf {} +
+
+# Create cross environment
+RUN ./python_cross/bin/python3 -m pip install crossenv && \
+    ./python_cross/bin/python3 -m crossenv /python/bin/python3 cross_ppc64le
+
+# Create wrapper scripts for Python and pip
+RUN mkdir -p /wrapper && \
+    printf "#!/bin/bash\n${PYTHON_EXECUTABLE} \"\$@\"" > /wrapper/python3 && \
+    printf "#!/bin/bash\n${PYTHON_EXECUTABLE} \"\$@\"" > /wrapper/python && \
+    printf "#!/bin/bash\n${PIP_EXECUTABLE} \"\$@\"" > /wrapper/pip3 && \
+    printf "#!/bin/bash\n${PIP_EXECUTABLE} \"\$@\"" > /wrapper/pip && \
+    chmod +x /wrapper/python3 /wrapper/python /wrapper/pip3 /wrapper/pip
+
+# Set the PATH to include the wrapper directory
+ENV PATH="/wrapper:${PATH}"
+
+# Set the environment variables for cross-compilation
+ENV CFLAGS="-I/python/include/python3.10"
+ENV LDFLAGS="-L/python/lib"

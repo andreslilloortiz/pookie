@@ -287,6 +287,48 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                     print(f">> Testing the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
+            if target == "manylinux_2_17_ppc64le":
+
+                image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_ppc64le"
+                original_dist_target = "linux_ppc64le"
+                new_dist_target = "manylinux_2_17_ppc64le.manylinux2014_ppc64le"
+
+                python_ppc64le = "LD_LIBRARY_PATH=/usr/powerpc64le-linux-gnu/lib /usr/powerpc64le-linux-gnu/lib/ld64.so.2 --library-path /usr/powerpc64le-linux-gnu/lib /python/bin/python3"
+                pip_ppc64le = "LD_LIBRARY_PATH=/usr/powerpc64le-linux-gnu/lib /usr/powerpc64le-linux-gnu/lib/ld64.so.2 --library-path /usr/powerpc64le-linux-gnu/lib /python/bin/python3 -m pip"
+
+                # build the library
+                if build != None:
+
+                    if linux_non_native_mode == 'cross':
+                        build_command = \
+                            build + \
+                            rename_dist(original_dist_target, new_dist_target)
+                    else:
+                        build_command = \
+                            wrapper('python3', python_ppc64le) + \
+                            wrapper('python', python_ppc64le) + \
+                            wrapper('pip3', pip_ppc64le) + \
+                            wrapper('pip', pip_ppc64le) + \
+                            build + \
+                            rename_dist(original_dist_target, new_dist_target)
+
+                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
+                    run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
+
+                # test the library
+                if test != None:
+
+                    test_command = \
+                        wrapper('python3', python_ppc64le) + \
+                        wrapper('python', python_ppc64le) + \
+                        wrapper('pip3', pip_ppc64le) + \
+                        wrapper('pip', pip_ppc64le) + \
+                        install_dist(py_version_nodot, new_dist_target) + \
+                        test
+
+                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
+                    run_lvl3_image(image_name, test_command, host_workspace_path, None)
+
             if target == 'musllinux_1_2_x86_64':
 
                 image_name = f"musllinux-lvl3-cp{py_version_nodot}-musllinux_1_2_x86_64"
