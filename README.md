@@ -71,7 +71,7 @@ Before getting started, ensure you have the following installed and configured o
 | `--build BUILD` | Python build bash command |
 | `--test TEST` | Python test bash command |
 | `--python-version PYTHON_VERSION [PYTHON_VERSION ...]` | Minor Python version(s) to compile for (default: last 4 available) |
-| `--target {manylinux_2_17_x86_64,manylinux_2_17_aarch64,musllinux_1_2_x86_64,musllinux_1_2_aarch64,`<br>`win_amd64,macosx_11_0_x86_64,macosx_11_0_arm64} [{manylinux_2_17_x86_64,manylinux_2_17_aarch64,musllinux_1_2_x86_64,musllinux_1_2_aarch64,`<br>`win_amd64,macosx_11_0_x86_64,macosx_11_0_arm64} ...]` | Target platform(s) to build and test the library for (default: all) |
+| `--target {manylinux_2_17_x86_64,manylinux_2_17_aarch64,manylinux_2_17_armv7,`<br>`musllinux_1_2_x86_64,musllinux_1_2_aarch64,win_amd64,macosx_11_0_x86_64,macosx_11_0_arm64} [{manylinux_2_17_x86_64,manylinux_2_17_aarch64,manylinux_2_17_armv7,`<br>`musllinux_1_2_x86_64,musllinux_1_2_aarch64,win_amd64,macosx_11_0_x86_64,macosx_11_0_arm64} ...]` | Target platform(s) to build and test the library for (default: all) |
 | `--linux-x86_64-compiler {gcc,clang}` | Compiler to use for manylinux_2_17_x86_64 or musllinux_1_2_x86_64 targets (default: gcc) |
 | `--linux-aarch64-mode {cross,emulate}` | Compilation mode for manylinux_2_17_aarch64 targets: "cross" for cross-compilation or "emulate" for QEMU-based emulation (default: cross) |
 
