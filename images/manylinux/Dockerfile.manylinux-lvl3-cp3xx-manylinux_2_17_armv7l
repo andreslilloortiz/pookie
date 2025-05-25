@@ -20,8 +20,8 @@ FROM manylinux-lvl2-gcc-arm-linux-gnueabihf:latest
 ARG PYTHON_URL
 
 # Set the Python and pip executables
-ARG PYTHON_EXECUTABLE="source /cross_armv7/bin/activate && python3"
-ARG PIP_EXECUTABLE="source /cross_armv7/bin/activate && python3 -m pip"
+ARG PYTHON_EXECUTABLE="source /cross_armv7l/bin/activate && python3"
+ARG PIP_EXECUTABLE="source /cross_armv7l/bin/activate && python3 -m pip"
 
 # Download and install Python for cross-compilation
 RUN bash -c '\
@@ -49,7 +49,7 @@ RUN cd /python/lib/python* && \
 
 # Create cross environment
 RUN ./python_cross/bin/python3 -m pip install crossenv && \
-    ./python_cross/bin/python3 -m crossenv /python/bin/python3 cross_armv7
+    ./python_cross/bin/python3 -m crossenv /python/bin/python3 cross_armv7l
 
 # Create wrapper scripts for Python and pip
 RUN mkdir -p /wrapper && \

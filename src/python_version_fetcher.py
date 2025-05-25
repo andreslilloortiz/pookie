@@ -22,8 +22,8 @@ from collections import defaultdict
 TARGET_MAPPING = {
     "manylinux_2_17_x86_64": "x86_64-unknown-linux-gnu",
     "manylinux_2_17_aarch64": "aarch64-unknown-linux-gnu",
-    "manylinux_2_17_armv7": "armv7-unknown-linux-gnueabihf",
-    "manylinux_2_17_ppc64le": "ppc64le-unknown-linux-gnu",
+    "manylinux_2_17_armv7l": "armv7-unknown-linux-gnueabihf",
+    "manylinux_2_17_ppc64": "ppc64le-unknown-linux-gnu",
     "manylinux_2_17_riscv64": "riscv64-unknown-linux-gnu",
     "manylinux_2_17_s390x": "s390x-unknown-linux-gnu",
     "musllinux_1_2_x86_64": "x86_64-unknown-linux-musl",
@@ -94,8 +94,8 @@ def main():
     targets = [
         "manylinux_2_17_x86_64",
         "manylinux_2_17_aarch64",
-        "manylinux_2_17_armv7",
-        "manylinux_2_17_ppc64le",
+        "manylinux_2_17_armv7l",
+        "manylinux_2_17_ppc64",
         "manylinux_2_17_riscv64",
         "manylinux_2_17_s390x",
         "musllinux_1_2_x86_64",

@@ -27,37 +27,51 @@ from docker_images_runner import run_docker_images
 def main():
     parser = argparse.ArgumentParser(description='Tool for Automating the Build and Testing Process of Native Python Libraries Using Cross-Compilation and Emulation Technologies')
 
-    targets = ['manylinux_2_17_x86_64', 'manylinux_2_17_aarch64', 'manylinux_2_17_armv7', 'musllinux_1_2_x86_64', 'musllinux_1_2_aarch64', 'win_amd64', 'macosx_11_0_x86_64', "macosx_11_0_arm64"] #TODO manylinux_2_17_armv7 with arm-linux-gnueabihf-gcc, manylinux_2_17_ppc64le with powerpc64le-linux-gnu-gcc, manylinux_2_17_riscv64 with riscv64-linux-gnu-gcc, manylinux_2_17_s390x with s390x-linux-gnu-gcc
+    targets = ['manylinux_2_17_x86_64', 'manylinux_2_17_aarch64', 'manylinux_2_17_armv7l', 'musllinux_1_2_x86_64', 'musllinux_1_2_aarch64', 'win_amd64', 'macosx_11_0_x86_64', "macosx_11_0_arm64"] #TODO manylinux_2_17_armv7l with arm-linux-gnueabihf-gcc, manylinux_2_17_ppc64 with powerpc64le-linux-gnu-gcc, manylinux_2_17_riscv64 with riscv64-linux-gnu-gcc, manylinux_2_17_s390x with s390x-linux-gnu-gcc
 
-    parser.add_argument('--clean',
-                            action='store_true',
-                            help='Remove all build artifacts and end the script execution')
-    parser.add_argument('--build',
-                            type = str,
-                            help = 'Python build bash command')
-    parser.add_argument('--test',
-                            type = str,
-                            help = 'Python test bash command')
-    parser.add_argument('--python-version',
-                            type = str,
-                            nargs = '+',
-                            help = 'Minor Python version(s) to compile for (default: last 4 available)')
-    parser.add_argument('--target',
-                            type = str,
-                            nargs = '+',
-                            choices = targets,
-                            default = targets,
-                            help = 'Target platform(s) to build and test the library for (default: all)')
-    parser.add_argument('--linux-x86_64-compiler',
-                            type=str,
-                            choices=['gcc', 'clang'],
-                            default='gcc',
-                            help='Compiler to use for manylinux_2_17_x86_64 or musllinux_1_2_x86_64 targets (default: gcc)')
-    parser.add_argument('--linux-aarch64-mode',
-                    type=str,
-                    choices=['cross', 'emulate'],
-                    default='cross',
-                    help='Compilation mode for manylinux_2_17_aarch64 targets: "cross" for cross-compilation or "emulate" for QEMU-based emulation (default: cross)')
+    parser.add_argument(
+        '--clean',
+        action='store_true',
+        help='Remove all build artifacts and end the script execution'
+        )
+    parser.add_argument(
+        '--build',
+        type = str,
+        help = 'Python build bash command'
+        )
+    parser.add_argument(
+        '--test',
+        type = str,
+        help = 'Python test bash command'
+        )
+    parser.add_argument(
+        '--python-version',
+        type = str,
+        nargs = '+',
+        help = 'Minor Python version(s) to compile for (default: last 4 available)'
+        )
+    parser.add_argument(
+        '--target',
+        type = str,
+        nargs = '+',
+        choices = targets,
+        default = targets,
+        help = 'Target platform(s) to build and test the library for (default: all)'
+        )
+    parser.add_argument(
+        '--linux-x86_64-compiler',
+        type=str,
+        choices=['gcc', 'clang'],
+        default='gcc',
+        help='Compiler to use for manylinux_2_17_x86_64 or musllinux_1_2_x86_64 targets (default: gcc)'
+        )
+    parser.add_argument(
+        '--linux-non-native-mode',
+        type=str,
+        choices=['cross', 'emulate'],
+        default='cross',
+        help='Compilation mode for non-native manylinux_2_17 targets (e.g. aarch64, armv7, ppc64le, riscv64, s390x): "cross" for cross-compilation or "emulate" for QEMU-based emulation (default: cross)'
+        )
 
     args = parser.parse_args()
 
@@ -106,7 +120,7 @@ def main():
     host_workspace_path = os.environ.get('WORKSPACE_PWD', '/workspace')
 
     # run build and test commands
-    run_docker_images(args.target, logfile, python_versions_dic, args.build, args.test, args.linux_x86_64_compiler, args.linux_aarch64_mode, host_workspace_path)
+    run_docker_images(args.target, logfile, python_versions_dic, args.build, args.test, args.linux_x86_64_compiler, args.linux_non_native_mode, host_workspace_path)
 
     # Delete __pycache__ folders
     subprocess.run([

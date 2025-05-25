@@ -150,7 +150,7 @@ def run_lvl3_image(image_name, command, host_workspace_path, logfile):
                 command
     ], stdout = logfile, stderr = logfile)
 
-def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_x86_64_compiler, linux_aarch64_mode, host_workspace_path):
+def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_x86_64_compiler, linux_non_native_mode, host_workspace_path):
     """
     Run Docker images for building and testing the library.
 
@@ -215,7 +215,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                 # build the library
                 if build != None:
 
-                    if linux_aarch64_mode == 'cross':
+                    if linux_non_native_mode == 'cross':
                         build_command = \
                             build + \
                             rename_dist(original_dist_target, new_dist_target)
@@ -239,6 +239,49 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                         wrapper('python', python_aarch64) + \
                         wrapper('pip3', pip_aarch64) + \
                         wrapper('pip', pip_aarch64) + \
+                        install_dist(py_version_nodot, new_dist_target) + \
+                        test
+
+                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
+                    run_lvl3_image(image_name, test_command, host_workspace_path, None)
+
+            if target == "manylinux_2_17_armv7l":
+
+                image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_armv7l"
+                original_dist_target_cross = "linux_armv7"
+                original_dist_target_emulate = "linux_armv7l"
+                new_dist_target = "manylinux_2_17_armv7l.manylinux2014_armv7l"
+
+                python_armv7 = "LD_LIBRARY_PATH=/usr/arm-linux-gnueabihf/lib /usr/arm-linux-gnueabihf/lib/ld-linux-armhf.so.3 --library-path /usr/arm-linux-gnueabihf/lib /python/bin/python3"
+                pip_armv7 = "LD_LIBRARY_PATH=/usr/arm-linux-gnueabihf/lib /usr/arm-linux-gnueabihf/lib/ld-linux-armhf.so.3 --library-path /usr/arm-linux-gnueabihf/lib /python/bin/python3 -m pip"
+
+                # build the library
+                if build != None:
+
+                    if linux_non_native_mode == 'cross':
+                        build_command = \
+                            build + \
+                            rename_dist(original_dist_target_cross, new_dist_target)
+                    else:
+                        build_command = \
+                            wrapper('python3', python_armv7) + \
+                            wrapper('python', python_armv7) + \
+                            wrapper('pip3', pip_armv7) + \
+                            wrapper('pip', pip_armv7) + \
+                            build + \
+                            rename_dist(original_dist_target_emulate, new_dist_target)
+
+                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
+                    run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
+
+                # test the library
+                if test != None:
+
+                    test_command = \
+                        wrapper('python3', python_armv7) + \
+                        wrapper('python', python_armv7) + \
+                        wrapper('pip3', pip_armv7) + \
+                        wrapper('pip', pip_armv7) + \
                         install_dist(py_version_nodot, new_dist_target) + \
                         test
 

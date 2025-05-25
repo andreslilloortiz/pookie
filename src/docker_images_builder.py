@@ -141,7 +141,7 @@ def build_docker_images(targets, logfile, python_versions_dic):
 
                 build_lvl3_image(tree, general_image_name, image_name, python_url, logfile)
 
-        if target == "manylinux_2_17_armv7":
+        if target == "manylinux_2_17_armv7l":
             print(f">> Creating docker images for {target}")
             tree = "manylinux"
 
@@ -155,10 +155,10 @@ def build_docker_images(targets, logfile, python_versions_dic):
 
             # level 3
             for minor, target_data in python_versions_dic.items():
-                general_image_name = "manylinux-lvl3-cp3xx-manylinux_2_17_armv7"
+                general_image_name = "manylinux-lvl3-cp3xx-manylinux_2_17_armv7l"
 
                 py_version_nodot = '3' + minor
-                image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_armv7"
+                image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_armv7l"
 
                 python_url = target_data[target]["url"]
 
