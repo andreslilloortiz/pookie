@@ -75,7 +75,7 @@ echo ">> Build for all targets"
 
 CMD1="./pookie.sh \
     --workspace \"$WORKSPACE\" \
-    --target manylinux_2_17_x86_64 manylinux_2_17_aarch64 manylinux_2_17_armv7l manylinux_2_17_ppc64le musllinux_1_2_x86_64 macosx_11_0_x86_64 macosx_11_0_arm64 \
+    --target manylinux_2_17_x86_64 manylinux_2_17_aarch64 manylinux_2_17_armv7l manylinux_2_17_ppc64le manylinux_2_17_s390x musllinux_1_2_x86_64 macosx_11_0_x86_64 macosx_11_0_arm64 \
     --build \"$BUILD_CMD\" \
     --python-version $PYTHON_VERSION"
 
@@ -87,6 +87,7 @@ FILES1=(
     "$BASE_WHEEL-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"
     "$BASE_WHEEL-manylinux_2_17_armv7l.manylinux2014_armv7l.whl"
     "$BASE_WHEEL-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl"
+    "$BASE_WHEEL-manylinux_2_17_s390x.manylinux2014_s390x.whl"
     "$BASE_WHEEL-musllinux_1_2_x86_64.whl"
     "$BASE_WHEEL-macosx_11_0_x86_64.whl"
     "$BASE_WHEEL-macosx_11_0_arm64.whl"
@@ -107,7 +108,7 @@ echo ">> Test for available targets"
 
 CMD2="./pookie.sh \
     --workspace \"$WORKSPACE\" \
-    --target manylinux_2_17_x86_64 manylinux_2_17_aarch64 manylinux_2_17_armv7l manylinux_2_17_ppc64le musllinux_1_2_x86_64 \
+    --target manylinux_2_17_x86_64 manylinux_2_17_aarch64 manylinux_2_17_armv7l manylinux_2_17_ppc64le manylinux_2_17_s390x musllinux_1_2_x86_64 \
     --build \"$BUILD_CMD\" \
     --test \"$TEST_CMD\" \
     --python-version $PYTHON_VERSION"
@@ -156,7 +157,7 @@ echo ">> Build for linux non native in emulate mode"
 
 CMD4="./pookie.sh \
     --workspace \"$WORKSPACE\" \
-    --target manylinux_2_17_aarch64 manylinux_2_17_armv7l manylinux_2_17_ppc64le \
+    --target manylinux_2_17_aarch64 manylinux_2_17_armv7l manylinux_2_17_ppc64le manylinux_2_17_s390x \
     --build \"$BUILD_CMD\" \
     --python-version $PYTHON_VERSION \
     --linux-non-native-mode emulate"
@@ -168,6 +169,7 @@ FILES3=(
     "$BASE_WHEEL-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"
     "$BASE_WHEEL-manylinux_2_17_armv7l.manylinux2014_armv7l.whl"
     "$BASE_WHEEL-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl"
+    "$BASE_WHEEL-manylinux_2_17_s390x.manylinux2014_s390x.whl"
 )
 
 for FILE in "${FILES3[@]}"; do

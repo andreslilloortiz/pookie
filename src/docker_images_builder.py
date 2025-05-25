@@ -187,6 +187,29 @@ def build_docker_images(targets, logfile, python_versions_dic):
 
                 build_lvl3_image(tree, general_image_name, image_name, python_url, logfile)
 
+        if target == "manylinux_2_17_s390x":
+            print(f">> Creating docker images for {target}")
+            tree = "manylinux"
+
+            # level 1
+            image_name = "manylinux-lvl1-base"
+            build_lvl1_or_lvl2_image(tree, image_name, logfile)
+
+            # level 2
+            image_name = "manylinux-lvl2-gcc-s390x-linux-gnu"
+            build_lvl1_or_lvl2_image(tree, image_name, logfile)
+
+            # level 3
+            for minor, target_data in python_versions_dic.items():
+                general_image_name = "manylinux-lvl3-cp3xx-manylinux_2_17_s390x"
+
+                py_version_nodot = '3' + minor
+                image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_s390x"
+
+                python_url = target_data[target]["url"]
+
+                build_lvl3_image(tree, general_image_name, image_name, python_url, logfile)
+
         if target == 'musllinux_1_2_x86_64':
             print(f">> Creating docker images for {target}")
             tree = "musllinux"

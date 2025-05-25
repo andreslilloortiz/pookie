@@ -174,6 +174,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                 image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_x86_64"
                 original_dist_target = "linux_x86_64"
                 new_dist_target = "manylinux_2_17_x86_64.manylinux2014_x86_64"
+
                 if linux_x86_64_compiler == 'gcc':
                     CC = "gcc"
                     CXX = "g++"
@@ -208,8 +209,8 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                 original_dist_target = "linux_aarch64"
                 new_dist_target = "manylinux_2_17_aarch64.manylinux2014_aarch64"
 
-                python_aarch64 = "LD_LIBRARY_PATH=/usr/aarch64-linux-gnu/lib /usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 --library-path /usr/aarch64-linux-gnu/lib /python/bin/python3"
-                pip_aarch64 = "LD_LIBRARY_PATH=/usr/aarch64-linux-gnu/lib /usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 --library-path /usr/aarch64-linux-gnu/lib /python/bin/python3 -m pip"
+                python_aarch64 = "LD_LIBRARY_PATH=/usr/aarch64-linux-gnu/lib /python/bin/python3"
+                pip_aarch64 = "LD_LIBRARY_PATH=/usr/aarch64-linux-gnu/lib /python/bin/python3 -m pip"
 
                 # build the library
                 if build != None:
@@ -251,8 +252,8 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                 original_dist_target_emulate = "linux_armv7l"
                 new_dist_target = "manylinux_2_17_armv7l.manylinux2014_armv7l"
 
-                python_armv7 = "LD_LIBRARY_PATH=/usr/arm-linux-gnueabihf/lib /usr/arm-linux-gnueabihf/lib/ld-linux-armhf.so.3 --library-path /usr/arm-linux-gnueabihf/lib /python/bin/python3"
-                pip_armv7 = "LD_LIBRARY_PATH=/usr/arm-linux-gnueabihf/lib /usr/arm-linux-gnueabihf/lib/ld-linux-armhf.so.3 --library-path /usr/arm-linux-gnueabihf/lib /python/bin/python3 -m pip"
+                python_armv7 = "LD_LIBRARY_PATH=/usr/arm-linux-gnueabihf/lib /python/bin/python3"
+                pip_armv7 = "LD_LIBRARY_PATH=/usr/arm-linux-gnueabihf/lib /python/bin/python3 -m pip"
 
                 # build the library
                 if build != None:
@@ -293,8 +294,8 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                 original_dist_target = "linux_ppc64le"
                 new_dist_target = "manylinux_2_17_ppc64le.manylinux2014_ppc64le"
 
-                python_ppc64le = "LD_LIBRARY_PATH=/usr/powerpc64le-linux-gnu/lib /usr/powerpc64le-linux-gnu/lib/ld64.so.2 --library-path /usr/powerpc64le-linux-gnu/lib /python/bin/python3"
-                pip_ppc64le = "LD_LIBRARY_PATH=/usr/powerpc64le-linux-gnu/lib /usr/powerpc64le-linux-gnu/lib/ld64.so.2 --library-path /usr/powerpc64le-linux-gnu/lib /python/bin/python3 -m pip"
+                python_ppc64le = "LD_LIBRARY_PATH=/usr/powerpc64le-linux-gnu/lib /python/bin/python3"
+                pip_ppc64le = "LD_LIBRARY_PATH=/usr/powerpc64le-linux-gnu/lib /python/bin/python3 -m pip"
 
                 # build the library
                 if build != None:
@@ -329,11 +330,54 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                     print(f">> Testing the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
+            if target == "manylinux_2_17_s390x":
+
+                image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_s390x"
+                original_dist_target = "linux_s390x"
+                new_dist_target = "manylinux_2_17_s390x.manylinux2014_s390x"
+
+                python_s390x = "LD_LIBRARY_PATH=/usr/s390x-linux-gnu/lib /python/bin/python3"
+                pip_s390x = "LD_LIBRARY_PATH=/usr/s390x-linux-gnu/lib /python/bin/python3 -m pip"
+
+                # build the library
+                if build != None:
+
+                    if linux_non_native_mode == 'cross':
+                        build_command = \
+                            build + \
+                            rename_dist(original_dist_target, new_dist_target)
+                    else:
+                        build_command = \
+                            wrapper('python3', python_s390x) + \
+                            wrapper('python', python_s390x) + \
+                            wrapper('pip3', pip_s390x) + \
+                            wrapper('pip', pip_s390x) + \
+                            build + \
+                            rename_dist(original_dist_target, new_dist_target)
+
+                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
+                    run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
+
+                # test the library
+                if test != None:
+
+                    test_command = \
+                        wrapper('python3', python_s390x) + \
+                        wrapper('python', python_s390x) + \
+                        wrapper('pip3', pip_s390x) + \
+                        wrapper('pip', pip_s390x) + \
+                        install_dist(py_version_nodot, new_dist_target) + \
+                        test
+
+                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
+                    run_lvl3_image(image_name, test_command, host_workspace_path, None)
+
             if target == 'musllinux_1_2_x86_64':
 
                 image_name = f"musllinux-lvl3-cp{py_version_nodot}-musllinux_1_2_x86_64"
                 original_dist_target = "linux_x86_64"
                 new_dist_target = "musllinux_1_2_x86_64"
+
                 if linux_x86_64_compiler == 'gcc':
                     CC = "gcc"
                     CXX = "g++"
