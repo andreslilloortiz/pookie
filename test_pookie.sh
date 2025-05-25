@@ -68,6 +68,8 @@ echo "- test command: $TEST_CMD"
 
 CLEAN="./pookie.sh --workspace \"$WORKSPACE\" --clean"
 
+SECONDS=0
+
 # -------------------------------------------------
 # Build for all targets
 # -------------------------------------------------
@@ -184,4 +186,4 @@ done
 echo ">> Cleaning workspace"
 eval $CLEAN >> "$WORKSPACE/pookie.log" 2>&1
 
-echo ">> All test completed. Check \"$WORKSPACE/pookie.log\" for details."
+echo ">> All test completed in $SECONDS seconds. Check \"$WORKSPACE/pookie.log\" for details."
