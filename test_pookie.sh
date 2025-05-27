@@ -85,11 +85,11 @@ eval $CLEAN > "$WORKSPACE/pookie.log" 2>&1
 eval $CMD1 >> "$WORKSPACE/pookie.log" 2>&1
 
 FILES1=(
-    "$BASE_WHEEL-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
-    "$BASE_WHEEL-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"
-    "$BASE_WHEEL-manylinux_2_17_armv7l.manylinux2014_armv7l.whl"
-    "$BASE_WHEEL-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl"
-    "$BASE_WHEEL-manylinux_2_17_s390x.manylinux2014_s390x.whl"
+    "$BASE_WHEEL-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
+    "$BASE_WHEEL-manylinux2014_aarch64.manylinux_2_17_aarch64.whl"
+    "$BASE_WHEEL-manylinux2014_armv7l.manylinux_2_17_armv7l.whl"
+    "$BASE_WHEEL-manylinux2014_ppc64le.manylinux_2_17_ppc64le.whl"
+    "$BASE_WHEEL-manylinux2014_s390x.manylinux_2_17_s390x.whl"
     "$BASE_WHEEL-musllinux_1_2_x86_64.whl"
     "$BASE_WHEEL-macosx_11_0_x86_64.whl"
     "$BASE_WHEEL-macosx_11_0_arm64.whl"
@@ -140,7 +140,7 @@ eval $CLEAN >> "$WORKSPACE/pookie.log" 2>&1
 eval $CMD3 >> "$WORKSPACE/pookie.log" 2>&1
 
 FILES2=(
-    "$BASE_WHEEL-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+    "$BASE_WHEEL-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
     "$BASE_WHEEL-musllinux_1_2_x86_64.whl"
 )
 
@@ -168,10 +168,10 @@ eval $CLEAN >> "$WORKSPACE/pookie.log" 2>&1
 eval $CMD4 >> "$WORKSPACE/pookie.log" 2>&1
 
 FILES3=(
-    "$BASE_WHEEL-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"
-    "$BASE_WHEEL-manylinux_2_17_armv7l.manylinux2014_armv7l.whl"
-    "$BASE_WHEEL-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl"
-    "$BASE_WHEEL-manylinux_2_17_s390x.manylinux2014_s390x.whl"
+    "$BASE_WHEEL-manylinux2014_aarch64.manylinux_2_17_aarch64.whl"
+    "$BASE_WHEEL-manylinux2014_armv7l.manylinux_2_17_armv7l.whl"
+    "$BASE_WHEEL-manylinux2014_ppc64le.manylinux_2_17_ppc64le.whl"
+    "$BASE_WHEEL-manylinux2014_s390x.manylinux_2_17_s390x.whl"
 )
 
 for FILE in "${FILES3[@]}"; do

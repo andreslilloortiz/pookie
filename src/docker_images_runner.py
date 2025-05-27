@@ -44,7 +44,7 @@ def rename_dist(original_dist_target, new_dist_target):
     Returns:
     - str: The command to rename the built library files.
     """
-    return f''' && for f in dist/*-{original_dist_target}.whl; do mv "$f" "${{f/{original_dist_target}/{new_dist_target}}}"; done'''
+    return f''' && pip install auditwheel && python -m auditwheel repair dist/*-{original_dist_target}.whl --plat {new_dist_target} --only-plat -w dist && rm -f dist/*-{original_dist_target}.whl'''
 
 def install_dist(cp_version, dist_target):
     """
@@ -173,7 +173,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
 
                 image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_x86_64"
                 original_dist_target = "linux_x86_64"
-                new_dist_target = "manylinux_2_17_x86_64.manylinux2014_x86_64"
+                new_dist_target = "manylinux2014_x86_64.manylinux_2_17_x86_64"
 
                 if linux_x86_64_compiler == 'gcc':
                     CC = "gcc"
@@ -188,7 +188,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                     build_command = \
                         prepare_environment_manylinux_2_17_x86_64_and_musllinux_1_2_x86_64(CC, CXX) + \
                         build + \
-                        rename_dist(original_dist_target, new_dist_target)
+                        rename_dist(original_dist_target, target)
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
@@ -207,7 +207,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
 
                 image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_aarch64"
                 original_dist_target = "linux_aarch64"
-                new_dist_target = "manylinux_2_17_aarch64.manylinux2014_aarch64"
+                new_dist_target = "manylinux2014_aarch64.manylinux_2_17_aarch64"
 
                 python_aarch64 = "LD_LIBRARY_PATH=/usr/aarch64-linux-gnu/lib /python/bin/python3"
                 pip_aarch64 = "LD_LIBRARY_PATH=/usr/aarch64-linux-gnu/lib /python/bin/python3 -m pip"
@@ -218,7 +218,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                     if linux_non_native_mode == 'cross':
                         build_command = \
                             build + \
-                            rename_dist(original_dist_target, new_dist_target)
+                            rename_dist(original_dist_target, target)
                     else:
                         build_command = \
                             wrapper('python3', python_aarch64) + \
@@ -226,7 +226,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                             wrapper('pip3', pip_aarch64) + \
                             wrapper('pip', pip_aarch64) + \
                             build + \
-                            rename_dist(original_dist_target, new_dist_target)
+                            rename_dist(original_dist_target, target)
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
@@ -250,7 +250,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                 image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_armv7l"
                 original_dist_target_cross = "linux_armv7"
                 original_dist_target_emulate = "linux_armv7l"
-                new_dist_target = "manylinux_2_17_armv7l.manylinux2014_armv7l"
+                new_dist_target = "manylinux2014_armv7l.manylinux_2_17_armv7l"
 
                 python_armv7 = "LD_LIBRARY_PATH=/usr/arm-linux-gnueabihf/lib /python/bin/python3"
                 pip_armv7 = "LD_LIBRARY_PATH=/usr/arm-linux-gnueabihf/lib /python/bin/python3 -m pip"
@@ -261,7 +261,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                     if linux_non_native_mode == 'cross':
                         build_command = \
                             build + \
-                            rename_dist(original_dist_target_cross, new_dist_target)
+                            rename_dist(original_dist_target_cross, target)
                     else:
                         build_command = \
                             wrapper('python3', python_armv7) + \
@@ -269,7 +269,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                             wrapper('pip3', pip_armv7) + \
                             wrapper('pip', pip_armv7) + \
                             build + \
-                            rename_dist(original_dist_target_emulate, new_dist_target)
+                            rename_dist(original_dist_target_emulate, target)
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
@@ -292,7 +292,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
 
                 image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_ppc64le"
                 original_dist_target = "linux_ppc64le"
-                new_dist_target = "manylinux_2_17_ppc64le.manylinux2014_ppc64le"
+                new_dist_target = "manylinux2014_ppc64le.manylinux_2_17_ppc64le"
 
                 python_ppc64le = "LD_LIBRARY_PATH=/usr/powerpc64le-linux-gnu/lib /python/bin/python3"
                 pip_ppc64le = "LD_LIBRARY_PATH=/usr/powerpc64le-linux-gnu/lib /python/bin/python3 -m pip"
@@ -303,7 +303,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                     if linux_non_native_mode == 'cross':
                         build_command = \
                             build + \
-                            rename_dist(original_dist_target, new_dist_target)
+                            rename_dist(original_dist_target, target)
                     else:
                         build_command = \
                             wrapper('python3', python_ppc64le) + \
@@ -311,7 +311,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                             wrapper('pip3', pip_ppc64le) + \
                             wrapper('pip', pip_ppc64le) + \
                             build + \
-                            rename_dist(original_dist_target, new_dist_target)
+                            rename_dist(original_dist_target, target)
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
@@ -334,7 +334,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
 
                 image_name = f"manylinux-lvl3-cp{py_version_nodot}-manylinux_2_17_s390x"
                 original_dist_target = "linux_s390x"
-                new_dist_target = "manylinux_2_17_s390x.manylinux2014_s390x"
+                new_dist_target = "manylinux2014_s390x.manylinux_2_17_s390x"
 
                 python_s390x = "LD_LIBRARY_PATH=/usr/s390x-linux-gnu/lib /python/bin/python3"
                 pip_s390x = "LD_LIBRARY_PATH=/usr/s390x-linux-gnu/lib /python/bin/python3 -m pip"
@@ -345,7 +345,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                     if linux_non_native_mode == 'cross':
                         build_command = \
                             build + \
-                            rename_dist(original_dist_target, new_dist_target)
+                            rename_dist(original_dist_target, target)
                     else:
                         build_command = \
                             wrapper('python3', python_s390x) + \
@@ -353,7 +353,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                             wrapper('pip3', pip_s390x) + \
                             wrapper('pip', pip_s390x) + \
                             build + \
-                            rename_dist(original_dist_target, new_dist_target)
+                            rename_dist(original_dist_target, target)
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
@@ -391,7 +391,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                     build_command = \
                         prepare_environment_manylinux_2_17_x86_64_and_musllinux_1_2_x86_64(CC, CXX) + \
                         build + \
-                        rename_dist(original_dist_target, new_dist_target)
+                        rename_dist(original_dist_target, target)
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
