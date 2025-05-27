@@ -71,14 +71,15 @@ CLEAN="./pookie.sh --workspace \"$WORKSPACE\" --clean"
 SECONDS=0
 
 # -------------------------------------------------
-# Build for all targets
+# Build and test for all targets
 # -------------------------------------------------
-echo ">> Build for all targets"
+echo ">> Build and test for all targets"
 
 CMD1="./pookie.sh \
     --workspace \"$WORKSPACE\" \
     --target manylinux_2_17_x86_64 manylinux_2_17_aarch64 manylinux_2_17_armv7l manylinux_2_17_ppc64le manylinux_2_17_s390x musllinux_1_2_x86_64 macosx_11_0_x86_64 macosx_11_0_arm64 \
     --build \"$BUILD_CMD\" \
+    --test \"$TEST_CMD\" \
     --python-version $PYTHON_VERSION"
 
 eval $CLEAN > "$WORKSPACE/pookie.log" 2>&1
@@ -103,21 +104,6 @@ for FILE in "${FILES1[@]}"; do
     fi
 done
 
-# -------------------------------------------------
-# Test for available targets
-# -------------------------------------------------
-echo ">> Test for available targets"
-
-CMD2="./pookie.sh \
-    --workspace \"$WORKSPACE\" \
-    --target manylinux_2_17_x86_64 manylinux_2_17_aarch64 manylinux_2_17_armv7l manylinux_2_17_ppc64le manylinux_2_17_s390x musllinux_1_2_x86_64 \
-    --build \"$BUILD_CMD\" \
-    --test \"$TEST_CMD\" \
-    --python-version $PYTHON_VERSION"
-
-eval $CLEAN >> "$WORKSPACE/pookie.log" 2>&1
-eval $CMD2 >> "$WORKSPACE/pookie.log" 2>&1
-
 awk '
   />> Testing the library/ {print $0; show=1; next}
   /^>> / {show=0}
@@ -125,14 +111,15 @@ awk '
 ' "$WORKSPACE/pookie.log"
 
 # -------------------------------------------------
-# Build for linux x86_64 with clang
+# Build and test for linux x86_64 with clang
 # -------------------------------------------------
-echo ">> Build for linux x86_64 with clang"
+echo ">> Build and test for linux x86_64 with clang"
 
 CMD3="./pookie.sh \
     --workspace \"$WORKSPACE\" \
     --target manylinux_2_17_x86_64 musllinux_1_2_x86_64 \
     --build \"$BUILD_CMD\" \
+    --test \"$TEST_CMD\" \
     --python-version $PYTHON_VERSION \
     --linux-x86_64-compiler clang"
 
@@ -152,8 +139,14 @@ for FILE in "${FILES2[@]}"; do
     fi
 done
 
+awk '
+  />> Testing the library/ {print $0; show=1; next}
+  /^>> / {show=0}
+  show {print}
+' "$WORKSPACE/pookie.log"
+
 # -------------------------------------------------
-# Build for linux non native in emulate mode
+# Build and test for linux non native in emulate mode
 # -------------------------------------------------
 echo ">> Build for linux non native in emulate mode"
 
@@ -161,6 +154,7 @@ CMD4="./pookie.sh \
     --workspace \"$WORKSPACE\" \
     --target manylinux_2_17_aarch64 manylinux_2_17_armv7l manylinux_2_17_ppc64le manylinux_2_17_s390x \
     --build \"$BUILD_CMD\" \
+    --test \"$TEST_CMD\" \
     --python-version $PYTHON_VERSION \
     --linux-non-native-mode emulate"
 
@@ -182,8 +176,16 @@ for FILE in "${FILES3[@]}"; do
     fi
 done
 
+awk '
+  />> Testing the library/ {print $0; show=1; next}
+  /^>> / {show=0}
+  show {print}
+' "$WORKSPACE/pookie.log"
+
 # End of tests
 echo ">> Cleaning workspace"
 eval $CLEAN >> "$WORKSPACE/pookie.log" 2>&1
 
-echo ">> All test completed in $SECONDS seconds. Check \"$WORKSPACE/pookie.log\" for details."
+MINUTES=$(( SECONDS / 60 ))
+REMAINING=$(( SECONDS % 60 ))
+echo ">> All test completed in $MINUTES minutes and $REMAINING seconds."

@@ -88,7 +88,8 @@ def main():
                 '-rf',
                 '__pycache__',
                 'dist',
-                'build'
+                'build',
+                'pookie.log'
         ]
         + glob.glob('*.egg-info'))
         print(">> See you soon")
