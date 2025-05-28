@@ -89,7 +89,8 @@ def main():
                 '__pycache__',
                 'dist',
                 'build',
-                'pookie.log'
+                'pookie.log',
+                'clang-wrapper.sh'
         ]
         + glob.glob('*.egg-info'))
         print(">> See you soon")
