@@ -58,7 +58,7 @@ def install_dist(cp_version, dist_target):
     Returns:
     - str: The command to install the built library.
     """
-    return f'''python3 -m pip install dist/*-cp{cp_version}-cp{cp_version}*-{dist_target}.whl && '''
+    return f'''python3 -m pip install dist/*-cp{cp_version}-cp{cp_version}*-{dist_target}.whl >> /dev/null 2>> /dev/null && '''
 
 def prepare_environment_macosx_11_0_x86_64_and_macosx_11_0_arm64(cross_compiler, arquitecture, python_major_dot_minor_version):
     """
