@@ -170,6 +170,16 @@ pookie/
 └── README.md                                  # Project documentation
 ```
 
+## Known Issues
+
+### Cross-compiling for `manylinux_2_17_armv7l`
+
+When cross-compiling for the `manylinux_2_17_armv7l` target using [crossenv](https://github.com/benfogle/crossenv) with `--linux-non-native-mode cross`, the build environment incorrectly tags the wheel with `armv7` instead of the standard `armv7l` platform tag.
+
+As a result, [`auditwheel`](https://github.com/pypa/auditwheel) cannot apply the correct platform tag to the generated wheel. This prevents the resulting wheel from being recognized as valid for `manylinux_2_17_armv7l`.
+
+However, when using emulation with `--linux-non-native-mode emulate`, the wheel is correctly tagged as `armv7l`, and `auditwheel` works as expected.
+
 ## Developer Notes
 
 During development, if you're rebuilding images frequently (for example, when testing changes) Docker may retain old layers from previous builds. Even when images are overwritten, the old layers can remain in the cache and gradually consume a large amount of disk space.
