@@ -99,15 +99,14 @@ def prepare_environment_manylinux_2_17_x86_64_and_musllinux_1_2_x86_64(CC, CXX):
 
     return f'''export CC={CC} && export CXX={CXX} && '''
 
-def fix_EXT_SUFFIX(py_version_nodot, new_base_os, new_dist_target):
+def fix_Wheel_macosx_11_0_x86_64_and_macosx_11_0_arm64(py_version_nodot, new_dist_target):
     """
-    Generate the command to fix the EXT_SUFFIX for cross builds.
+    Generate the command to fix the wheel platform and tags for macosx_11_0_x86_64 and macosx_11_0_arm64 cross builds.
     This is necessary to ensure that the built library can be imported correctly.
     Place this command AFTER the build command.
 
     Parameters:
     - py_version_nodot (str): The CP version to use in the filename.
-    - new_base_os (str): The new base OS for the library (target name in .so files).
     - new_dist_target (str): The new distribution target.
 
     Returns:
@@ -117,9 +116,7 @@ def fix_EXT_SUFFIX(py_version_nodot, new_base_os, new_dist_target):
     return f''' && cd dist && \
         orig_whl=$(ls *-cp{py_version_nodot}-cp{py_version_nodot}-linux_x86_64.whl) && \
         unzip -o *-cp{py_version_nodot}-cp{py_version_nodot}-linux_x86_64.whl -d tmp && cd tmp && \
-        find . -type f -name "*.cpython-{py_version_nodot}-x86_64-linux-gnu.so" -exec bash -c 'mv "$0" "${{0/-x86_64-linux-gnu/-{new_base_os}}}"' {{}} \\; && \
         sed -i 's/linux_x86_64/{new_dist_target}/g' *.dist-info/WHEEL && \
-        sed -i 's/x86_64-linux-gnu/{new_base_os}/g' *.dist-info/RECORD && \
         zip -r "../${{orig_whl/-linux_x86_64/-{new_dist_target}}}" * && \
         cd .. && rm -rf *-cp{py_version_nodot}-cp{py_version_nodot}-linux_x86_64.whl tmp/ ../clang-wrapper.sh'''
 
@@ -422,7 +419,6 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
             if target == 'macosx_11_0_x86_64':
 
                 image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-macosx_11_0_x86_64"
-                new_base_os = "darwin"
                 new_dist_target = "macosx_11_0_x86_64"
                 cross_compiler = "o64-clang"
                 arquitecture = "x86_64"
@@ -433,7 +429,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                     build_command = \
                         prepare_environment_macosx_11_0_x86_64_and_macosx_11_0_arm64(cross_compiler, arquitecture, python_major_dot_minor_version) + \
                         build + \
-                        fix_EXT_SUFFIX(py_version_nodot, new_base_os, new_dist_target)
+                        fix_Wheel_macosx_11_0_x86_64_and_macosx_11_0_arm64(py_version_nodot, new_dist_target)
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
@@ -458,7 +454,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                     build_command = \
                         prepare_environment_macosx_11_0_x86_64_and_macosx_11_0_arm64(cross_compiler, arquitecture, python_major_dot_minor_version) + \
                         build + \
-                        fix_EXT_SUFFIX(py_version_nodot, new_base_os, new_dist_target)
+                        fix_Wheel_macosx_11_0_x86_64_and_macosx_11_0_arm64(py_version_nodot, new_dist_target)
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)

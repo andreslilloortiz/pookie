@@ -47,6 +47,11 @@ RUN cd /python/lib/python* && \
     sed -i 's#/install#/python#g' _sysconfigdata__*.py && \
     find . -name '__pycache__' -type d -exec rm -rf {} +
 
+RUN bash -c "\
+    minor_version=\$(echo \"\$PYTHON_URL\" | sed -n 's/.*cpython-[0-9]*\\.\\([0-9]*\\)\\..*/\\1/p') && \
+    echo -e \"\nbuild_time_vars[\\\"EXT_SUFFIX\\\"] = \\\".cpython-3\${minor_version}-darwin.so\\\"\" >> /python_cross/lib/python*/_sysconfigdata* && \
+    echo -e \"\nbuild_time_vars[\\\"SOABI\\\"] = \\\"cpython-3\${minor_version}-darwin\\\"\" >> /python_cross/lib/python*/_sysconfigdata*"
+
 # Create wrapper scripts for Python and pip
 RUN mkdir -p /wrapper && \
     printf "#!/bin/bash\n${PYTHON_EXECUTABLE} \"\$@\"" > /wrapper/python3 && \
