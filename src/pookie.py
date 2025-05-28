@@ -32,7 +32,7 @@ def main():
     parser.add_argument(
         '--clean',
         action='store_true',
-        help='Remove all build artifacts and end the script execution'
+        help='Remove all build artifacts, log files and other residual files and end the script execution'
         )
     parser.add_argument(
         '--build',
