@@ -414,7 +414,14 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                         build
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
-                    run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
+                    #run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
+                    print("Not supported yet :(")
+
+                # test the library
+                if test != None:
+
+                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
+                    print("Not supported yet :(")
 
             if target == 'macosx_11_0_x86_64':
 
@@ -443,7 +450,6 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
             if target == 'macosx_11_0_arm64':
 
                 image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-macosx_11_0_arm64"
-                new_base_os = "darwin"
                 new_dist_target = "macosx_11_0_arm64"
                 cross_compiler = "oa64-clang"
                 arquitecture = "arm64"

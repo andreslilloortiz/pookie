@@ -77,7 +77,6 @@ echo ">> Build and test for all targets"
 
 CMD1="./pookie.sh \
     --workspace \"$WORKSPACE\" \
-    --target manylinux_2_17_x86_64 manylinux_2_17_aarch64 manylinux_2_17_armv7l manylinux_2_17_ppc64le manylinux_2_17_s390x musllinux_1_2_x86_64 macosx_11_0_x86_64 macosx_11_0_arm64 \
     --build \"$BUILD_CMD\" \
     --test \"$TEST_CMD\" \
     --python-version $PYTHON_VERSION"
