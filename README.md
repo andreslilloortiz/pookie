@@ -73,7 +73,7 @@ Before getting started, ensure you have the following installed and configured o
 | `--python-version PYTHON_VERSION [PYTHON_VERSION ...]` | Minor Python version(s) to compile for (default: last 4 available) |
 | `--target {manylinux_2_17_x86_64,manylinux_2_17_aarch64,manylinux_2_17_armv7l,`<br>`manylinux_2_17_ppc64le,manylinux_2_17_s390x,musllinux_1_2_x86_64,`<br>`win_amd64,macosx_11_0_x86_64,macosx_11_0_arm64} [{manylinux_2_17_x86_64,manylinux_2_17_aarch64,manylinux_2_17_armv7l,`<br>`manylinux_2_17_ppc64le,manylinux_2_17_s390x,musllinux_1_2_x86_64,`<br>`win_amd64,macosx_11_0_x86_64,macosx_11_0_arm64} ...]` | Target platform(s) to build and test the library for (default: all) |
 | `--linux-x86_64-compiler {gcc,clang}` | Compiler to use for manylinux_2_17_x86_64 or musllinux_1_2_x86_64 targets (default: gcc) |
-| `--linux-non-native-mode {cross,emulate}` | Compilation mode for non-native manylinux_2_17 targets (e.g. aarch64, armv7l, ppc64, riscv64, s390x): "cross" for cross-compilation or "emulate" for QEMU-based emulation (default: cross) |
+| `--linux-non-native-mode {cross,emulate}` | Compilation mode for non-native manylinux_2_17 targets (e.g. aarch64, armv7l, ppc64, s390x): "cross" for cross-compilation or "emulate" for QEMU-based emulation (default: cross) |
 
 ## Examples
 
