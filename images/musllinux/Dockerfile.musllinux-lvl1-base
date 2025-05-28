@@ -24,6 +24,7 @@ RUN apk add --no-cache \
 
 RUN wget https://github.com/NixOS/patchelf/releases/download/0.18.0/patchelf-0.18.0-x86_64.tar.gz && \
     mkdir patchelf && \
-    tar -xzf patchelf-0.18.0-x86_64.tar.gz -C /patchelf
+    tar -xzf patchelf-0.18.0-x86_64.tar.gz -C /patchelf && \
+    rm -f patchelf-0.18.0-x86_64.tar.gz
 
 ENV PATH="/patchelf/bin:${PATH}"
