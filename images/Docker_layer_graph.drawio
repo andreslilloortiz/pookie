@@ -1,4 +1,4 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.5 Chrome/134.0.6998.205 Electron/35.3.0 Safari/537.36" version="27.0.5" pages="3">
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.5 Chrome/134.0.6998.205 Electron/35.3.0 Safari/537.36" version="27.0.5" pages="5">
   <diagram id="O48PNkfvRvmSjr1T7r3z" name="manylinux">
     <mxGraphModel dx="1896" dy="902" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -85,6 +85,108 @@
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="1330" y="80" as="sourcePoint" />
             <mxPoint x="1931" y="120" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="manylinux-part1" id="Did13FDV1qydkBjjkvy9">
+    <mxGraphModel dx="1896" dy="902" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="wd3FYFt02pDFn2Ap9oAw-0" />
+        <mxCell id="wd3FYFt02pDFn2Ap9oAw-1" parent="wd3FYFt02pDFn2Ap9oAw-0" />
+        <mxCell id="wd3FYFt02pDFn2Ap9oAw-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="wd3FYFt02pDFn2Ap9oAw-1" source="wd3FYFt02pDFn2Ap9oAw-3" target="wd3FYFt02pDFn2Ap9oAw-5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wd3FYFt02pDFn2Ap9oAw-3" value="&lt;font&gt;manylinux-lvl1-base&lt;/font&gt;&lt;div&gt;&lt;font&gt;(ubuntu:18.04)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;gradientColor=none;fillColor=default;strokeColor=default;fontFamily=Times New Roman;" parent="wd3FYFt02pDFn2Ap9oAw-1" vertex="1">
+          <mxGeometry x="500" y="40" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="wd3FYFt02pDFn2Ap9oAw-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="wd3FYFt02pDFn2Ap9oAw-1" source="wd3FYFt02pDFn2Ap9oAw-5" target="wd3FYFt02pDFn2Ap9oAw-6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wd3FYFt02pDFn2Ap9oAw-5" value="&lt;font&gt;manylinux-lvl2-gnu-gcc-clang&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="wd3FYFt02pDFn2Ap9oAw-1" vertex="1">
+          <mxGeometry x="60" y="160" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="wd3FYFt02pDFn2Ap9oAw-6" value="&lt;font&gt;manylinux-&lt;span style=&quot;&quot;&gt;lvl3&lt;/span&gt;-&lt;span style=&quot;&quot;&gt;cp3xx-manylinux_2_17_x86_64&lt;/span&gt;&lt;br&gt;(One for each Python version)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="wd3FYFt02pDFn2Ap9oAw-1" vertex="1">
+          <mxGeometry x="40" y="280" width="360" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="wd3FYFt02pDFn2Ap9oAw-7" value="&lt;font&gt;manylinux-lvl2-gcc-aarch64-linux-gnu&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="wd3FYFt02pDFn2Ap9oAw-1" vertex="1">
+          <mxGeometry x="460" y="160" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="wd3FYFt02pDFn2Ap9oAw-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="wd3FYFt02pDFn2Ap9oAw-1" source="wd3FYFt02pDFn2Ap9oAw-3" target="wd3FYFt02pDFn2Ap9oAw-7" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="296" y="150" as="sourcePoint" />
+            <mxPoint x="199" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wd3FYFt02pDFn2Ap9oAw-9" value="&lt;font&gt;manylinux-&lt;span style=&quot;&quot;&gt;lvl3&lt;/span&gt;-&lt;span style=&quot;&quot;&gt;cp3xx-manylinux_2_17_aarch64&lt;/span&gt;&lt;/font&gt;&lt;div&gt;&lt;font&gt;(One for each Python version)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="wd3FYFt02pDFn2Ap9oAw-1" vertex="1">
+          <mxGeometry x="440" y="280" width="360" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="wd3FYFt02pDFn2Ap9oAw-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="wd3FYFt02pDFn2Ap9oAw-1" source="wd3FYFt02pDFn2Ap9oAw-7" target="wd3FYFt02pDFn2Ap9oAw-9" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="369.45000000000005" y="220" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wd3FYFt02pDFn2Ap9oAw-11" value="&lt;font&gt;manylinux-lvl2-gcc-arm-linux-gnueabihf&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="wd3FYFt02pDFn2Ap9oAw-1" vertex="1">
+          <mxGeometry x="860" y="160" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="wd3FYFt02pDFn2Ap9oAw-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="wd3FYFt02pDFn2Ap9oAw-1" source="wd3FYFt02pDFn2Ap9oAw-3" target="wd3FYFt02pDFn2Ap9oAw-11" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="900" y="120" as="sourcePoint" />
+            <mxPoint x="639" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wd3FYFt02pDFn2Ap9oAw-13" value="&lt;font&gt;manylinux-&lt;span style=&quot;&quot;&gt;lvl3&lt;/span&gt;-&lt;span style=&quot;&quot;&gt;cp3xx-manylinux_2_17&lt;/span&gt;&lt;/font&gt;_armv7l&lt;div&gt;&lt;font&gt;(One for each Python version)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="wd3FYFt02pDFn2Ap9oAw-1" vertex="1">
+          <mxGeometry x="840" y="280" width="360" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="wd3FYFt02pDFn2Ap9oAw-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="wd3FYFt02pDFn2Ap9oAw-1" source="wd3FYFt02pDFn2Ap9oAw-11" target="wd3FYFt02pDFn2Ap9oAw-13" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="809.45" y="220" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="manylinux-part2" id="QDSYBTf6AXZRdPi9jbgv">
+    <mxGraphModel dx="1896" dy="902" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="QHAEiVIK2DXOMmamvT1E-0" />
+        <mxCell id="QHAEiVIK2DXOMmamvT1E-1" parent="QHAEiVIK2DXOMmamvT1E-0" />
+        <mxCell id="QHAEiVIK2DXOMmamvT1E-3" value="&lt;font&gt;manylinux-lvl1-base&lt;/font&gt;&lt;div&gt;&lt;font&gt;(ubuntu:18.04)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;gradientColor=none;fillColor=default;strokeColor=default;fontFamily=Times New Roman;" parent="QHAEiVIK2DXOMmamvT1E-1" vertex="1">
+          <mxGeometry x="299" y="40" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="QHAEiVIK2DXOMmamvT1E-15" value="&lt;font&gt;manylinux-lvl2-gcc-powerpc64le-linux-gnu&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="QHAEiVIK2DXOMmamvT1E-1" vertex="1">
+          <mxGeometry x="60.5" y="160" width="319" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="QHAEiVIK2DXOMmamvT1E-16" value="&lt;font&gt;manylinux-&lt;span style=&quot;&quot;&gt;lvl3&lt;/span&gt;-&lt;span style=&quot;&quot;&gt;cp3xx-manylinux_2_17&lt;/span&gt;&lt;/font&gt;_ppc64le&lt;div&gt;&lt;font&gt;(One for each Python version)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="QHAEiVIK2DXOMmamvT1E-1" vertex="1">
+          <mxGeometry x="40" y="280" width="360" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="QHAEiVIK2DXOMmamvT1E-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="QHAEiVIK2DXOMmamvT1E-1" source="QHAEiVIK2DXOMmamvT1E-15" target="QHAEiVIK2DXOMmamvT1E-16" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="48.450000000000045" y="220" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QHAEiVIK2DXOMmamvT1E-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="QHAEiVIK2DXOMmamvT1E-1" source="QHAEiVIK2DXOMmamvT1E-3" target="QHAEiVIK2DXOMmamvT1E-15" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="29" y="110" as="sourcePoint" />
+            <mxPoint x="249" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QHAEiVIK2DXOMmamvT1E-19" value="&lt;font&gt;manylinux-lvl2-gcc-s390x-linux-gnu&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="QHAEiVIK2DXOMmamvT1E-1" vertex="1">
+          <mxGeometry x="459.5" y="160" width="319" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="QHAEiVIK2DXOMmamvT1E-20" value="&lt;font&gt;manylinux-&lt;span style=&quot;&quot;&gt;lvl3&lt;/span&gt;-&lt;span style=&quot;&quot;&gt;cp3xx-manylinux_2_17&lt;/span&gt;&lt;/font&gt;_s390x&lt;div&gt;&lt;font&gt;(One for each Python version)&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="QHAEiVIK2DXOMmamvT1E-1" vertex="1">
+          <mxGeometry x="439" y="280" width="360" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="QHAEiVIK2DXOMmamvT1E-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="QHAEiVIK2DXOMmamvT1E-1" source="QHAEiVIK2DXOMmamvT1E-19" target="QHAEiVIK2DXOMmamvT1E-20" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="447.45000000000005" y="220" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QHAEiVIK2DXOMmamvT1E-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;fontColor=default;fontFamily=Times New Roman;" parent="QHAEiVIK2DXOMmamvT1E-1" source="QHAEiVIK2DXOMmamvT1E-3" target="QHAEiVIK2DXOMmamvT1E-19" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="129" y="80" as="sourcePoint" />
+            <mxPoint x="730" y="120" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
