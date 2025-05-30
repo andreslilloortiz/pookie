@@ -124,7 +124,7 @@ To test the functionality of pookie, you can run the provided test script `test_
    chmod +x test_pookie.sh
    ```
 
-2. ** Run the test script**:
+2. **Run the test script**:
 
    Execute the `test_pookie.sh` script to run the tests.
 
