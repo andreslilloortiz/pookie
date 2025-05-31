@@ -46,6 +46,19 @@ RUN wget -O python.tar.gz ${PYTHON_URL} && \
     tar -xvzf python.tar.gz && \
     rm -f python.tar.gz
 
+RUN bash -c "\
+    minor_version=\$(echo \"\$PYTHON_URL\" | sed -n 's/.*cpython-[0-9]*\\.\\([0-9]*\\)\\..*/\\1/p') && \
+    echo -e \"\nbuild_time_vars[\\\"EXT_SUFFIX\\\"] = \\\".cp-3\${minor_version}-win_amd64.pyd\\\"\" >> /python_cross/lib/python*/_sysconfigdata* && \
+    echo -e \"\nbuild_time_vars[\\\"SOABI\\\"] = \\\"cp-3\${minor_version}-win_amd64\\\"\" >> /python_cross/lib/python*/_sysconfigdata* && \
+    echo -e \"\nbuild_time_vars[\\\"SHLIB_SUFFIX\\\"] = \\\".pyd\\\"\" >> /python_cross/lib/python*/_sysconfigdata*"
+
+# Generate the static library libpython310.a from python310.dll for MinGW linking
+RUN bash -c "\
+    minor_version=\$(echo \"\$PYTHON_URL\" | sed -n 's/.*cpython-[0-9]*\\.\\([0-9]*\\)\\..*/\\1/p') && \
+    cd /python/libs && \
+    gendef /python/python3\${minor_version}.dll && \
+    x86_64-w64-mingw32-dlltool -d python3\${minor_version}.def -l libpython3\${minor_version}.a -D python3\${minor_version}.dll"
+
 # Create wrapper scripts for Python and pip
 RUN mkdir -p /wrapper && \
     printf "#!/bin/bash\n${PYTHON_EXECUTABLE} \"\$@\"" > /wrapper/python3 && \

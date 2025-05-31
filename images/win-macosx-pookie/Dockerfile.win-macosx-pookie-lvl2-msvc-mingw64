@@ -26,6 +26,8 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     winbind \
     cabextract \
+    gcc-mingw-w64-x86-64 \
+    mingw-w64-tools \
     && rm -rf /var/lib/apt/lists/*
 
 # # Download and install mingw-w64

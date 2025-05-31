@@ -90,7 +90,8 @@ def main():
                 'dist',
                 'build',
                 'pookie.log',
-                'clang-wrapper.sh'
+                'clang-wrapper.sh',
+                'mingw-wrapper.sh'
         ]
         + glob.glob('*.egg-info'))
         print(">> See you soon")
@@ -124,11 +125,13 @@ def main():
     # run build and test commands
     run_docker_images(args.target, logfile, python_versions_dic, args.build, args.test, args.linux_x86_64_compiler, args.linux_non_native_mode, host_workspace_path)
 
-    # Delete __pycache__ folders
+    # Delete residual files
     subprocess.run([
         'rm',
             '-rf',
-            '__pycache__'
+            '__pycache__',
+            'clang-wrapper.sh',
+            'mingw-wrapper.sh'
     ])
 
     print(">> See you soon")

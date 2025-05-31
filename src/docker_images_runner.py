@@ -99,6 +99,51 @@ def prepare_environment_manylinux_2_17_x86_64_and_musllinux_1_2_x86_64(CC, CXX):
 
     return f'''export CC={CC} && export CXX={CXX} && '''
 
+def prepare_environment_win_amd64(py_version_nodot):
+    """
+    Generate the command to prepare the environment for win_amd64 builds.
+    This includes setting up the compiler and linker flags.
+    Place this command BEFORE the build command.
+
+    Parameters:
+    - py_version_nodot (str): The major and minor version of Python to use (e.g., "312").
+
+    Returns:
+    - str: The command to prepare the environment.
+    """
+
+    return f'''cat <<'EOF' > mingw-wrapper.sh
+#!/bin/bash
+
+# Detect if we're in the linking phase by checking for `-shared` flag
+if [[ "$@" == *"-shared"* ]]; then
+    # Reorder args: move `-lpython{py_version_nodot}` and enable auto-import to the end
+    args=()
+    libs=()
+    for arg in "$@"; do
+        if [[ "$arg" == "-lpython{py_version_nodot}" ]]; then
+            libs+=("$arg")
+        elif [[ "$arg" == "-Wl,--enable-auto-import" ]]; then
+            libs+=("$arg")
+        else
+            args+=("$arg")
+        fi
+    done
+    # Now call the real compiler
+    exec x86_64-w64-mingw32-gcc "${{args[@]}}" "${{libs[@]}}"
+else
+    # Not linking: compile as usual
+    exec x86_64-w64-mingw32-gcc "$@"
+fi
+EOF
+    chmod +x ./mingw-wrapper.sh && \
+    export CC="$(pwd)/mingw-wrapper.sh" && \
+    export CXX="$CC" && \
+    export CFLAGS="-I/python/include" && \
+    export LDFLAGS="-L/python/libs -lpython{py_version_nodot} -Wl,--enable-auto-import" \
+    &&
+'''
+
 def fix_Wheel_macosx_11_0_x86_64_and_macosx_11_0_arm64(py_version_nodot, new_dist_target):
     """
     Generate the command to fix the wheel platform and tags for macosx_11_0_x86_64 and macosx_11_0_arm64 cross builds.
@@ -411,10 +456,11 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                 if build != None:
 
                     build_command = \
+                        prepare_environment_win_amd64(py_version_nodot) + \
                         build
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
-                    #run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
+                    run_lvl3_image(image_name, build_command, host_workspace_path, None)
                     print("Not supported yet :(")
 
                 # test the library
