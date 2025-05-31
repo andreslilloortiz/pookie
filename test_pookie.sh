@@ -91,6 +91,7 @@ FILES1=(
     "$BASE_WHEEL-manylinux2014_ppc64le.manylinux_2_17_ppc64le.whl"
     "$BASE_WHEEL-manylinux2014_s390x.manylinux_2_17_s390x.whl"
     "$BASE_WHEEL-musllinux_1_2_x86_64.whl"
+    "$BASE_WHEEL-win_amd64.whl"
     "$BASE_WHEEL-macosx_11_0_x86_64.whl"
     "$BASE_WHEEL-macosx_11_0_arm64.whl"
 )
