@@ -262,7 +262,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                         build + \
                         rename_dist(original_dist_target, target)
 
-                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Building the library for cp{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
                 # test the library
@@ -272,7 +272,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                         install_dist(py_version_nodot, new_dist_target) + \
                         test
 
-                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Testing the library for cp{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
             if target == 'manylinux_2_17_aarch64':
@@ -300,7 +300,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                             build + \
                             rename_dist(original_dist_target, target)
 
-                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Building the library for cp{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
                 # test the library
@@ -314,7 +314,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                         install_dist(py_version_nodot, new_dist_target) + \
                         test
 
-                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Testing the library for cp{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
             if target == "manylinux_2_17_armv7l":
@@ -343,7 +343,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                             build + \
                             rename_dist(original_dist_target_emulate, target)
 
-                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Building the library for cp{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
                 # test the library
@@ -357,7 +357,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                         install_dist(py_version_nodot, new_dist_target) + \
                         test
 
-                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Testing the library for cp{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
             if target == "manylinux_2_17_ppc64le":
@@ -385,7 +385,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                             build + \
                             rename_dist(original_dist_target, target)
 
-                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Building the library for cp{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
                 # test the library
@@ -399,7 +399,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                         install_dist(py_version_nodot, new_dist_target) + \
                         test
 
-                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Testing the library for cp{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
             if target == "manylinux_2_17_s390x":
@@ -427,7 +427,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                             build + \
                             rename_dist(original_dist_target, target)
 
-                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Building the library for cp{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
                 # test the library
@@ -441,7 +441,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                         install_dist(py_version_nodot, new_dist_target) + \
                         test
 
-                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Testing the library for cp{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
             if target == 'musllinux_1_2_x86_64':
@@ -465,7 +465,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                         build + \
                         rename_dist(original_dist_target, target)
 
-                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Building the library for cp{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
                 # test the library
@@ -475,7 +475,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                         install_dist(py_version_nodot, new_dist_target) + \
                         test
 
-                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Testing the library for cp{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
             if target == 'win_amd64':
@@ -489,7 +489,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                         prepare_environment_win_amd64(py_version_nodot, python_major_dot_minor_version) + \
                         build
 
-                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Building the library for cp{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
                 # test the library
@@ -513,13 +513,13 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                         build + \
                         fix_Wheel_macosx_11_0_x86_64_and_macosx_11_0_arm64(py_version_nodot, new_dist_target)
 
-                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Building the library for cp{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
                 # test the library
                 if test != None:
 
-                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Testing the library for cp{py_version_nodot}-{target}")
                     print("Not supported yet :(")
 
             if target == 'macosx_11_0_arm64':
@@ -537,11 +537,11 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                         build + \
                         fix_Wheel_macosx_11_0_x86_64_and_macosx_11_0_arm64(py_version_nodot, new_dist_target)
 
-                    print(f">> Building the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Building the library for cp{py_version_nodot}-{target}")
                     run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
                 # test the library
                 if test != None:
 
-                    print(f">> Testing the library for cp-{py_version_nodot}-{target}")
+                    print(f">> Testing the library for cp{py_version_nodot}-{target}")
                     print("Not supported yet :(")
