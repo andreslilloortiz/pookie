@@ -139,19 +139,30 @@ fi
 EOF
 
 cat <<EOF > /python_cross/lib/python{python_major_dot_minor_version}/site-packages/sitecustomize.py
-import distutils.util
+import sys
 import sysconfig
-import setuptools.command.bdist_wheel as bdist_wheel_mod
 
-# Patch platform functions
-distutils.util.get_platform = lambda: "win-amd64"
+# Patch sysconfig.get_platform
 sysconfig.get_platform = lambda: "win-amd64"
 
-# Patch get_tag()
-def _patched_get_tag(self):
-    return 'cp{py_version_nodot}', 'cp{py_version_nodot}', 'win_amd64'
+# Patch distutils.util.get_platform (only if distutils exists)
+try:
+    import distutils.util
+    distutils.util.get_platform = lambda: "win-amd64"
+except ImportError:
+    pass  # distutils not available in Python 12+
 
-bdist_wheel_mod.bdist_wheel.get_tag = _patched_get_tag
+# Patch bdist_wheel.get_tag
+try:
+    import setuptools.command.bdist_wheel as bdist_wheel_mod
+
+    def _patched_get_tag(self):
+        return f'cp{py_version_nodot}', f'cp{py_version_nodot}', 'win_amd64'
+
+    bdist_wheel_mod.bdist_wheel.get_tag = _patched_get_tag
+except ImportError:
+    pass  # setuptools or bdist_wheel not available or changed
+
 EOF
 
     chmod +x ./mingw-wrapper.sh && \
