@@ -99,7 +99,7 @@ def prepare_environment_manylinux_2_17_x86_64_and_musllinux_1_2_x86_64(CC, CXX):
 
     return f'''export CC={CC} && export CXX={CXX} && '''
 
-def prepare_environment_win_amd64(py_version_nodot):
+def prepare_environment_win_amd64(py_version_nodot, python_major_dot_minor_version):
     """
     Generate the command to prepare the environment for win_amd64 builds.
     This includes setting up the compiler and linker flags.
@@ -107,6 +107,7 @@ def prepare_environment_win_amd64(py_version_nodot):
 
     Parameters:
     - py_version_nodot (str): The major and minor version of Python to use (e.g., "312").
+    - python_major_dot_minor_version (str): The major and minor version of Python to use (e.g., "3.12").
 
     Returns:
     - str: The command to prepare the environment.
@@ -136,7 +137,25 @@ else
     exec x86_64-w64-mingw32-gcc "$@"
 fi
 EOF
+
+cat <<EOF > /python_cross/lib/python{python_major_dot_minor_version}/site-packages/sitecustomize.py
+import distutils.util
+import sysconfig
+import setuptools.command.bdist_wheel as bdist_wheel_mod
+
+# Patch platform functions
+distutils.util.get_platform = lambda: "win-amd64"
+sysconfig.get_platform = lambda: "win-amd64"
+
+# Patch get_tag()
+def _patched_get_tag(self):
+    return 'cp{py_version_nodot}', 'cp{py_version_nodot}', 'win_amd64'
+
+bdist_wheel_mod.bdist_wheel.get_tag = _patched_get_tag
+EOF
+
     chmod +x ./mingw-wrapper.sh && \
+    export PYTHONPATH=/python_cross/lib/python{python_major_dot_minor_version}/site-packages
     export CC="$(pwd)/mingw-wrapper.sh" && \
     export CXX="$CC" && \
     export CFLAGS="-I/python/include" && \
@@ -456,12 +475,11 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                 if build != None:
 
                     build_command = \
-                        prepare_environment_win_amd64(py_version_nodot) + \
+                        prepare_environment_win_amd64(py_version_nodot, python_major_dot_minor_version) + \
                         build
 
                     print(f">> Building the library for cp-{py_version_nodot}-{target}")
-                    run_lvl3_image(image_name, build_command, host_workspace_path, None)
-                    print("Not supported yet :(")
+                    run_lvl3_image(image_name, build_command, host_workspace_path, logfile)
 
                 # test the library
                 if test != None:
