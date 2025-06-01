@@ -122,7 +122,7 @@ awk '
     }
   }
 }
-'  "$WORKSPACE/pookie.log"
+' "$WORKSPACE/pookie.log"
 
 # -------------------------------------------------
 # Build and test for linux x86_64 with clang
@@ -171,7 +171,7 @@ awk '
     }
   }
 }
-'  "$WORKSPACE/pookie.log"
+' "$WORKSPACE/pookie.log"
 
 # -------------------------------------------------
 # Build and test for linux non native in emulate mode
@@ -222,7 +222,7 @@ awk '
     }
   }
 }
-'  "$WORKSPACE/pookie.log"
+' "$WORKSPACE/pookie.log"
 
 # End of tests
 echo ">> Cleaning workspace"
