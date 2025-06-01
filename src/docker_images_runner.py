@@ -170,7 +170,7 @@ EOF
     export CC="$(pwd)/mingw-wrapper.sh" && \
     export CXX="$CC" && \
     export CFLAGS="-I/python/include -static-libgcc -static-libstdc++" && \
-    export LDFLAGS="-L/python/libs -lpython{py_version_nodot} -Wl,--enable-auto-import -static-libgcc -static-libstdc++" \
+    export LDFLAGS="-L/python/libs -lpython{py_version_nodot} -Wl,--enable-auto-import -Wl,--export-all-symbols -static-libgcc -static-libstdc++" \
     &&
 '''
 
