@@ -105,10 +105,24 @@ for FILE in "${FILES1[@]}"; do
 done
 
 awk '
-  />> Testing the library/ {print $0; show=1; next}
-  /^>> / {show=0}
-  show {print}
-' "$WORKSPACE/pookie.log"
+{
+  if ($0 ~ />> Testing/) {
+    in_block = 1
+  }
+
+  if (in_block && $0 ~ />>/ && $0 !~ />> Testing/ && seen_testing) {
+    in_block = 0
+    next
+  }
+
+  if (in_block) {
+    print
+    if ($0 ~ />> Testing/) {
+      seen_testing = 1
+    }
+  }
+}
+'  "$WORKSPACE/pookie.log"
 
 # -------------------------------------------------
 # Build and test for linux x86_64 with clang
@@ -140,10 +154,24 @@ for FILE in "${FILES2[@]}"; do
 done
 
 awk '
-  />> Testing the library/ {print $0; show=1; next}
-  /^>> / {show=0}
-  show {print}
-' "$WORKSPACE/pookie.log"
+{
+  if ($0 ~ />> Testing/) {
+    in_block = 1
+  }
+
+  if (in_block && $0 ~ />>/ && $0 !~ />> Testing/ && seen_testing) {
+    in_block = 0
+    next
+  }
+
+  if (in_block) {
+    print
+    if ($0 ~ />> Testing/) {
+      seen_testing = 1
+    }
+  }
+}
+'  "$WORKSPACE/pookie.log"
 
 # -------------------------------------------------
 # Build and test for linux non native in emulate mode
@@ -177,10 +205,24 @@ for FILE in "${FILES3[@]}"; do
 done
 
 awk '
-  />> Testing the library/ {print $0; show=1; next}
-  /^>> / {show=0}
-  show {print}
-' "$WORKSPACE/pookie.log"
+{
+  if ($0 ~ />> Testing/) {
+    in_block = 1
+  }
+
+  if (in_block && $0 ~ />>/ && $0 !~ />> Testing/ && seen_testing) {
+    in_block = 0
+    next
+  }
+
+  if (in_block) {
+    print
+    if ($0 ~ />> Testing/) {
+      seen_testing = 1
+    }
+  }
+}
+'  "$WORKSPACE/pookie.log"
 
 # End of tests
 echo ">> Cleaning workspace"
