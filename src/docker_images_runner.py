@@ -60,6 +60,47 @@ def install_dist(cp_version, dist_target):
     """
     return f'''python3 -m pip install dist/*-cp{cp_version}-cp{cp_version}*-{dist_target}.whl >> /dev/null 2>> /dev/null && '''
 
+def install_dist_win_amd64(cp_version, dist_target):
+    """
+    Generate the command to install the built library in Wine.
+    Place this command BEFORE the test command.
+
+    Parameters:
+    - cp_version (str): The CP version to use in the filename.
+    - target (str): The target architecture.
+
+    Returns:
+    - str: The command to install the built library.
+    """
+    return f'''cat <<'EOF' > /python/Lib/site-packages/sitecustomize.py
+import sys
+import os
+import importlib.machinery
+import importlib.util
+import glob
+
+class SuffixPydLoader:
+    def find_spec(self, fullname, path, target=None):
+        module = fullname.split(".")[0]
+
+        for entry in sys.path:
+            if not os.path.isdir(entry):
+                continue
+            pattern = os.path.join(entry, f"{{module}}.cp*.pyd")
+            matches = glob.glob(pattern)
+            if matches:
+                file_path = matches[0]
+                loader = importlib.machinery.ExtensionFileLoader(fullname, file_path)
+                return importlib.util.spec_from_file_location(fullname, file_path, loader=loader)
+        return None
+
+sys.meta_path.insert(0, SuffixPydLoader())
+
+EOF
+
+    wine /python/python.exe -m pip install dist/*-cp{cp_version}-cp{cp_version}*-{dist_target}.whl >> /dev/null 2>> /dev/null &&
+'''
+
 def prepare_environment_macosx_11_0_x86_64_and_macosx_11_0_arm64(cross_compiler, arquitecture, python_major_dot_minor_version):
     """
     Generate the command to prepare the environment for macosx_11_0_x86_64 and macosx_11_0_arm64 builds.
@@ -169,8 +210,8 @@ EOF
     export PYTHONPATH=/python_cross/lib/python{python_major_dot_minor_version}/site-packages
     export CC="$(pwd)/mingw-wrapper.sh" && \
     export CXX="$CC" && \
-    export CFLAGS="-I/python/include" && \
-    export LDFLAGS="-L/python/libs -lpython{py_version_nodot} -Wl,--enable-auto-import" \
+    export CFLAGS="-I/python/include -static-libgcc -static-libstdc++" && \
+    export LDFLAGS="-L/python/libs -lpython{py_version_nodot} -Wl,--enable-auto-import -static-libgcc -static-libstdc++" \
     &&
 '''
 
@@ -481,6 +522,7 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
             if target == 'win_amd64':
 
                 image_name = f"win-macosx-pookie-lvl3-cp{py_version_nodot}-win_amd64"
+                new_dist_target = "win_amd64"
 
                 # build the library
                 if build != None:
@@ -495,8 +537,19 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                 # test the library
                 if test != None:
 
+                    python_win_amd64 = "wine /python/python.exe"
+                    pip_win_amd64 = "wine /python/python.exe -m pip"
+
+                    test_command = \
+                        wrapper('python3', python_win_amd64) + \
+                        wrapper('python', python_win_amd64) + \
+                        wrapper('pip3', pip_win_amd64) + \
+                        wrapper('pip', pip_win_amd64) + \
+                        install_dist_win_amd64(py_version_nodot, new_dist_target) + \
+                        test
+
                     print(f">> Testing the library for cp-{py_version_nodot}-{target}")
-                    print("Not supported yet :(")
+                    run_lvl3_image(image_name, test_command, host_workspace_path, None)
 
             if target == 'macosx_11_0_x86_64':
 
