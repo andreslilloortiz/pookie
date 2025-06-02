@@ -324,8 +324,8 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                 original_dist_target_emulate = "linux_armv7l"
                 new_dist_target = "manylinux2014_armv7l.manylinux_2_17_armv7l"
 
-                python_armv7 = "LD_LIBRARY_PATH=/usr/arm-linux-gnueabihf/lib /python/bin/python3"
-                pip_armv7 = "LD_LIBRARY_PATH=/usr/arm-linux-gnueabihf/lib /python/bin/python3 -m pip"
+                python_armv7l = "LD_LIBRARY_PATH=/usr/arm-linux-gnueabihf/lib /python/bin/python3"
+                pip_armv7l = "LD_LIBRARY_PATH=/usr/arm-linux-gnueabihf/lib /python/bin/python3 -m pip"
 
                 # build the library
                 if build != None:
@@ -336,10 +336,10 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                             rename_dist(original_dist_target_cross, target)
                     else:
                         build_command = \
-                            wrapper('python3', python_armv7) + \
-                            wrapper('python', python_armv7) + \
-                            wrapper('pip3', pip_armv7) + \
-                            wrapper('pip', pip_armv7) + \
+                            wrapper('python3', python_armv7l) + \
+                            wrapper('python', python_armv7l) + \
+                            wrapper('pip3', pip_armv7l) + \
+                            wrapper('pip', pip_armv7l) + \
                             build + \
                             rename_dist(original_dist_target_emulate, target)
 
@@ -350,10 +350,10 @@ def run_docker_images(targets, logfile, python_versions_dic, build, test, linux_
                 if test != None:
 
                     test_command = \
-                        wrapper('python3', python_armv7) + \
-                        wrapper('python', python_armv7) + \
-                        wrapper('pip3', pip_armv7) + \
-                        wrapper('pip', pip_armv7) + \
+                        wrapper('python3', python_armv7l) + \
+                        wrapper('python', python_armv7l) + \
+                        wrapper('pip3', pip_armv7l) + \
+                        wrapper('pip', pip_armv7l) + \
                         install_dist(py_version_nodot, new_dist_target) + \
                         test
 
