@@ -161,7 +161,8 @@ pookie/
 │ ├── docker_images_builder.py                     # Python script for building Docker images following the layer graph
 │ ├── docker_images_runner.py                      # Python script for running build and test commands on Docker images
 │ ├── pookie.py                                    # Python script for managing the user arguments
-│ └── python_version_fetcher.py                    # Python script for fetching available Python versions
+│ ├── python_version_fetcher.py                    # Python script for fetching available Python versions
+| └── test_python_version_fetcher.py               # Python script for testing python_version_fetcher.py
 ├── pookie.sh                                  # Shell script for lunching pookie
 ├── test_pookie.sh                             # Shell script for testing pookie functionality
 ├── LICENSE                                    # Project license
