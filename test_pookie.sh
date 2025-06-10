@@ -70,6 +70,8 @@ CLEAN="./pookie.sh --workspace \"$WORKSPACE\" --clean"
 
 SECONDS=0
 
+eval $CLEAN >> /dev/null 2>> /dev/null
+
 # -------------------------------------------------
 # Build and test for all targets
 # -------------------------------------------------
